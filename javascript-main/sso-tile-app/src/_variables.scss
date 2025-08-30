@@ -1,0 +1,10 @@
+// Override default variables before the import
+$body-bg: #121e25;
+$body-color: #fff;
+$primary: #18c3e6;
+$warning: #fca653;
+$border-radius: 0.125rem;
+$border-radius-sm: 0.125rem;
+
+// needed for BSv4 to color primary button text correctly
+$yiq-contrasted-threshold: 50 !default;

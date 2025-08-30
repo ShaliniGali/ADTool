@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rhombus S3 API Documentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .api-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .api-section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 2rem;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .endpoint {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 5px solid #667eea;
+        }
+
+        .method {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 6px;
+            color: white;
+            font-weight: 600;
+            margin-right: 15px;
+            min-width: 70px;
+            text-align: center;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+
+        .method.get { background: #28a745; }
+        .method.post { background: #007bff; }
+        .method.put { background: #ffc107; color: #212529; }
+        .method.delete { background: #dc3545; }
+
+        .endpoint-url {
+            font-family: 'Courier New', monospace;
+            font-size: 1.2rem;
+            color: #2d3748;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            padding: 12px 18px;
+            border-radius: 8px;
+            border: 2px solid #e2e8f0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .endpoint-description {
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .endpoint-example {
+            background: #f8f9fa;
+            color: #495057;
+            border-radius: 6px;
+            padding: 15px 18px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            margin-bottom: 12px;
+            border: 1px solid #dee2e6;
+            border-left: 4px solid #007bff;
+        }
+
+        .endpoint-response {
+            background: #d4edda;
+            border-radius: 5px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            border-left: 4px solid #28a745;
+        }
+
+        .test-buttons {
+            margin-top: 15px;
+        }
+
+        .test-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 10px;
+            font-size: 0.9rem;
+        }
+
+        .test-btn:hover {
+            background: #5a6fd8;
+        }
+
+        .response-area {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 15px;
+            margin-top: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            white-space: pre-wrap;
+            display: none;
+        }
+
+        .nav-links {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .nav-links a {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            margin: 0 10px;
+            transition: background 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .bucket-info {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            border: 2px solid #2196f3;
+            box-shadow: 0 4px 15px rgba(33, 150, 243, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bucket-info::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #2196f3, #21cbf3, #2196f3);
+        }
+
+        .bucket-path, .bucket-endpoint, .bucket-console {
+            margin: 12px 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 8px;
+            border: 1px solid rgba(33, 150, 243, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .bucket-path:hover, .bucket-endpoint:hover, .bucket-console:hover {
+            background: rgba(255, 255, 255, 0.9);
+            transform: translateX(5px);
+            box-shadow: 0 2px 10px rgba(33, 150, 243, 0.2);
+        }
+
+        .bucket-console a {
+            color: #1976d2;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .bucket-console a:hover {
+            color: #0d47a1;
+            text-decoration: underline;
+        }
+
+        .files-list {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            border: 2px solid #e9ecef;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .files-list h4 {
+            margin-bottom: 20px;
+            color: #2c3e50;
+            font-size: 1.2rem;
+            text-align: center;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .file-item {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 15px 18px;
+            margin: 10px 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .file-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+            border-color: #007bff;
+        }
+
+        .file-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(to bottom, #007bff, #6610f2);
+        }
+
+        .file-item .file-name {
+            font-weight: 700;
+            color: #2c3e50;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .file-item .file-details {
+            color: #6c757d;
+            font-size: 0.9rem;
+            margin-top: 8px;
+            background: rgba(108, 117, 125, 0.1);
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid rgba(108, 117, 125, 0.2);
+        }
+
+        .s3-structure {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            border: 2px solid #e9ecef;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .s3-structure h4 {
+            color: #2c3e50;
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            text-align: center;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .folder-tree {
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .folder-tree::before {
+            content: '';
+            position: absolute;
+            left: 25px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, #28a745, #20c997, #17a2b8);
+            border-radius: 1px;
+        }
+
+        .folder-item {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 18px 20px;
+            margin: 15px 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            position: relative;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        .folder-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            border-color: #007bff;
+        }
+
+        .folder-item.subfolder {
+            margin-left: 50px;
+            border-left: 4px solid #28a745;
+            background: linear-gradient(135deg, #f8fff9 0%, #f0fff4 100%);
+        }
+
+        .folder-item.subfolder:hover {
+            border-left-color: #20c997;
+            background: linear-gradient(135deg, #f0fff4 0%, #e6fffa 100%);
+        }
+
+        .folder-icon {
+            font-size: 1.8rem;
+            filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.1));
+        }
+
+        .folder-name {
+            font-weight: 700;
+            color: #2c3e50;
+            min-width: 140px;
+            font-size: 1.1rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .folder-path {
+            color: #6c757d;
+            font-size: 0.95rem;
+            font-family: 'Courier New', monospace;
+            background: rgba(108, 117, 125, 0.1);
+            padding: 5px 10px;
+            border-radius: 6px;
+            border: 1px solid rgba(108, 117, 125, 0.2);
+        }
+
+        .folder-item::before {
+            content: '';
+            position: absolute;
+            left: -25px;
+            top: 50%;
+            width: 20px;
+            height: 2px;
+            background: linear-gradient(to right, #28a745, #20c997);
+            transform: translateY(-50%);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 Rhombus S3 API Documentation</h1>
+            <p>Complete API reference for S3 file operations</p>
+        </div>
+
+        <div class="nav-links">
+            <a href="/working-services.html">← Back to Dashboard</a>
+            <a href="http://localhost:3000" target="_blank">S3 File Service</a>
+            <a href="http://localhost:9001" target="_blank">MinIO Console</a>
+        </div>
+
+        <div class="api-section">
+            <h2>🔧 S3 API Methods</h2>
+            
+            <!-- GET /s3/list -->
+            <div class="endpoint">
+                <div class="method get">GET</div>
+                <div class="endpoint-url">/s3/list</div>
+                <div class="endpoint-description">List all files in S3 bucket</div>
+                <div class="endpoint-example">curl http://localhost:3000/files</div>
+                <div class="test-buttons">
+                    <button class="test-btn" onclick="testEndpoint('/files', 'GET')">Test GET /s3/list</button>
+                </div>
+                <div class="response-area" id="response-files"></div>
+            </div>
+
+            <!-- GET /s3/get -->
+            <div class="endpoint">
+                <div class="method get">GET</div>
+                <div class="endpoint-url">/s3/get/{filename}</div>
+                <div class="endpoint-description">Get/Download file from S3</div>
+                <div class="endpoint-example">curl http://localhost:3000/download/filename.txt</div>
+                <div class="test-buttons">
+                    <button class="test-btn" onclick="testDownload()">Test GET /s3/get</button>
+                </div>
+                <div class="response-area" id="response-download"></div>
+            </div>
+
+            <!-- PUT /s3/put -->
+            <div class="endpoint">
+                <div class="method post">PUT</div>
+                <div class="endpoint-url">/s3/put</div>
+                <div class="endpoint-description">Upload/Put file to S3</div>
+                <div class="endpoint-example">curl -X POST -F "file=@yourfile.txt" http://localhost:3000/upload</div>
+                <div class="test-buttons">
+                    <button class="test-btn" onclick="testUpload()">Test PUT /s3/put</button>
+                </div>
+                <div class="response-area" id="response-upload"></div>
+            </div>
+
+            <!-- DELETE /s3/delete -->
+            <div class="endpoint">
+                <div class="method delete">DELETE</div>
+                <div class="endpoint-url">/s3/delete/{filename}</div>
+                <div class="endpoint-description">Delete file from S3</div>
+                <div class="endpoint-example">curl -X DELETE http://localhost:3000/delete/filename.txt</div>
+                <div class="test-buttons">
+                    <button class="test-btn" onclick="testDelete()">Test DELETE /s3/delete</button>
+                </div>
+                <div class="response-area" id="response-delete"></div>
+            </div>
+        </div>
+
+        <div class="api-section">
+            <h2>🗂️ S3 Bucket Structure & Folders</h2>
+            
+            <div class="endpoint">
+                <h3>📁 Bucket: rhombus-documents</h3>
+                <div class="endpoint-description">Your S3-compatible storage bucket with folder structure</div>
+                
+                <div class="bucket-info">
+                    <div class="bucket-path">
+                        <strong>S3 Path:</strong> s3://rhombus-documents/
+                    </div>
+                    <div class="bucket-endpoint">
+                        <strong>MinIO Endpoint:</strong> http://localhost:9000
+                    </div>
+                    <div class="bucket-console">
+                        <strong>Console:</strong> <a href="http://localhost:9001" target="_blank">http://localhost:9001</a>
+                    </div>
+                </div>
+
+                <div class="s3-structure">
+                    <h4>🌳 S3 Folder Structure:</h4>
+                    <div class="folder-tree">
+                        <div class="folder-item">
+                            <span class="folder-icon">📁</span>
+                            <span class="folder-name">rhombus-documents/</span>
+                            <span class="folder-path">s3://rhombus-documents/</span>
+                        </div>
+                        <div class="folder-item subfolder">
+                            <span class="folder-icon">📁</span>
+                            <span class="folder-name">fy2024/</span>
+                            <span class="folder-path">s3://rhombus-documents/fy2024/</span>
+                        </div>
+                        <div class="folder-item subfolder">
+                            <span class="folder-icon">📁</span>
+                            <span class="folder-name">fy2025/</span>
+                            <span class="folder-path">s3://rhombus-documents/fy2025/</span>
+                        </div>
+                        <div class="folder-item subfolder">
+                            <span class="folder-icon">📁</span>
+                            <span class="folder-name">documents/</span>
+                            <span class="folder-path">s3://rhombus-documents/documents/</span>
+                        </div>
+                        <div class="folder-item subfolder">
+                            <span class="folder-icon">📁</span>
+                            <span class="folder-name">uploads/</span>
+                            <span class="folder-path">s3://rhombus-documents/uploads/</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="files-list">
+                    <h4>📋 Current Files in Bucket:</h4>
+                    <div id="bucket-files">Loading bucket contents...</div>
+                </div>
+
+                <div class="test-buttons">
+                    <button class="test-btn" onclick="refreshBucketFiles()">🔄 Refresh Bucket</button>
+                    <button class="test-btn" onclick="createS3Folders()">📁 Create S3 Folders</button>
+                    <button class="test-btn" onclick="testMinIOConnection()">🔗 Test MinIO</button>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <script>
+        async function testEndpoint(endpoint, method) {
+            const responseArea = document.getElementById(`response-${endpoint.substring(1)}`);
+            responseArea.style.display = 'block';
+            responseArea.textContent = 'Testing...';
+            
+            try {
+                const response = await fetch(`http://localhost:3000${endpoint}`, {
+                    method: method
+                });
+                const data = await response.text();
+                
+                responseArea.textContent = `Status: ${response.status}\nResponse: ${data}`;
+            } catch (error) {
+                responseArea.textContent = `Error: ${error.message}`;
+            }
+        }
+
+        async function testUpload() {
+            const responseArea = document.getElementById('response-upload');
+            responseArea.style.display = 'block';
+            responseArea.textContent = 'Creating test file and uploading...';
+            
+            try {
+                // Create a test file
+                const testContent = 'This is a test file for API testing';
+                const blob = new Blob([testContent], { type: 'text/plain' });
+                const file = new File([blob], 'api-test.txt', { type: 'text/plain' });
+                
+                const formData = new FormData();
+                formData.append('file', file);
+                
+                const response = await fetch('http://localhost:3000/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.text();
+                responseArea.textContent = `Status: ${response.status}\nResponse: ${data}`;
+            } catch (error) {
+                responseArea.textContent = `Error: ${error.message}`;
+            }
+        }
+
+        async function testDownload() {
+            const responseArea = document.getElementById('response-download');
+            responseArea.style.display = 'block';
+            responseArea.textContent = 'Testing download...';
+            
+            try {
+                const response = await fetch('http://localhost:3000/download/api-test.txt');
+                const data = await response.text();
+                
+                responseArea.textContent = `Status: ${response.status}\nResponse: ${data}`;
+            } catch (error) {
+                responseArea.textContent = `Error: ${error.message}`;
+            }
+        }
+
+        async function testDelete() {
+            const responseArea = document.getElementById('response-delete');
+            responseArea.style.display = 'block';
+            responseArea.textContent = 'Testing delete...';
+            
+            try {
+                const response = await fetch('http://localhost:3000/delete/api-test.txt', {
+                    method: 'DELETE'
+                });
+                const data = await response.text();
+                
+                responseArea.textContent = `Status: ${response.status}\nResponse: ${data}`;
+            } catch (error) {
+                responseArea.textContent = `Error: ${error.message}`;
+            }
+        }
+
+        // Load bucket files on page load
+        window.addEventListener('load', function() {
+            refreshBucketFiles();
+        });
+
+        // Refresh bucket files
+        async function refreshBucketFiles() {
+            const bucketFiles = document.getElementById('bucket-files');
+            bucketFiles.innerHTML = 'Loading bucket contents...';
+            
+            try {
+                const response = await fetch('http://localhost:3000/files');
+                const data = await response.json();
+                
+                if (data.files && data.files.length > 0) {
+                    bucketFiles.innerHTML = data.files.map(file => `
+                        <div class="file-item">
+                            <div class="file-name">📄 ${file.Key}</div>
+                            <div class="file-details">
+                                Size: ${file.Size} bytes | 
+                                Modified: ${new Date(file.LastModified).toLocaleString()} | 
+                                Storage: ${file.StorageClass}
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                    bucketFiles.innerHTML = '<p>No files found in bucket</p>';
+                }
+            } catch (error) {
+                bucketFiles.innerHTML = `<p>Error loading bucket: ${error.message}</p>`;
+            }
+        }
+
+        // Test MinIO connection
+        async function testMinIOConnection() {
+            const bucketFiles = document.getElementById('bucket-files');
+            bucketFiles.innerHTML = 'Testing MinIO connection...';
+            
+            try {
+                const response = await fetch('http://localhost:3000/health');
+                const data = await response.json();
+                
+                if (data.status === 'healthy') {
+                    bucketFiles.innerHTML = '✅ MinIO connection successful! Refreshing bucket contents...';
+                    setTimeout(refreshBucketFiles, 1000);
+                } else {
+                    bucketFiles.innerHTML = '❌ MinIO connection failed';
+                }
+            } catch (error) {
+                bucketFiles.innerHTML = `❌ MinIO connection error: ${error.message}`;
+            }
+        }
+
+        // Create S3 folders
+        async function createS3Folders() {
+            const bucketFiles = document.getElementById('bucket-files');
+            bucketFiles.innerHTML = 'Creating S3 folder structure...';
+            
+            try {
+                // Create test files in different folders to establish structure
+                const folders = ['fy2024', 'fy2025', 'documents', 'uploads'];
+                let createdCount = 0;
+                
+                for (const folder of folders) {
+                    const testContent = `Test file for ${folder} folder`;
+                    const blob = new Blob([testContent], { type: 'text/plain' });
+                    const file = new File([blob], `${folder}/README.txt`, { type: 'text/plain' });
+                    
+                    const formData = new FormData();
+                    formData.append('file', file);
+                    
+                    try {
+                        const response = await fetch('http://localhost:3000/upload', {
+                            method: 'POST',
+                            body: formData
+                        });
+                        if (response.ok) createdCount++;
+                    } catch (e) {
+                        console.log(`Could not create ${folder} folder`);
+                    }
+                }
+                
+                bucketFiles.innerHTML = `✅ Created ${createdCount} S3 folders! Refreshing bucket contents...`;
+                setTimeout(refreshBucketFiles, 1000);
+            } catch (error) {
+                bucketFiles.innerHTML = `❌ Error creating folders: ${error.message}`;
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,136 @@
+# Template for Constants.php
+```
+if(!getenv('Unit_test_indicator')){
+    $jsonData = loadDBCredentials();
+    
+    defined('H_N_PRODUCTS') OR define('H_N_PRODUCTS', $jsonData[0]['host_name']);
+    defined('U_N_PRODUCTS') OR define('U_N_PRODUCTS', $jsonData[0]['user_name']);
+    defined('P_W_PRODUCTS') OR define('P_W_PRODUCTS', $jsonData[0]['password']);
+    defined('PORT_PRODUCTS') OR define('PORT_PRODUCTS', 3306);
+}
+
+
+defined('RHOMBUS_DEBUG_ENV') OR define('RHOMBUS_DEBUG_ENV', FALSE);
+defined('RHOMBUS_DEBUG') OR define('RHOMBUS_DEBUG', 'TRUE');  // 'TRUE', 'FALSE'
+defined('RHOMBUS_CONSOLE') OR define('RHOMBUS_CONSOLE', 'TRUE'); // 'TRUE', 'FALSE'
+defined('RHOMBUS_PROJECT_NAME') OR define('RHOMBUS_PROJECT_NAME', 'Project Name Example'); 
+defined('UI_EMAIL_SEND') OR define('UI_EMAIL_SEND', TRUE); // TRUE, FALSE
+defined('RB_EMAIL_API_KEY') OR define('RB_EMAIL_API_KEY', getenv('RB_EMAIL_API_KEY'));
+defined('ADMIN_EMAILS') OR define('ADMIN_EMAILS', explode("::::",getenv('ProjectCode_admin_emails'))); 
+defined('USER_TYPE') OR define('USER_TYPE', array(
+    'use-db' => FALSE,
+    'db' => 'guardian-admingi',
+    'table' => 'users',
+    'column' => 'account_type')
+);
+defined('RHOMBUS_PASSWORD_GENERATOR') OR define('RHOMBUS_PASSWORD_GENERATOR', 'FALSE'); // 'TRUE', 'FALSE'
+defined('RHOMBUS_BASE_URL') OR define('RHOMBUS_BASE_URL', getenv('ProjectCode_BaseURL')); 
+defined('RHOMBUS_TFA_LAYER') OR define('RHOMBUS_TFA_LAYER', getenv('ProjectCode_tfa_layer')); // 'TRUE', 'FALSE'
+defined('RHOMBUS_EMAIL_DOMAIN') OR define('RHOMBUS_EMAIL_DOMAIN', 'TRUE'); // 'TRUE', 'FALSE'
+defined('RHOMBUS_PRIVATE_SUBNET_LOGIN') OR define('RHOMBUS_PRIVATE_SUBNET_LOGIN', getenv('ProjectCode_subnet_login'));
+defined('LOGIN_LAYERS') OR define('LOGIN_LAYERS', array("1", "0", "0", "0", "0"));
+defined('ENCRYPT_DECRYPT_FILE_IV') OR define('ENCRYPT_DECRYPT_FILE_IV', getenv('ENCRYPT_DECRYPT_FILE_IV'));
+defined('ENCRYPT_DECRYPT_PASSWORD_ITERATIONS') OR define('ENCRYPT_DECRYPT_PASSWORD_ITERATIONS', getenv('encrypt_decrypt_password_iterations')); 
+defined('ENCRYPTION_KEY') OR define('ENCRYPTION_KEY', getenv('ENCRYPT_DECRYPT_FILE_IV')); 
+defined('ENCRYPTION_SIZE') OR define('ENCRYPTION_SIZE', getenv('encryption_size')); 
+AWS_IAM_KEY
+AWS_IAM_SECRET_KEY
+defined('FILE_CACHING_CSS_JS') OR define('FILE_CACHING_CSS_JS', "FALSE"); // 'TRUE', 'FALSE'
+defined('FILE_DOWNLOAD_CSS_JS') OR define('FILE_DOWNLOAD_CSS_JS', "FALSE"); // 'TRUE', 'FALSE'
+defined('S3_CSS_JS_URL') OR define('S3_CSS_JS_URL', ''); // URL
+RHOMBUS_SSO_TIMEOUT
+
+/**
+ * Constants for Keycloak SSO
+ */
+defined('RHOMBUS_SSO_KEYCLOAK') OR define('RHOMBUS_SSO_KEYCLOAK', getenv('BaseCode_KEYCLOAK_SSO'));
+defined('KEYCLOAK_SSO_DEV') OR define('KEYCLOAK_SSO_DEV', getenv('BaseCode_KEYCLOAK_SSO_dev'));
+defined('KEYCLOAK_SSO_URL') OR define('KEYCLOAK_SSO_URL', getenv('BaseCode_KEYCLOAK_SSO_URL'));
+defined('KEYCLOAK_SSO_REALM') OR define('KEYCLOAK_SSO_REALM', getenv('BaseCode_KEYCLOAK_SSO_REALM'));
+defined('RB_KEYCLOAK_DEBUG') OR define('RB_KEYCLOAK_DEBUG', getenv('BaseCode_KEYCLOAK_SSO_DEBUG'));
+defined('KEYCLOAK_SSO_CLIENT_ID') OR define('KEYCLOAK_SSO_CLIENT_ID', getenv('BaseCode_KEYCLOAK_SSO_CLIENT_ID'));
+defined('KEYCLOAK_SSO_CLIENT_SCOPE') OR define('KEYCLOAK_SSO_CLIENT_SCOPE', getenv('BaseCode_KEYCLOAK_SSO_CLIENT_SCOPE'));
+defined('KEYCLOAK_SSO_APP_NAME') OR define('KEYCLOAK_SSO_APP_NAME', getenv('BaseCode_KEYCLOAK_SSO_APP_NAME'));
+/**
+ * Routes for Keycloak SSO
+ */
+$route['rb_kc'] = 'Login_keycloak/authenticate';
+$route['rb_kc/success'] = 'Keycloak_sso_controller/success';
+$route['rb_kc/failure'] = 'Keycloak_sso_controller/failure';
+$route['rb_kc/requestRegistration'] = 'Keycloak_sso_controller/requestRegistration';
+$route['rb_kc/activate/(:any)'] = 'Keycloak_register_activate/activate/$1';
+/**
+ * ENV for Keycloak SSO
+ */
+ProjectCode_KEYCLOAK_SSO
+ProjectCode_KEYCLOAK_SSO_dev
+ProjectCode_KEYCLOAK_SSO_URL
+ProjectCode_KEYCLOAK_SSO_REALM
+ProjectCode_KEYCLOAK_SSO_DEBUG
+ProjectCode_KEYCLOAK_SSO_CLIENT_ID
+ProjectCode_KEYCLOAK_SSO_CLIENT_SCOPE
+ProjectCode_KEYCLOAK_SSO_APP_NAME
+
+#
+# KEYCLOAK TILES
+#
+Keycloak_show_tiles=
+Keycloak_disable_tiles=
+TILE_NAME_SPLASH_SCHEMA=
+TILE_NAME_SPLASH_URL=
+
+#
+# SSO CONSTANTS AND ENV
+#
+
+//
+// ENV
+//
+RB_SAML_CERT_PRIVATE=
+RB_SAML_CERT_PUBLIC=
+RB_SAML_IDP=
+RB_SAML_SECRET_SALT=
+RB_SAML_ADMIN_PASSWORD=
+RB_SAML_USERS_HOST=
+RB_SAML_USERS_PORT=
+RB_SAML_DB_USERNAME=
+RB_SAML_DB_PASSWORD=
+
+ProjectCode_SAML_SSO=
+ProjectCode_SAML_DEBUG=
+ProjectCode_SAML_USERS_DB_FLAG=
+ProjectCode_SAML_USERS_SIPR=
+ProjectCode_SAML_USERS_DATABASENAME=
+
+//
+// CONSTANTS
+//
+defined('RHOMBUS_SSO') OR define('RHOMBUS_SSO', getenv('ProjectCode_SAML_SSO'));
+defined('UI_SIPR_ENVIRONMENT') OR define('UI_SIPR_ENVIRONMENT', (getenv('ProjectCode_SAML_USERS_SIPR') == 'TRUE')?TRUE:FALSE );
+defined('RB_SAML_USERS_DATABASENAME') OR define('RB_SAML_USERS_DATABASENAME', getenv('ProjectCode_SAML_USERS_DATABASENAME'));
+defined('RB_SAML_USERS_DB_FLAG') OR define('RB_SAML_USERS_DB_FLAG', getenv('ProjectCode_SAML_USERS_DB_FLAG'));
+defined('RB_SAML_DEBUG') OR define('RB_SAML_DEBUG', getenv('ProjectCode_SAML_DEBUG'));
+if(BASEPATH == 'SAML_include'){
+    defined('RHOMBUS_DATABASES') OR define('RHOMBUS_DATABASES', RB_SAML_USERS_DB_FLAG);
+}
+
+defined('RHOMBUS_EMAIL_DOMAIN') || define('RHOMBUS_EMAIL_DOMAIN', (getenv('BaseCode_VALIDATE_EMAIL_DOMAIN') == 'TRUE') ? 'TRUE' : 'FALSE');
+
+// for p1 migration
+defined('P1_FLAG') || define('P1_FLAG', (getenv('Basecode_P1') == 'TRUE')? TRUE : FALSE );
+
+// APP VERSION
+defined('APP_VERSION') || define('APP_VERSION', getenv('BaseCode_APP_VERSION'));
+
+defined('APP_VERSION_DATABASE') || define('APP_VERSION_DATABASE', [
+    'db' => 'guardian-admingi',
+    'table' => 'LOOKUP_APP_VERSION'
+]);
+
+
+KEYCLOAK_SSO_DB=
+
+# IF KEYCLOAK_SSO_DB is not set (SIPR constants for SSO DB)
+CI_PRODUCTS_SSO_HOST=
+CI_PRODUCTS_SSO_USERNAME=
+CI_PRODUCTS_SSO_PASSWORD=

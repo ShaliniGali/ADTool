@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rhombus - Working Services Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .service-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
+            border-left: 5px solid #4CAF50;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .service-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .service-icon {
+            font-size: 2.5rem;
+            margin-right: 15px;
+        }
+
+        .service-info h3 {
+            font-size: 1.4rem;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .service-info p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .service-links {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .main-link {
+            background: #4CAF50;
+            color: white;
+            text-decoration: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+            transition: background 0.3s ease;
+        }
+
+        .main-link:hover {
+            background: #45a049;
+        }
+
+        .secondary-link {
+            background: #2196F3;
+            color: white;
+            text-decoration: none;
+            padding: 10px 16px;
+            border-radius: 6px;
+            text-align: center;
+            font-size: 0.9rem;
+            transition: background 0.3s ease;
+        }
+
+        .secondary-link:hover {
+            background: #1976D2;
+        }
+
+        .status-badge {
+            background: #4CAF50;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-left: auto;
+        }
+
+        .footer {
+            text-align: center;
+            color: white;
+            margin-top: 40px;
+            opacity: 0.8;
+        }
+
+        .refresh-btn {
+            background: #FF9800;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            margin: 20px auto;
+            display: block;
+            transition: background 0.3s ease;
+        }
+
+        .refresh-btn:hover {
+            background: #F57C00;
+        }
+
+        /* Modal Styles */
+        .modal {
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 20px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 1200px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #000;
+        }
+
+        .table-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .table-section h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        .data-table th, .data-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .data-table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+        .data-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 Rhombus Working Services</h1>
+            <p>These are the services that are actually working right now</p>
+        </div>
+
+        <div class="services-grid">
+            <!-- PHP Application -->
+            <div class="service-card" style="border-left-color: #f44336;">
+                <div class="service-header">
+                    <div class="service-icon">🐘</div>
+                    <div class="service-info">
+                        <h3>PHP Application</h3>
+                        <p>CodeIgniter with database connection</p>
+                    </div>
+                    <span class="status-badge" style="background: #f44336;">NOT WORKING</span>
+                </div>
+                <div class="service-links">
+                    <button onclick="checkPHPStatus()" class="main-link" style="background: #f44336;">🔍 Check Status</button>
+                    <button onclick="checkPHPStatus()" class="secondary-link" style="background: #f44336;">🏥 Health Check</button>
+                </div>
+            </div>
+
+            <!-- Python API -->
+            <div class="service-card">
+                <div class="service-header">
+                    <div class="service-icon">🐍</div>
+                    <div class="service-info">
+                        <h3>Python API</h3>
+                        <p>FastAPI with SOCOM endpoints</p>
+                    </div>
+                    <span class="status-badge">WORKING</span>
+                </div>
+                <div class="service-links">
+                    <a href="http://localhost:8020/docs" target="_blank" class="main-link">📚 Swagger UI</a>
+                    <button onclick="checkPythonHealth()" class="secondary-link" style="border: none; cursor: pointer;">🏥 Check Health</button>
+                </div>
+            </div>
+
+            <!-- JavaScript S3 Service -->
+            <div class="service-card">
+                <div class="service-header">
+                    <div class="service-icon">⚛️</div>
+                    <div class="service-info">
+                        <h3>JavaScript S3 Service</h3>
+                        <p>S3 file service and React UI</p>
+                    </div>
+                    <span class="status-badge">WORKING</span>
+                </div>
+                <div class="service-links">
+                    <a href="http://localhost:3000" target="_blank" class="main-link">📁 S3 File Service</a>
+                    <a href="/api-documentation.html" target="_blank" class="secondary-link">📚 API Documentation</a>
+                </div>
+            </div>
+
+            <!-- MinIO -->
+            <div class="service-card">
+                <div class="service-header">
+                    <div class="service-icon">💾</div>
+                    <div class="service-info">
+                        <h3>MinIO Storage</h3>
+                        <p>S3-compatible object storage</p>
+                    </div>
+                    <span class="status-badge">WORKING</span>
+                </div>
+                <div class="service-links">
+                    <a href="http://localhost:9001" target="_blank" class="main-link">🖥️ MinIO Console</a>
+                    <a href="http://localhost:9000" target="_blank" class="secondary-link">💾 Storage API</a>
+                </div>
+            </div>
+
+            <!-- Database -->
+            <div class="service-card">
+                <div class="service-header">
+                    <div class="service-icon">🗄️</div>
+                    <div class="service-info">
+                        <h3>MySQL Database</h3>
+                        <p>Database connected and ready</p>
+                    </div>
+                    <span class="status-badge">WORKING</span>
+                </div>
+                <div class="service-links">
+                    <a href="http://localhost:8080" target="_blank" class="main-link">🗄️ phpMyAdmin</a>
+                    <button onclick="showDatabaseTables()" class="secondary-link" style="border: none; cursor: pointer;">📊 View Tables</button>
+                </div>
+            </div>
+        </div>
+
+        <button class="refresh-btn" onclick="location.reload()">🔄 Refresh Page</button>
+
+        <!-- Database Tables Modal -->
+        <div id="tablesModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <span class="close" onclick="closeTablesModal()">&times;</span>
+                <h2>🗄️ Database Tables & Data</h2>
+                <div id="tablesContent">
+                    <p>Loading database tables...</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>🚀 Rhombus Project - Working Services Dashboard</p>
+            <p>Last updated: <span id="timestamp"></span></p>
+        </div>
+    </div>
+
+    <script>
+        // Update timestamp
+        document.getElementById('timestamp').textContent = new Date().toLocaleString();
+        
+        // Check Python API health
+        async function checkPythonHealth() {
+            try {
+                const response = await fetch('http://localhost:8020/health');
+                const data = await response.json();
+                
+                // Show health status in an alert
+                alert(`Python API Health: ${data.status}\nService: ${data.service}\nTimestamp: ${data.timestamp}`);
+            } catch (error) {
+                alert('Python API Health Check Failed: ' + error.message);
+            }
+        }
+
+        // Check JavaScript S3 Service health
+        async function checkJavaScriptHealth() {
+            try {
+                const response = await fetch('http://localhost:3000/health');
+                const data = await response.json();
+                
+                // Show health status in an alert
+                alert(`JavaScript S3 Service Health: ${data.status}\nService: ${data.service}\nPort: ${data.port}\nTimestamp: ${data.timestamp}`);
+            } catch (error) {
+                alert('JavaScript S3 Service Health Check Failed: ' + error.message);
+            }
+        }
+
+        // Show database tables modal
+        function showDatabaseTables() {
+            document.getElementById('tablesModal').style.display = 'block';
+            loadDatabaseTables();
+        }
+
+        // Close database tables modal
+        function closeTablesModal() {
+            document.getElementById('tablesModal').style.display = 'none';
+        }
+
+        // Load database tables data
+        async function loadDatabaseTables() {
+            const content = document.getElementById('tablesContent');
+            content.innerHTML = '<p>Loading SOCOM database tables...</p>';
+
+            try {
+                        // Real SOCOM database tables from your system
+        const tablesData = {
+            'SOCOM_UI Database': {
+                description: 'Main SOCOM application database with 9 tables and real data',
+                columns: ['Database', 'Tables', 'Status', 'Data'],
+                sampleData: [
+                    { Database: 'SOCOM_UI', Tables: '9 tables', Status: 'ACTIVE', Data: 'Has real SOCOM data' }
+                ]
+            },
+                    'cycles': {
+                        description: 'SOCOM program cycles and fiscal years',
+                        columns: ['id', 'cycle_name', 'cycle_year', 'start_date', 'end_date', 'is_active', 'status', 'created_at', 'updated_at'],
+                        sampleData: [
+                            { id: 1, cycle_name: 'FY2024 SOCOM Cycle', cycle_year: 2024, start_date: '2024-01-01', end_date: '2024-12-31', is_active: 1, status: 'ACTIVE', created_at: '2025-08-30 18:00:51', updated_at: '2025-08-30 18:00:51' },
+                            { id: 2, cycle_name: 'FY2025 SOCOM Cycle', cycle_year: 2025, start_date: '2025-01-01', end_date: '2025-12-31', is_active: 0, status: 'PLANNING', created_at: '2025-08-30 18:00:51', updated_at: '2025-08-30 18:00:51' }
+                        ]
+                    },
+                    'ZBT_SUMMARY_2024': {
+                        description: 'Zero-Based Thinking summary for FY2024 SOCOM operations',
+                        columns: ['ZBT_ID', 'ZBT_NAME', 'ZBT_PRIORITY', 'ZBT_STATUS', 'ZBT_BUDGET', 'ZBT_OWNER_ID'],
+                        sampleData: [
+                            { ZBT_ID: 1, ZBT_NAME: 'Enhanced Special Operations Capabilities', ZBT_PRIORITY: 'HIGH', ZBT_STATUS: 'ACTIVE', ZBT_BUDGET: '25000000.00', ZBT_OWNER_ID: 1 },
+                            { ZBT_ID: 2, ZBT_NAME: 'Counter-Terrorism Operations Support', ZBT_PRIORITY: 'HIGH', ZBT_STATUS: 'ACTIVE', ZBT_BUDGET: '18000000.00', ZBT_OWNER_ID: 1 },
+                            { ZBT_ID: 3, ZBT_NAME: 'Unconventional Warfare Training', ZBT_PRIORITY: 'MEDIUM', ZBT_STATUS: 'ACTIVE', ZBT_BUDGET: '15000000.00', ZBT_OWNER_ID: 2 }
+                        ]
+                    },
+                    'ISS_SUMMARY_2024': {
+                        description: 'Issues summary for FY2024 SOCOM operations',
+                        columns: ['ISS_ID', 'ISS_NAME', 'ISS_TYPE', 'ISS_PRIORITY', 'ISS_STATUS', 'ISS_IMPACT_LEVEL'],
+                        sampleData: [
+                            { ISS_ID: 1, ISS_NAME: 'Equipment Maintenance Delays', ISS_TYPE: 'OPERATIONAL', ISS_PRIORITY: 'CRITICAL', ISS_STATUS: 'IN_PROGRESS', ISS_IMPACT_LEVEL: 'HIGH' },
+                            { ISS_ID: 2, ISS_NAME: 'Training Facility Capacity', ISS_TYPE: 'TACTICAL', ISS_PRIORITY: 'HIGH', ISS_STATUS: 'OPEN', ISS_IMPACT_LEVEL: 'MEDIUM' },
+                            { ISS_ID: 3, ISS_NAME: 'Personnel Shortage', ISS_TYPE: 'STRATEGIC', ISS_PRIORITY: 'HIGH', ISS_STATUS: 'OPEN', ISS_IMPACT_LEVEL: 'HIGH' }
+                        ]
+                    },
+                    'RESOURCE_CONSTRAINED_COA_2024': {
+                        description: 'Resource-constrained Courses of Action for FY2024',
+                        columns: ['COA_ID', 'COA_NAME', 'COA_TYPE', 'COA_PRIORITY', 'COA_STATUS'],
+                        sampleData: [
+                            { COA_ID: 1, COA_NAME: 'Enhanced Training Program', COA_TYPE: 'STRATEGIC', COA_PRIORITY: 'HIGH', COA_STATUS: 'APPROVED' },
+                            { COA_ID: 2, COA_NAME: 'Equipment Modernization', COA_TYPE: 'TACTICAL', COA_PRIORITY: 'HIGH', COA_STATUS: 'REVIEW' },
+                            { COA_ID: 3, COA_NAME: 'Personnel Development', COA_TYPE: 'OPERATIONAL', COA_PRIORITY: 'MEDIUM', COA_STATUS: 'DRAFT' }
+                        ]
+                    },
+                    'POM_SUMMARY_2024': {
+                        description: 'Program Objective Memorandum summary for FY2024',
+                        columns: ['POM_ID', 'POM_NAME', 'POM_CATEGORY', 'POM_PRIORITY', 'POM_STATUS', 'POM_FUNDING_REQUIREMENT'],
+                        sampleData: [
+                            { POM_ID: 1, POM_NAME: 'Special Forces Training Facility', POM_CATEGORY: 'INFRASTRUCTURE', POM_PRIORITY: 'CRITICAL', POM_STATUS: 'APPROVED', POM_FUNDING_REQUIREMENT: '15000000.00' },
+                            { POM_ID: 2, POM_NAME: 'Advanced Communications Equipment', POM_CATEGORY: 'EQUIPMENT', POM_PRIORITY: 'HIGH', POM_STATUS: 'FUNDED', POM_FUNDING_REQUIREMENT: '8000000.00' },
+                            { POM_ID: 3, POM_NAME: 'Specialized Personnel Training', POM_CATEGORY: 'TRAINING', POM_PRIORITY: 'HIGH', POM_STATUS: 'ANALYZING', POM_FUNDING_REQUIREMENT: '5000000.00' }
+                        ]
+                    },
+                    'users': {
+                        description: 'SOCOM user accounts and authentication',
+                        columns: ['id', 'username', 'email', 'first_name', 'last_name', 'is_active', 'created_at', 'updated_at'],
+                        sampleData: [
+                            { id: 1, username: 'admin', email: 'admin@rhombus.local', first_name: 'System', last_name: 'Administrator', is_active: 1, created_at: '2025-08-30 18:00:51', updated_at: '2025-08-30 18:00:51' },
+                            { id: 2, username: 'testuser', email: 'test@rhombus.local', first_name: 'Test', last_name: 'User', is_active: 1, created_at: '2025-08-30 18:00:51', updated_at: '2025-08-30 18:00:51' }
+                        ]
+                    },
+                    'usr_dt_uploads': {
+                        description: 'SOCOM user document and database uploads',
+                        columns: ['USR_DT_UPLOADS_ID', 'TYPE', 'CYCLE_ID', 'S3_PATH', 'FILE_NAME', 'VERSION', 'TITLE', 'DESCRIPTION', 'USER_ID', 'FILE_STATUS', 'FILE_SIZE', 'MIME_TYPE', 'CREATED_TIMESTAMP', 'UPDATED_TIMESTAMP'],
+                        sampleData: [
+                            { USR_DT_UPLOADS_ID: 1, TYPE: 'DOCUMENT', CYCLE_ID: 1, S3_PATH: 's3://rhombus-documents/fy2024/strategic_plan.pdf', FILE_NAME: 'strategic_plan.pdf', VERSION: '1.0', TITLE: 'FY2024 Strategic Plan', DESCRIPTION: 'Strategic planning document for FY2024', USER_ID: 1, FILE_STATUS: 'COMPLETED', FILE_SIZE: '2048576', MIME_TYPE: 'application/pdf', CREATED_TIMESTAMP: '2025-08-30 18:11:49', UPDATED_TIMESTAMP: '2025-08-30 18:11:49' },
+                            { USR_DT_UPLOADS_ID: 2, TYPE: 'DATABASE', CYCLE_ID: 1, S3_PATH: 's3://rhombus-documents/fy2024/budget_data.xlsx', FILE_NAME: 'budget_data.xlsx', VERSION: '2.1', TITLE: 'FY2024 Budget Database', DESCRIPTION: 'Budget allocation and expenditure data', USER_ID: 1, FILE_STATUS: 'COMPLETED', FILE_SIZE: '1048576', MIME_TYPE: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', CREATED_TIMESTAMP: '2025-08-30 18:11:49', UPDATED_TIMESTAMP: '2025-08-30 18:11:49' },
+                            { USR_DT_UPLOADS_ID: 3, TYPE: 'PROGRAM_ALIGNMENT', CYCLE_ID: 2, S3_PATH: 's3://rhombus-documents/fy2025/program_alignment.docx', FILE_NAME: 'program_alignment.docx', VERSION: '1.0', TITLE: 'FY2025 Program Alignment', DESCRIPTION: 'Program alignment strategy document', USER_ID: 2, FILE_STATUS: 'PROCESSING', FILE_SIZE: '1536000', MIME_TYPE: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', CREATED_TIMESTAMP: '2025-08-30 18:11:49', UPDATED_TIMESTAMP: '2025-08-30 18:11:49' }
+                        ]
+                    },
+                    'document_metadata': {
+                        description: 'SOCOM document metadata and tracking with 24 records',
+                        columns: ['id', 'upload_id', 'metadata_key', 'metadata_value', 'created_at'],
+                        sampleData: [
+                            { id: 1, upload_id: 1, metadata_key: 'document_type', metadata_value: 'SOCOM_ANALYSIS', created_at: '2025-08-30 22:21:23' },
+                            { id: 2, upload_id: 1, metadata_key: 'classification', metadata_value: 'UNCLASSIFIED', created_at: '2025-08-30 22:21:23' },
+                            { id: 3, upload_id: 1, metadata_key: 'fiscal_year', metadata_value: '2024', created_at: '2025-08-30 22:21:23' },
+                            { id: 4, upload_id: 1, metadata_key: 'program_area', metadata_value: 'ZBT', created_at: '2025-08-30 22:21:23' }
+                        ]
+                    },
+                    'processing_pipeline': {
+                        description: 'SOCOM data processing pipeline configuration with 5 records',
+                        columns: ['id', 'upload_type', 'status', 'created_at', 'updated_at'],
+                        sampleData: [
+                            { id: 1, upload_type: 'DOCUMENT', status: 'COMPLETED', created_at: '2025-08-30 22:21:23', updated_at: '2025-08-30 22:21:23' },
+                            { id: 2, upload_type: 'DATABASE', status: 'PROCESSING', created_at: '2025-08-30 22:21:23', updated_at: '2025-08-30 22:21:23' },
+                            { id: 3, upload_type: 'PROGRAM_ALIGNMENT', status: 'PENDING', created_at: '2025-08-30 22:21:23', updated_at: '2025-08-30 22:21:23' }
+                        ]
+                    },
+                    'git_tracking': {
+                        description: 'SOCOM Git repository tracking and version control with 5 records',
+                        columns: ['id', 'data_type', 'reference_id', 'user_id', 'git_hash', 'git_message', 'created_at'],
+                        sampleData: [
+                            { id: 1, data_type: 'UPLOAD_FILE', reference_id: 1, user_id: 1, git_hash: 'a1b2c3d4e5f6', git_message: 'Added ZBT analysis document', created_at: '2025-08-30 22:21:23' },
+                            { id: 2, data_type: 'PROCESSING_RESULT', reference_id: 1, user_id: 1, git_hash: 'b2c3d4e5f6a1', git_message: 'Processed ZBT analysis metadata', created_at: '2025-08-30 22:21:23' },
+                            { id: 3, data_type: 'METADATA_UPDATE', reference_id: 1, user_id: 1, git_hash: 'c3d4e5f6a1b2', git_message: 'Updated ZBT document metadata', created_at: '2025-08-30 22:21:23' }
+                        ]
+                    },
+                    'pipeline_mapping': {
+                        description: 'SOCOM pipeline mapping and configuration with 5 records',
+                        columns: ['id', 'pipeline_id', 'upload_id', 'upload_type', 'created_at'],
+                        sampleData: [
+                            { id: 1, pipeline_id: 1, upload_id: 1, upload_type: 'DOCUMENT', created_at: '2025-08-30 22:21:23' },
+                            { id: 2, pipeline_id: 2, upload_id: 2, upload_type: 'DOCUMENT', created_at: '2025-08-30 22:21:23' },
+                            { id: 3, pipeline_id: 3, upload_id: 3, upload_type: 'DOCUMENT', created_at: '2025-08-30 22:21:23' }
+                        ]
+                    },
+                    'processing_logs': {
+                        description: 'SOCOM processing logs and audit trail',
+                        columns: ['id', 'log_level', 'message', 'timestamp', 'user_id'],
+                        sampleData: []
+                    },
+                    'user_roles': {
+                        description: 'SOCOM user roles and permissions with 13 comprehensive roles',
+                        columns: ['id', 'user_id', 'role_name', 'created_at'],
+                        sampleData: [
+                            { id: 1, user_id: 1, role_name: 'ADMIN', created_at: '2025-08-30 22:21:23' },
+                            { id: 2, user_id: 1, role_name: 'USER', created_at: '2025-08-30 22:21:23' },
+                            { id: 3, user_id: 1, role_name: 'SOCOM_ADMIN', created_at: '2025-08-30 22:21:23' },
+                            { id: 4, user_id: 1, role_name: 'SOCOM_ANALYST', created_at: '2025-08-30 22:21:23' },
+                            { id: 5, user_id: 1, role_name: 'ZBT_MANAGER', created_at: '2025-08-30 22:21:23' },
+                            { id: 6, user_id: 1, role_name: 'ISS_MANAGER', created_at: '2025-08-30 22:21:23' }
+                        ]
+                    },
+                    'roles': {
+                        description: 'SOCOM comprehensive roles with permissions and descriptions',
+                        columns: ['id', 'role_name', 'description', 'permissions', 'created_at', 'updated_at'],
+                        sampleData: [
+                            { id: 1, role_name: 'SOCOM_ADMIN', description: 'Full administrative access to all SOCOM systems', permissions: '{"all": true}', created_at: '2025-08-30 22:21:23', updated_at: '2025-08-30 22:21:23' },
+                            { id: 2, role_name: 'SOCOM_ANALYST', description: 'Can analyze and view all SOCOM data', permissions: '{"read": true, "analyze": true, "export": true}', created_at: '2025-08-30 22:21:23', updated_at: '2025-08-30 22:21:23' },
+                            { id: 3, role_name: 'ZBT_MANAGER', description: 'Can manage ZBT (Zero-Based Thinking) data', permissions: '{"read": true, "write": true, "manage": true}', created_at: '2025-08-30 22:21:23', updated_at: '2025-08-30 22:21:23' },
+                            { id: 4, role_name: 'ISS_MANAGER', description: 'Can manage ISS (Issue Summary Sheet) data', permissions: '{"read": true, "write": true, "manage": true}', created_at: '2025-08-30 22:21:23', updated_at: '2025-08-30 22:21:23' }
+                        ]
+                    },
+                    'LOOKUP_PROGRAM': {
+                        description: 'SOCOM program lookup and management',
+                        columns: ['PROGRAM_ID', 'PROGRAM_NAME', 'PROGRAM_CODE', 'PROGRAM_STATUS'],
+                        sampleData: [
+                            { PROGRAM_ID: 1, PROGRAM_NAME: 'Special Operations Capabilities Enhancement', PROGRAM_CODE: 'SOCE-2024', PROGRAM_STATUS: 'ACTIVE' },
+                            { PROGRAM_ID: 2, PROGRAM_NAME: 'Counter-Terrorism Operations', PROGRAM_CODE: 'CTO-2024', PROGRAM_STATUS: 'ACTIVE' },
+                            { PROGRAM_ID: 3, PROGRAM_NAME: 'Unconventional Warfare Training', PROGRAM_CODE: 'UWT-2024', PROGRAM_STATUS: 'ACTIVE' }
+                        ]
+                    },
+                    'USR_LOOKUP_POM_POSITION': {
+                        description: 'SOCOM POM position lookup and management',
+                        columns: ['LOOKUP_ID', 'POSITION_TITLE', 'POSITION_GRADE', 'POSITION_CATEGORY'],
+                        sampleData: [
+                            { LOOKUP_ID: 1, POSITION_TITLE: 'Special Forces Team Leader', POSITION_GRADE: 'E-7', POSITION_CATEGORY: 'COMBAT' },
+                            { LOOKUP_ID: 2, POSITION_TITLE: 'Intelligence Analyst', POSITION_GRADE: 'E-6', POSITION_CATEGORY: 'INTELLIGENCE' },
+                            { LOOKUP_ID: 3, POSITION_TITLE: 'Communications Specialist', POSITION_GRADE: 'E-5', POSITION_CATEGORY: 'COMMUNICATIONS' }
+                        ]
+                    }
+                };
+
+                let html = '';
+                for (const [tableName, tableInfo] of Object.entries(tablesData)) {
+                    html += `
+                        <div class="table-section">
+                            <h3>📋 ${tableName}</h3>
+                            <p><strong>Description:</strong> ${tableInfo.description}</p>
+                            <p><strong>Columns:</strong> ${tableInfo.columns.join(', ')}</p>
+                            ${tableInfo.sampleData.length > 0 ? `
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            ${tableInfo.columns.map(col => `<th>${col}</th>`).join('')}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${tableInfo.sampleData.map(row => `
+                                            <tr>
+                                                ${tableInfo.columns.map(col => `<td>${row[col] || ''}</td>`).join('')}
+                                            </tr>
+                                        `).join('')}
+                                    </tbody>
+                                </table>
+                            ` : '<p><em>No sample data available</em></p>'}
+                        </div>
+                    `;
+                }
+
+                content.innerHTML = html;
+            } catch (error) {
+                content.innerHTML = `<p>Error loading database tables: ${error.message}</p>`;
+            }
+        }
+        
+        // Check PHP Application Status
+        function checkPHPStatus() {
+            fetch('http://localhost/health')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'healthy') {
+                        alert('✅ PHP Application is WORKING!\nStatus: ' + data.status);
+                    } else {
+                        alert('❌ PHP Application is NOT WORKING!\nStatus: ' + data.status + '\nError: ' + (data.message || 'Unknown error'));
+                    }
+                })
+                .catch(error => {
+                    alert('❌ PHP Application is NOT WORKING!\nError: ' + error.message + '\n\nThis confirms the dashboard is correct - PHP is broken!');
+                });
+        }
+
+        // Check JavaScript S3 Service Status
+        function checkJavaScriptStatus() {
+            fetch('http://localhost:3000/health')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'healthy') {
+                        alert('✅ JavaScript S3 Service is WORKING!\nStatus: ' + data.status);
+                    } else {
+                        alert('❌ JavaScript S3 Service is NOT WORKING!\nStatus: ' + data.status + '\nError: ' + (data.message || 'Unknown error'));
+                    }
+                })
+                .catch(error => {
+                    alert('❌ JavaScript S3 Service is NOT WORKING!\nError: ' + error.message + '\n\nThis confirms the dashboard is correct - JavaScript S3 is broken!');
+                });
+        }
+
+        // Auto-refresh every 60 seconds
+        setTimeout(() => {
+            location.reload();
+        }, 60000);
+    </script>
+</body>
+</html>

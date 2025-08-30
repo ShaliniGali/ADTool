@@ -1,0 +1,49 @@
+@import '../../variables';
+
+.about-dialog {
+    .description {
+        flex: 1;
+        overflow-y: auto;
+        padding-bottom: 24px;
+        font-size: 1.125rem;
+    }
+    .title{
+        display: flex;
+        align-items: center;
+        h2{
+            flex: 1;
+        }
+        .fas {
+            font-size: 4rem;
+        }
+    }
+    .buttons {
+        display: flex;
+        justify-content: space-between;
+        button {
+            min-width: 150px;
+        }
+    }
+    .app-icon-svg{
+        height: 92px;
+        width: 92px;
+    }
+}
+@media (max-width: 1450px) {
+    .about-dialog {
+        .description {
+            font-size: 0.875rem;
+            h4, h5 {
+                font-size: 1rem;  
+                font-weight: bold;
+            }
+            p {
+                font-size: 0.875rem;
+            }
+        }
+        .app-icon-svg{
+            height: 64px;
+            width: 64px;
+        }
+    }
+}

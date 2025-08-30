@@ -1,0 +1,49 @@
+.card{
+    flex-grow: 1;
+    min-width:20%;
+    color:#ccc
+}
+
+.card:hover{
+    background-color: #404444 !important;
+    color:#fff;
+    text-decoration: none;
+}
+
+.card-body:hover > .card-title{
+    text-decoration: underline;
+	padding:0 !important;
+    transition: padding 0.5s;
+}
+
+.card-text{
+    max-height:0;
+    overflow:auto;
+    opacity:0;
+    transition: opacity 0.5s, max-height 0.6s;
+}
+
+.card-title{
+    padding-top: 1.5em;
+    transition: padding 0.5s;
+}
+
+.flex-container{
+    flex-wrap: wrap;
+    align-content: stretch
+}
+
+.card-body > img {
+    transition: padding 0.5s;
+}
+
+.card-body:hover > img{
+    padding:0em !important;
+    transition: padding 0.5s;
+}
+
+.card-body:hover > .card-text{
+    opacity:1 !important;
+    max-height: 45px;
+    transition: opacity 0.5s, max-height 0.6s;
+}

@@ -1,0 +1,32 @@
+#profile_img,.profie_view {
+  object-fit: cover;
+  width:75px;
+  height:75px;
+  border-radius: 50%;
+}
+
+.dropzone {
+  min-height: 80px;
+  height: 80px;
+}
+
+.dz-message {
+  height: 80px;
+  margin: 0;
+}
+
+.defaultIcon {
+  bottom:50px;
+}
+
+.profPicButton {
+  cursor: pointer;
+}
+
+.buttonsDiv {
+  display: none;
+}
+
+.profilePicArea {
+  display: inline-block;
+}

@@ -1,0 +1,21 @@
+@import '../../variables';
+
+.register-dialog {
+    .form-container {
+        flex: 1;
+    }
+    .buttons {
+        display: flex;
+        justify-content: space-between;
+        input,
+        button {
+            min-width: 150px;
+        }
+    }
+    .cds--list-box,
+    .cds--select-input,
+    .cds--text-input {
+        border-bottom-color: $primary;
+        background-color: #2a333a;
+    }
+}

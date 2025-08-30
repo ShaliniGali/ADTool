@@ -1,0 +1,27 @@
+@import '../variables';
+
+.app-icon-svg {
+    height: 3rem;
+    transition: height 0.3s;
+    // filter: invert(1);
+    // &.color-1 {
+    //     filter: invert(37%) sepia(50%) saturate(337%) hue-rotate(235deg)
+    //         brightness(92%) contrast(88%);
+    // }
+    // &.color-2 {
+    //     filter: invert(40%) sepia(13%) saturate(1165%) hue-rotate(88deg)
+    //         brightness(93%) contrast(93%);
+    // }
+    // &.color-3 {
+    //     filter: invert(83%) sepia(27%) saturate(7418%) hue-rotate(146deg)
+    //         brightness(94%) contrast(91%);
+    // }
+    // &.color-4 {
+    //     filter: invert(49%) sepia(23%) saturate(792%) hue-rotate(348deg)
+    //         brightness(93%) contrast(88%);
+    // }
+    // &.color-5 {
+    //     filter: invert(28%) sepia(39%) saturate(2297%) hue-rotate(190deg)
+    //         brightness(88%) contrast(86%);
+    // }
+}

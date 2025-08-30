@@ -1,0 +1,166 @@
+h1, h2 {
+    margin: .5em 0 0 .5em;
+    font-size: 1.2em;
+}
+
+.neumophism_afplan {
+    width: 95%;
+    max-height: 150vh;
+    min-height: 500px;
+    margin: 2em 2em;
+    padding: 1em 1em;
+}
+
+.upload-list .select2-selection__rendered {
+    color: #444 !important;
+}
+
+#upload-list th,
+#upload-list td {
+    width: 100px !important;
+}
+
+#upload-list_length, #upload-list_filter {
+    margin-bottom: 1em;
+}
+
+#upload-list_info, #upload-list_paginate {
+    margin-top: 1em;
+}
+
+div.dataTables_wrapper div.dataTables_length label, 
+div.dataTables_wrapper div.dataTables_filter label {
+    font-weight: normal;
+    text-align: left;
+    white-space: nowrap;
+}
+
+div.dataTables_wrapper div.dataTables_filter {
+    text-align: right;
+}
+
+div.dataTables_wrapper div.dataTables_filter label {
+    display: inline-block;
+    margin-bottom: 0.5rem;
+}
+
+div.dataTables_wrapper div.dataTables_filter input {
+    margin-left: 0.5em;
+    display: inline-block;
+    width: auto;
+}
+
+div.dataTables_wrapper .dataTables_paginate .paginate_button {
+    padding: 0;
+}
+
+#import-afplan-file {
+    max-height:1000px;
+}
+
+#upload-status{
+    margin-left:100px;
+}
+
+.bx--form-item{
+    margin-top:20px;
+}
+.form-control{
+    border:none;
+    border-radius:unset;
+    border-bottom:1px solid #8d8d8d;
+}
+#form-flex-container{
+    display:flex;
+    /* flex-direction:row-reverse;
+    justify-content:flex-end; */
+}
+#upload-form{
+    margin-top:3em;
+}
+#file-input-label, #save-file{
+    background-color:#0f62fe;
+    height:50px;
+    width:200px;
+    color:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    margin:0;
+}
+#save-file{
+    border:none;
+    margin-top:20px;
+
+}
+.bx--file{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+#file-upload-success{
+    width: 320px;
+}
+
+#position-form-select{
+    display:none;
+}
+
+.select2-container .select2-selection--single{
+    height: 40px;
+    border:none;
+    border-radius:unset;
+    border-bottom:1px solid #8d8d8d;
+}
+
+#upload-list_wrapper { 
+    width: 100%;
+}
+
+#afplan-edit {
+    overflow: hidden;
+    max-height: 1000px;
+}
+
+#options_duplicates_modal div.bx--modal-container {
+    height: 95%;
+    width: 95%;
+}
+
+#options_duplicates_private, #options_duplicates_public {
+    margin: 10px 0 20px 0;
+}
+
+#options_duplicates_accordian {
+    display: none;
+}
+
+#options_duplicates_private table > tbody > tr.bx--accordion__item.bx--accordion__item--active, 
+#options_duplicates_public table > tbody > tr.bx--accordion__item.bx--accordion__item--active {
+    display: table-row;
+    padding-bottom: 1.5rem;
+    padding-top: 0.5rem;
+    padding-top: var(--cds-spacing-03, 0.5rem);
+    -webkit-transition: padding-top cubic-bezier(0, 0, 0.38, 0.9) 110ms, padding-bottom cubic-bezier(0, 0, 0.38, 0.9) 110ms;
+    transition: padding-top cubic-bezier(0, 0, 0.38, 0.9) 110ms, padding-bottom cubic-bezier(0, 0, 0.38, 0.9) 110ms;
+}
+
+#options_duplicates_private table > tbody > tr > td > div.bx--form-item.bx--checkbox-wrapper,
+#options_duplicates_public table > tbody > tr > td > div.bx--form-item.bx--checkbox-wrapper {
+    width: 125px;
+}
+
+#options_duplicates_private table > tbody > tr > td.version_cell,
+#options_duplicates_public table > tbody > tr > td.version_cell {
+    padding-top: 1rem;
+    vertical-align: top;
+}
+
+#options_duplicates_public > fieldset.bx--fieldset {
+    margin: 3px;
+}
+
+.button-not-allowed{
+    cursor: not-allowed;
+}

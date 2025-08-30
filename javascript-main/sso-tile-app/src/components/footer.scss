@@ -1,0 +1,20 @@
+@import '../variables';
+
+footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    ul {
+        display: flex;
+        margin: 0;
+        a {
+            padding: 48px;
+            margin: 0 16px;
+        }
+    }
+    li:not(:last-child)::after {
+        content: '|';
+        opacity: .25;
+        color: $primary;
+    }
+}

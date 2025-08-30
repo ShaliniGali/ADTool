@@ -1,0 +1,45 @@
+#
+# Install php73 extension for google authernticator QR code generator:
+#
+
+-----------
+Linux AMI 1
+-----------
+sudo yum install php73-gd.x86_64 && sudo service httpd restart
+
+-----------
+Linux AMI 2
+-----------
+yum install -y php-gd
+systemctl restart php-fpm
+service httpd restart
+
+#
+# Update php settings
+#
+sudo nano /etc/php-7.3.ini
+
+max_execution_time = 3000
+upload_max_filesize = 50M
+max_file_uploads = 50
+post_max_size = 50M
+memory_limit = 512M
+
+
+#
+# SAML SP Server configuration
+#
+    ### SIMPLESAML
+    SetEnv SIMPLESAMLPHP_CONFIG_DIR ${project_sp_path}/application/simplesamlphp/config
+
+    ####### WARNING: DO NOT USE ALIAS FOR CONTROLLER NAME
+    Alias /rb_sp ${project_sp_path}/application/simplesamlphp/www
+    Alias /rb_sso ${project_sp_path}/application/simplesamlsso
+    Alias /rb_logout ${project_sp_path}/application/simplesamlsso/logout.php
+
+    <Directory ${project_sp_path}/application/simplesamlphp/www>
+        Options Indexes FollowSymLinks
+        AllowOverride All
+        Require all granted
+    </Directory>
+

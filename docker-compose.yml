@@ -1,0 +1,180 @@
+version: '3.8'
+
+services:
+  # MySQL Database
+  mysql:
+    image: mysql:8.0
+    container_name: rhombus-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rhombus_root_password
+      MYSQL_DATABASE: rhombus_db
+      MYSQL_USER: rhombus_user
+      MYSQL_PASSWORD: rhombus_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./php-main/sql:/docker-entrypoint-initdb.d
+    networks:
+      - rhombus-network
+
+  # PHP Application
+  php-app:
+    build:
+      context: ./php-main
+      dockerfile: Dockerfile
+    container_name: rhombus-php
+    restart: unless-stopped
+    volumes:
+      - ./php-main:/var/www/html
+      - ./php-main/application/logs:/var/www/html/application/logs
+    environment:
+      - SOCOM_guardian_users=rhombus_db
+      - SOCOM_P1=TRUE
+      - SOCOM_BASE_URL=http://localhost:80/
+      - SOCOM_UI=SOCOM_UI
+      - SOCOM_ENVIRONMENT=siprdevelopment
+      - SOCOM_DEPLOYMENT=TRUE
+      - SOCOM_guardian_deepdive_region=us-gov-west-1
+      - SOCOM_aws_region=us-gov-west-1
+      - SOCOM_tfa_layer=FALSE
+      - SOCOM_subnet_login=FALSE
+      - SOCOM_encryption_key=3XB9g5jQdWybEuUB
+      - SOCOM_encrypt_decrypt_password_iterations=32767
+      - SOCOM_encryption_size=16
+      - SOCOM_encrypt_decrypt_file_iv=test123
+      - SOCOM_SAML_SSO=FALSE
+      - SOCOM_KEYCLOAK_SSO=FALSE
+      - SOCOM_VALIDATE_EMAIL_DOMAIN=FALSE
+      - SOCOM_APP_VERSION=1.0.0
+      - SOCOM_NETWORK_NAME=socom-network
+      - SOCOM_VAULT_FLAG=FALSE
+      - SOCOM_TAG=1.0.0
+      - SOCOM_FILE_CACHING=FALSE
+      - SOCOM_FILE_DOWNLOAD=FALSE
+      - SOCOM_admin_emails=admin@example.com
+      - SOCOM_RHOMBUS_DEBUG=TRUE
+      - CI_CREDENTIALS_HOST=rhombus-mysql
+      - CI_CREDENTIALS_USERNAME=rhombus_user
+      - CI_CREDENTIALS_PASSWORD=rhombus_password
+      - CI_PRODUCTS_0_HOST=rhombus-mysql
+      - CI_PRODUCTS_0_USERNAME=rhombus_user
+      - CI_PRODUCTS_0_PASSWORD=rhombus_password
+    networks:
+      - rhombus-network
+    depends_on:
+      - mysql
+
+  # Python API
+  python-api:
+    build:
+      context: ./python-main
+      dockerfile: Dockerfile
+    container_name: rhombus-python
+    restart: unless-stopped
+    ports:
+      - "8020:8020"
+    volumes:
+      - ./python-main:/code
+    environment:
+      - DATABASE_URL=mysql://rhombus_user:rhombus_password@mysql:3306/rhombus_db
+    networks:
+      - rhombus-network
+    depends_on:
+      - mysql
+
+  # JavaScript/Node.js Application
+  javascript-app:
+    build:
+      context: ./javascript-main
+      dockerfile: Dockerfile
+    container_name: rhombus-javascript
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+      - "3001:3001"
+    volumes:
+      - ./javascript-main:/home/node/code
+      - /home/node/code/node_modules
+    environment:
+      - MINIO_ACCESS_KEY=minioadmin
+      - MINIO_SECRET_KEY=minioadmin123
+      - MINIO_ENDPOINT_URL=http://rhombus-minio:9000
+      - MINIO_BUCKET_NAME=rhombus-documents
+    networks:
+      - rhombus-network
+    depends_on:
+      - python-api
+
+  # Nginx Reverse Proxy
+  nginx:
+    image: nginx:alpine
+    container_name: rhombus-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+      - ./php-main:/var/www/html:ro
+    networks:
+      - rhombus-network
+    depends_on:
+      - php-app
+      - python-api
+      - javascript-app
+
+  # Redis for caching (optional)
+  redis:
+    image: redis:7-alpine
+    container_name: rhombus-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    networks:
+      - rhombus-network
+
+  # phpMyAdmin for database management
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: rhombus-phpmyadmin
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_USER: rhombus_user
+      PMA_PASSWORD: rhombus_password
+    networks:
+      - rhombus-network
+    depends_on:
+      - mysql
+
+  # MinIO Storage Service
+  minio:
+    image: minio/minio:latest
+    container_name: rhombus-minio
+    restart: unless-stopped
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      - MINIO_ROOT_USER=minioadmin
+      - MINIO_ROOT_PASSWORD=minioadmin123
+      - MINIO_BROWSER_REDIRECT_URL=http://localhost:9001
+    volumes:
+      - ./minio-data:/data
+    command: server /data --console-address ":9001"
+    networks:
+      - rhombus-network
+
+volumes:
+  mysql_data:
+    driver: local
+
+networks:
+  rhombus-network:
+    driver: bridge

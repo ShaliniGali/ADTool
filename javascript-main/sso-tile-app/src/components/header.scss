@@ -1,0 +1,29 @@
+header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #090d12;
+    > div {
+        text-align: left;
+    }
+    .username {
+        font-size: 1.4rem;
+    }
+    .welcome {
+        font-size: 2rem;
+    }
+}
+@media (max-height: 880px) {
+    img {
+        width: 3rem;
+    }
+    header {
+        .username {
+            font-size: 1.2rem;
+        }
+        .welcome {
+            font-size: 1.6rem;
+            line-height: 1.8rem;
+        }
+    }
+}

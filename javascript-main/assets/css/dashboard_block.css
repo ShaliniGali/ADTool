@@ -1,0 +1,106 @@
+
+.home-blocks {
+    background: #fff;
+    border: 1px solid #dcdde0;
+    border-radius: 3px;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: box-shadow .25s,transform .25s;
+    width: 100%;
+    margin: 0.5rem;
+}
+    
+.landing-page-opts a:hover{
+    box-shadow: 0 16px 28px rgb(37 38 45 / 12%);
+    transform: translateY(-4px);
+}
+    
+a,a:hover {
+    text-decoration: none;
+    color: unset;
+}
+    
+.landing-page-opts .content {
+    display: flex;
+    padding: 0;
+}
+    
+.landing-page-opts .icon{
+    flex-shrink: 1;
+    align-items: center;
+    display: flex;
+    height: 80px;
+    justify-content: center;
+    margin-bottom: 40px;
+    width: 100%;
+}
+    
+.landing-page-opts .icon picture {
+    height: 100%;
+    text-align: center;
+    width: 100%;
+}
+    
+.landing-page-opts .text {
+    padding: 25px;
+    text-align: left;
+    text-align: center;
+    width: 100%;
+}
+    
+.landing-page-opts .text h3 {
+    margin: 0 0 8px;
+}
+    
+.landing-page-opts a:hover>.faux-link
+{
+    background: linear-gradient(-225deg, #039FCE, #034DC4);
+    color:white;
+    font-weight:bold;
+}
+     
+a.home-blocks.disabled,a.home-blocks.disabled:hover{
+    background: #cecbcb;
+    color: white;
+    cursor: not-allowed !important;
+}
+    
+.g-type-display-4 {
+    font-size: 1.438rem;
+    letter-spacing: -.004em;
+    line-height: 1.391em;
+}
+
+.g-type-body, .g-type-body-strong {
+    font-size: 1.063rem;
+    letter-spacing: .01em;
+    line-height: 1.647em;
+}
+
+.landing-page-opts .faux-link {
+    border-top: 1px solid #dcdde0;
+    padding: 23px;
+    text-align: center;
+}
+.g-type-buttons-and-standalone-links {
+    font-size: 1rem;
+    line-height: 1.5em;
+}
+
+.landing-page-opts a:hover > .faux-link > svg > path
+{ 
+    fill:white;
+}
+
+.home-blocks:hover > .content > div > .icon-image > svg, 
+.home-blocks:hover > .content > div > .icon-image > svg > g
+{ 
+    fill:#034DC4 !important;
+}
+
+.icon-image{
+    width: 5em !important;
+    height: 4em !important;
+}

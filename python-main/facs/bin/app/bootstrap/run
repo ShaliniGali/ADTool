@@ -1,0 +1,20 @@
+#!/bin/bash                                                                                                                                                                           
+SQL=/code/sql
+MYSQL_HOST=feature-api-db
+MYSQL_USER=root
+MYSQL_PW=pw
+APP_NAME=facs
+
+SCHEMAS=(CREDENTIALS_TILE)
+
+for s in ${SCHEMAS[@]}
+do
+    echo "[1] ddl: $s"
+    sed $(printf "s/{{schema}}/$s/g") $SQL/ddl.sql > tmp.sql
+    mysql -h $MYSQL_HOST --user=$MYSQL_USER --password=$MYSQL_PW < tmp.sql
+    echo "[2] data: $s"
+    sed $(printf "s/{{schema}}/$s/g") $SQL/data.sql > tmp.sql
+    mysql -h $MYSQL_HOST --user=$MYSQL_USER --password=$MYSQL_PW < tmp.sql
+done
+
+exit 0

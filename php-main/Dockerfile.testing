@@ -1,0 +1,31 @@
+FROM 357249423005.dkr.ecr.us-gov-west-1.amazonaws.com/devops/base/php8:8.2.17
+
+
+USER root
+
+COPY --chown=1000:1000 . /code
+
+# Install basics needed for compose and base operations
+RUN  dnf install -y wget git zip unzip; \
+
+# Guardian app prep [must go into /tmp/directory]
+     mkdir -p /guardian/{session,environment}; chown -R 1001:root /guardian;
+
+# Install PHP Libraries
+     #cd /code/application; composer install; chown -R 1001:1001 /code;
+
+RUN dnf install -y --nodocs \
+      autoconf gcc make
+RUN mkdir -p /usr/local/src/redis && \
+     pecl install redis
+RUN mkdir -p /usr/local/src/xdebug && \
+     pecl install xdebug
+RUN dnf remove -y autoconf gcc make
+
+EXPOSE 9000
+
+USER 1000
+
+WORKDIR /code
+
+ENTRYPOINT ["sh", "/code/docker/runPHP.sh"]

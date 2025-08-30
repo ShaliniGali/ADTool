@@ -1,0 +1,57 @@
+{
+    "name": "sso-tile-app",
+    "version": "0.1.0",
+    "private": true,
+    "homepage": ".",
+    "dependencies": {
+        "bootstrap": "^5.3.8",
+        "carbon-components": "^10.56.0",
+        "carbon-components-react": "^7.33.0",
+        "carbon-icons": "^7.0.7",
+        "react": "^17.0.2",
+        "react-dom": "^17.0.2",
+        "react-hook-form": "^7.62.0",
+        "react-scripts": "^5.0.1",
+        "sass": "^1.91.0"
+    },
+    "scripts": {
+        "start": "PORT=3001 react-scripts start",
+        "docker": "DOCKER_BUILDKIT=1 docker build -f Dockerfile --target development -t sso-react . && docker run -p 8001:3000 --name react-server --network=base_network --network-alias=react-server sso-react",
+        "docker-test": "DOCKER_BUILDKIT=1 docker build -f Dockerfile.test -t sso-react . && docker run --rm sso-react",
+        "build": "BUILD_PATH='../dist' react-scripts build",
+        "test": "react-scripts test",
+        "test-api": "jest --coverage /tests ",
+        "test:unit": "react-scripts test --watchAll=false --coverage",
+        "test:unit:summary": "react-scripts test --watchAll=false --coverage --coverageReporters=\"text-summary\"",
+        "eject": "react-scripts eject"
+    },
+    "eslintConfig": {
+        "extends": [
+            "react-app",
+            "react-app/jest"
+        ]
+    },
+    "browserslist": {
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
+        ]
+    },
+    "jest": {
+        "coverageReporters": [
+            "json",
+            "html"
+        ],
+        "collectCoverageFrom": [
+            "src/**/*.{js,jsx}",
+            "!src/index.js",
+            "!src/reportWebVitals.js"
+        ]
+    }
+}

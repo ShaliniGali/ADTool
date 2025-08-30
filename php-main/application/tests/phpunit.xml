@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd" bootstrap="./Bootstrap.php" backupGlobals="false" colors="true" cacheResult="false">
+  <php>
+    <server name="SERVER_NAME" value="http://localhost"/>
+  </php>
+  <testsuites>
+    <testsuite name="CodeIgniter Application Test Suite">
+      <directory suffix="test.php">./</directory>
+      <exclude>./_ci_phpunit_test/</exclude>
+    </testsuite>
+  </testsuites>
+  <coverage>
+    <report>
+      <html outputDirectory="build/coverage" lowUpperBound="50" highLowerBound="90"/>
+      <clover outputFile="build/logs/clover.xml"/>
+    </report>
+  </coverage>
+  <logging>
+    <junit outputFile="build/logs/junit.xml"/>
+  </logging>
+  <source>
+    <include>
+      <directory suffix=".php">../controllers</directory>
+      <directory suffix=".php">../models</directory>
+      <file>../libraries/LoginLayers.php</file>
+      <file>../libraries/KG/Rhombus_Elastic_Process.php</file>
+      <file>../libraries/AccountStatus.php</file>
+      <file>../libraries/Password_encrypt_decrypt.php</file>
+      <file>../libraries/RB_geoJson.php</file>
+      <file>../libraries/RB_js_css.php</file>
+      <file>../libraries/Rhombus_Keycloak.php</file>
+      <file>../libraries/Rhombus_Platform_One.php</file>
+      <file>../libraries/UserAccountType.php</file>
+    </include>
+    <exclude>
+      <!-- CD and MTA files -->
+      <directory suffix=".php">../controllers/NIPR</directory>
+      <directory suffix=".php">../controllers/CD</directory>
+      <directory suffix=".php">../controllers/MTA</directory>
+      <directory suffix=".php">../models/CD</directory>
+      <directory suffix=".php">../models/MTA</directory>
+      <!-- Third-party libraries -->
+      <directory suffix=".php">../libraries/GuzzleHttp</directory>
+      <directory suffix=".php">../libraries/JmesPath</directory>
+      <directory suffix=".php">../libraries/minify</directory>
+      <directory suffix=".php">../libraries/phpqrcode</directory>
+      <directory suffix=".php">../libraries/Psr</directory>
+      <directory suffix=".php">../libraries/minify</directory>
+      <directory suffix=".php">../libraries/DirectoryManager.php</directory>
+      <directory suffix=".php">../libraries/Rhombus_Form_validation.php</directory>
+      <directory suffix=".php">../libraries/Minify.php</directory>
+      <directory suffix=".php">../libraries/Seeder.php</directory>
+      <!-- Views -->
+      <directory suffix=".php">../views</directory>
+    </exclude>
+  </source>
+</phpunit>

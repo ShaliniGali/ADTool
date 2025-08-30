@@ -1,0 +1,182 @@
+[
+    {
+        "key": "sb",
+        "label": "Strategic Basing",
+        "icon": "5-sb.svg",
+        "status": "REGISTERED",
+        "url": "https://dev-actf.rhombuspower.com/",
+        "group": "a5",
+        "favorite": false,
+        "description": "<h5>Challenge:</h5><p>How can we develop and evaluate data-informed basing options and generate options to realign missions to minimize job losses, as force structure changes to modernize the Air Force?</p><h5>Value:</h5><p>Support Air Force strategic decision-making by fusing data sources, automating analytic processes, using AI when appropriate, and deploying visualization tools to help AOs and senior leaders develop and defend COAs, and message the complex impacts their decisions will have across the Air Force and DoD.</p>"
+    },
+    {
+        "key": "wss",
+        "label": "Weapons System Sustainment What If",
+        "icon": "2-wss.svg",
+        "status": "REGISTERED",
+        "url": "https://dev-actf.rhombuspower.com/",
+        "group": "a2",
+        "favorite": false,
+        "description": "<h5>Challenge:</h5><p>How can we develop and evaluate data-informed basing options and generate options to realign missions to minimize job losses, as force structure changes to modernize the Air Force?</p><h5>Value:</h5><p>Support Air Force strategic decision-making by fusing data sources, automating analytic processes, using AI when appropriate, and deploying visualization tools to help AOs and senior leaders develop and defend COAs, and message the complex impacts their decisions will have across the Air Force and DoD.</p>"
+    },
+    {
+        "key": "fh",
+        "label": "Flying Hours What If",
+        "icon": "2-fh.svg",
+        "status": "REGISTERED",
+        "url": "https://dev-actf.rhombuspower.com/",
+        "group": "a2",
+        "favorite": false,
+        "description": "<h5>Challenge:</h5><p>How can we develop and evaluate data-informed basing options and generate options to realign missions to minimize job losses, as force structure changes to modernize the Air Force?</p><h5>Value:</h5><p>Support Air Force strategic decision-making by fusing data sources, automating analytic processes, using AI when appropriate, and deploying visualization tools to help AOs and senior leaders develop and defend COAs, and message the complex impacts their decisions will have across the Air Force and DoD.</p>"
+    },
+    {
+        "key": "mp",
+        "label": "Manpower What If",
+        "icon": "2-manpower.svg",
+        "status": "SIPR",
+        "url": "https://dev-actf.rhombuspower.com/",
+        "group": "a2",
+        "favorite": false,
+        "description": "<h5>Challenge:</h5><p>How can we develop and evaluate data-informed basing options and generate options to realign missions to minimize job losses, as force structure changes to modernize the Air Force?</p><h5>Value:</h5><p>Support Air Force strategic decision-making by fusing data sources, automating analytic processes, using AI when appropriate, and deploying visualization tools to help AOs and senior leaders develop and defend COAs, and message the complex impacts their decisions will have across the Air Force and DoD.</p>"
+    },
+    {
+        "key": "actf",
+        "label": "Aircrew Ecosystem",
+        "icon": "5-actf.svg",
+        "status": "REGISTERED",
+        "url": "https://dev-actf.rhombuspower.com/",
+        "group": "a5",
+        "favorite": false,
+        "description": "<h5>Challenge:</h5><p>How can we develop and evaluate data-informed basing options and generate options to realign missions to minimize job losses, as force structure changes to modernize the Air Force?</p><h5>Value:</h5><p>Support Air Force strategic decision-making by fusing data sources, automating analytic processes, using AI when appropriate, and deploying visualization tools to help AOs and senior leaders develop and defend COAs, and message the complex impacts their decisions will have across the Air Force and DoD.</p>"
+    },
+    {
+        "key": "pvoe",
+        "label": "Programmed vs. Obligations & Expenditures",
+        "icon": "2-pvoe.svg",
+        "status": "REGISTERED",
+        "url": "https://dev-actf.rhombuspower.com/",
+        "group": "a2",
+        "favorite": false,
+        "description": "<h5>Challenge:</h5><p>How can we develop and evaluate data-informed basing options and generate options to realign missions to minimize job losses, as force structure changes to modernize the Air Force?</p><h5>Value:</h5><p>Support Air Force strategic decision-making by fusing data sources, automating analytic processes, using AI when appropriate, and deploying visualization tools to help AOs and senior leaders develop and defend COAs, and message the complex impacts their decisions will have across the Air Force and DoD.</p>"
+    },
+    {
+        "key": "cspi",
+        "label": "Cost, Schedule, Performance Insights",
+        "icon": "2-cspi.svg",
+        "status": "PENDING",
+        "url": "https://dev-actf.rhombuspower.com/",
+        "group": "a2",
+        "favorite": false,
+        "description": "<h5>Challenge:</h5><p>How can we develop and evaluate data-informed basing options and generate options to realign missions to minimize job losses, as force structure changes to modernize the Air Force?</p><h5>Value:</h5><p>Support Air Force strategic decision-making by fusing data sources, automating analytic processes, using AI when appropriate, and deploying visualization tools to help AOs and senior leaders develop and defend COAs, and message the complex impacts their decisions will have across the Air Force and DoD.</p>"
+    },
+    {
+        "key": "ppbe",
+        "label": "PPB&E",
+        "icon": "2-ppbe.svg",
+        "status": "REGISTERED",
+        "url": "https://dev-actf.rhombuspower.com/",
+        "group": "a2",
+        "favorite": false,
+        "description": "<h5>Challenge:</h5><p>How can we develop and evaluate data-informed basing options and generate options to realign missions to minimize job losses, as force structure changes to modernize the Air Force?</p><h5>Value:</h5><p>Support Air Force strategic decision-making by fusing data sources, automating analytic processes, using AI when appropriate, and deploying visualization tools to help AOs and senior leaders develop and defend COAs, and message the complex impacts their decisions will have across the Air Force and DoD.</p>"
+    },
+    {
+        "key": "eaafm",
+        "label": "Enterprise Aircraft Availability Forecasting Model",
+        "icon": "5-eaafm.svg",
+        "status": "REGISTERED",
+        "url": "https://dev-actf.rhombuspower.com/",
+        "group": "a5",
+        "favorite": false,
+        "description": "<h5>Challenge:</h5><p>How can we develop and evaluate data-informed basing options and generate options to realign missions to minimize job losses, as force structure changes to modernize the Air Force?</p><h5>Value:</h5><p>Support Air Force strategic decision-making by fusing data sources, automating analytic processes, using AI when appropriate, and deploying visualization tools to help AOs and senior leaders develop and defend COAs, and message the complex impacts their decisions will have across the Air Force and DoD.</p>"
+    },
+    {
+        "key": "mets",
+        "label": "Mission Engineering Threads",
+        "icon": "3-mets.svg",
+        "status": "COMING_SOON",
+        "url": "https://dev-actf.rhombuspower.com/",
+        "group": "a3",
+        "favorite": false,
+        "description": "<h5>Challenge:</h5><p>How can we develop and evaluate data-informed basing options and generate options to realign missions to minimize job losses, as force structure changes to modernize the Air Force?</p><h5>Value:</h5><p>Support Air Force strategic decision-making by fusing data sources, automating analytic processes, using AI when appropriate, and deploying visualization tools to help AOs and senior leaders develop and defend COAs, and message the complex impacts their decisions will have across the Air Force and DoD.</p>"
+    },
+    {
+        "key": "capdev",
+        "label": "Capability Development",
+        "icon": "3-capdev.svg",
+        "status": "COMING_SOON",
+        "url": "https://dev-actf.rhombuspower.com/",
+        "group": "a3",
+        "favorite": false,
+        "description": "<h5>Challenge:</h5><p>How can we develop and evaluate data-informed basing options and generate options to realign missions to minimize job losses, as force structure changes to modernize the Air Force?</p><h5>Value:</h5><p>Support Air Force strategic decision-making by fusing data sources, automating analytic processes, using AI when appropriate, and deploying visualization tools to help AOs and senior leaders develop and defend COAs, and message the complex impacts their decisions will have across the Air Force and DoD.</p>"
+    },
+    {
+        "key": "slrd",
+        "label": "Senior Leader Resourcing Dashboard",
+        "icon": "3-slrd.svg",
+        "status": "REGISTERED",
+        "url": "https://dev-actf.rhombuspower.com/",
+        "group": "a3",
+        "favorite": false,
+        "description": "<h5>Challenge:</h5><p>How can we develop and evaluate data-informed basing options and generate options to realign missions to minimize job losses, as force structure changes to modernize the Air Force?</p><h5>Value:</h5><p>Support Air Force strategic decision-making by fusing data sources, automating analytic processes, using AI when appropriate, and deploying visualization tools to help AOs and senior leaders develop and defend COAs, and message the complex impacts their decisions will have across the Air Force and DoD.</p>"
+    },
+    {
+        "key": "afforgen",
+        "label": "AFFORGEN / GFMAP",
+        "icon": "5-afforgen.svg",
+        "status": "COMING_SOON",
+        "url": "https://dev-actf.rhombuspower.com/",
+        "group": "a5",
+        "favorite": false,
+        "description": "<h5>Challenge:</h5><p>How can we develop and evaluate data-informed basing options and generate options to realign missions to minimize job losses, as force structure changes to modernize the Air Force?</p><h5>Value:</h5><p>Support Air Force strategic decision-making by fusing data sources, automating analytic processes, using AI when appropriate, and deploying visualization tools to help AOs and senior leaders develop and defend COAs, and message the complex impacts their decisions will have across the Air Force and DoD.</p>"
+    },
+    {
+        "key": "depmap",
+        "label": "Dependency Mapping",
+        "icon": "3-depmap.svg",
+        "status": "COMING_SOON",
+        "url": "https://dev-actf.rhombuspower.com/",
+        "group": "a3",
+        "favorite": false,
+        "description": "<h5>Challenge:</h5><p>How can we develop and evaluate data-informed basing options and generate options to realign missions to minimize job losses, as force structure changes to modernize the Air Force?</p><h5>Value:</h5><p>Support Air Force strategic decision-making by fusing data sources, automating analytic processes, using AI when appropriate, and deploying visualization tools to help AOs and senior leaders develop and defend COAs, and message the complex impacts their decisions will have across the Air Force and DoD.</p>"
+    },
+    {
+        "key": "comp",
+        "label": "Competition",
+        "icon": "1-competition.svg",
+        "status": "REGISTERED",
+        "url": "https://dev-actf.rhombuspower.com/",
+        "group": "a1",
+        "favorite": false,
+        "description": "<h5>Challenge:</h5><p>How can we develop and evaluate data-informed basing options and generate options to realign missions to minimize job losses, as force structure changes to modernize the Air Force?</p><h5>Value:</h5><p>Support Air Force strategic decision-making by fusing data sources, automating analytic processes, using AI when appropriate, and deploying visualization tools to help AOs and senior leaders develop and defend COAs, and message the complex impacts their decisions will have across the Air Force and DoD.</p>"
+    },
+    {
+        "key": "knowone",
+        "label": "Knowledge One",
+        "icon": "1-knowone.svg",
+        "status": "REGISTERED",
+        "url": "https://dev-actf.rhombuspower.com/",
+        "group": "a1",
+        "favorite": false,
+        "description": "<h5>Challenge:</h5><p>How can we develop and evaluate data-informed basing options and generate options to realign missions to minimize job losses, as force structure changes to modernize the Air Force?</p><h5>Value:</h5><p>Support Air Force strategic decision-making by fusing data sources, automating analytic processes, using AI when appropriate, and deploying visualization tools to help AOs and senior leaders develop and defend COAs, and message the complex impacts their decisions will have across the Air Force and DoD.</p>"
+    },
+    {
+        "key": "kg",
+        "label": "Knowledge Graph",
+        "icon": "4-kg.svg",
+        "status": "REGISTERED",
+        "url": "https://dev-actf.rhombuspower.com/",
+        "group": "a4",
+        "favorite": false,
+        "description": "<h5>Challenge:</h5><p>How can we develop and evaluate data-informed basing options and generate options to realign missions to minimize job losses, as force structure changes to modernize the Air Force?</p><h5>Value:</h5><p>Support Air Force strategic decision-making by fusing data sources, automating analytic processes, using AI when appropriate, and deploying visualization tools to help AOs and senior leaders develop and defend COAs, and message the complex impacts their decisions will have across the Air Force and DoD.</p>"
+    },
+    {
+        "key": "storage",
+        "label": "File Storage",
+        "icon": "4-kg.svg",
+        "status": "REGISTERED",
+        "url": "http://localhost:3000/s3/list?bucket=rhombus-documents",
+        "group": "a4",
+        "favorite": true,
+        "description": "<h5>Storage Service:</h5><p>Access your S3-compatible storage buckets and manage files through the Rhombus storage system.</p><h5>Features:</h5><p>Upload, download, and organize files in rhombus-documents, rhombus-uploads, and rhombus-backups buckets.</p>"
+    }
+]

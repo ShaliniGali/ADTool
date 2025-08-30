@@ -1,0 +1,38 @@
+/* Dark Mode Styles */
+
+.dark-mode {
+    background-color: #1a1a1a;
+    color: #ffffff;
+}
+
+.dark-mode .rhombus-card {
+    background-color: #2d2d2d;
+    border: 1px solid #404040;
+}
+
+.dark-mode .rhombus-table th {
+    background-color: #404040;
+    color: #ffffff;
+}
+
+.dark-mode .rhombus-table tr:hover {
+    background-color: #3a3a3a;
+}
+
+.dark-mode input,
+.dark-mode select,
+.dark-mode textarea {
+    background-color: #2d2d2d;
+    color: #ffffff;
+    border: 1px solid #404040;
+}
+
+.dark-mode .btn {
+    background-color: #404040;
+    color: #ffffff;
+    border: 1px solid #555555;
+}
+
+.dark-mode .btn:hover {
+    background-color: #555555;
+}

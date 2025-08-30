@@ -1,0 +1,9 @@
+{
+    "scripts": {
+        "test:unit":   [
+            "Composer\\Config::disableProcessTimeout",
+            "./phpunit -d memory_limit=1528M"
+        ]
+    }
+
+}

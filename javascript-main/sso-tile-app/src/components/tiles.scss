@@ -1,0 +1,132 @@
+@import '../variables';
+
+$top: 20px;
+$left: 8%;
+
+.tiles-container {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    padding: $top $left;
+    position: relative;
+    &.has-dialog {
+        .app-tile {
+            opacity: 0.3;
+            transition: opacity 0.3s ease-out;
+        }
+    }
+}
+.app-filter {
+    margin: 0 12px;
+    display: flex;
+    .cds--tabs {
+        max-width: 1316px;
+        .cds--tabs__nav-link {
+            max-width: 30rem;
+            &:focus,
+            &:active {
+                outline: 0;
+            }
+        }
+        .cds--tabs__nav-item--selected {
+            border-bottom-color: $warning;
+            font-weight: 400;
+        }
+    }
+    .search-container {
+        flex: 1;
+        box-shadow: inset 0 -2px #525252;
+    }
+}
+.favorite-app-tiles {
+    display: flex;
+    flex-direction: column;
+    width: 25%;
+    transition: width 0.2s ease-out;
+    .app-tile {
+        flex: 1;
+        margin: 12px;
+    }
+    &.no-favs {
+        width: 0;
+    }
+}
+.app-tiles {
+    flex: 1;
+    // display: flex;
+    // flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(4, 25%);
+    gap: 0px;
+    grid-auto-rows: minmax(25%, auto);
+    .app-tile {
+        margin: 12px;
+    }
+}
+.app-tile {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    opacity: 1;
+    transition: opacity 0.3s ease-out;
+}
+.dialog {
+    position: absolute;
+    z-index: 2;
+    top: 12px;
+    left: 12px;
+    width: 42.5%;
+    border: solid 1px $primary;
+    padding: 48px;
+    bottom: 12px;
+    background-color: #0b1219;
+    display: flex;
+    flex-direction: column;
+}
+.toast-container {
+    bottom: 0;
+    right: 2rem;
+    position: absolute;
+}
+@media (max-width: 1450px) {
+    .tiles-container {
+        padding: $top !important;
+    }
+}
+@media (min-width: 2000px) {
+    .cds--tabs .cds--tabs__nav-link {
+        font-size: 1.1rem;
+    }
+    .cds--tabs {
+        max-width: 1556px !important;
+    }
+}
+
+.badge-success{
+    font-size: inherit !important;
+}
+
+.badge-red{
+    background-color: #e60000;
+    color: #ffffff;
+    font-size: inherit !important;
+}
+
+.badge-orange{
+    background-color: #e77300;
+    color: #ffffff;
+    font-size: inherit !important;
+}
+
+.badge-blue{
+    background-color: #0064e6;
+    color: #ffffff;
+    font-size: inherit !important;
+}
+
+.badge-grey {
+    background-color: #807f7f;
+    color: #fff;
+    font-size: inherit !important;
+}

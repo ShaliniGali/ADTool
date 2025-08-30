@@ -1,0 +1,429 @@
+!------------------------------------------------
+
+Registration when the Users table is empty (30-November-2020)
+
+!------------------------------------------------
+
+Do not manually change or delete the file application/first_admin_folder/FirstAdminFlag.txt
+
+the following line should be in .gitignore file:
+
+FirstAdminFlag.txt
+
+
+!------------------------------------------------
+
+Login and Registeration (V: 2.0.0) with TFA layering system (28-August-2020)
+
+Updated 10 September (V.3.0.0)
+
+!------------------------------------------------
+
+Must install in your server for google auth qr code generator: 
+
+sudo yum install php73-gd.x86_64 && sudo service httpd restart
+
+C-> Created
+M-> Modified
+D-> Deleted
+
+-------------------------------------------------
+
+ Config:
+
+ M application/config/autoload.php:
+ Load these libraries: 'session','form_validation','database','minify','encryption','email', 'DirectoryManager','Rhombus_Form_validation', 'Password_encrypt_decrypt', 'GoogleAuthenticator', 'phpqrcode/qrlib', 'UserAccountType', 'LoginLayers', 'AccountStatus'
+
+ M application/config/constants.php
+
+ Controllers:
+
+ C Account_manager_controller.php
+ C Google_2FA_controller.php
+ D Key.php
+ M Login.php
+ C Login_token_controller.php
+ M Register.php
+ D Register.php
+ 
+ Libraries:
+ 
+ C GoogleAuthenticator.php
+ C Password_encrypt_decrypt.php
+ C UserAccountType.php
+ C GuzzleHttp/*
+ C JmesPath/*
+ C Psr/*
+ C phpqrcode/*
+ C LoginLayers
+ C AccountStatus
+ 
+ Models:
+
+ C login_register/Google_2FA_model.php
+ C login_register/Login_model.php
+ C login_register/Login_private_subnet_model.php
+ C login_register/Login_token_model.php
+ C login_register/Register_model.php
+ C login_register/Users_keys_model.php
+ C Account_manager_model.php
+ M DB_ind_model.php
+ M DBs.php
+ M Generic.php
+ D Login_model.php
+ D Register_model.php
+
+
+ Views:
+ 
+ M templates/essential_javascripts.php
+ M templates/header_view.php
+ M templates/modals.php
+ M templates/navbar_view.php
+ C templates/terms_and_conditions.php
+ C account_manager_view.php
+ C account_view.php
+ M activate_register_view.php
+ M activate_view.php
+ D authsetup_form.php
+ M login_form.php
+ C login_private_subnet_view.php
+ C login_tfa_view.php
+ M login_view.php
+ C message_view.php
+ M register_form.php
+ C register_tfa_view.php
+ C reset_password_view.php
+
+ Assets:
+ 
+
+ assets/css/
+ C bootstrap-datepicker.standalone.css
+ C profile.css
+ C rhombus_datatable.css
+ C select2.css
+ C terms-of-service-modal.css
+ C tfa.css
+ 
+ assets/css/essential/
+ C dark-mode-login.css
+ C rhombus-login.css
+ M rhombus.css
+ 
+ assets/js/actions/
+ C account_manager.js
+ C activate_register.js
+ D authsetup.js
+ C google_tfa.js
+ D key.js
+ M login.js
+ C login_token.js
+ C recovery_code.js
+ M register.js
+ C reset_login_password.js
+ D tfa.js
+
+
+!------------------------------------------------
+
+JS CSS File Compression (27 August 2020)
+
+!------------------------------------------------
+
+Added a capability for css compression (locally and globally). The new version is also compatible with the older version.
+
+Modified files:    libraries/RB_js_css.php
+
+How to call it:
+
+$css_files = array();
+$css_files['bootstrap'] = ['bootstrap.css','global'];
+$css_files['bootstrap1'] = ['bootstrap1.css','custom'];
+$CI =& get_instance();
+$CI->load->library('RB_js_css');
+$CI->rb_js_css->compress($css_files);
+
+
+!------------------------------------------------
+
+JS CSS File Compression (14 July 2020)
+
+!------------------------------------------------
+
+Files present in S3 environment:
+
+accessibility.js, accessibility.js.map, bootstrap-datepicker.js, bootstrap.bundle.js, clipboard.min.js, cryptoJS.js, d3.min.js, dataTables.searchHighlight.min.js, datatables.min.js, datatables.scroller.min.js, dropzone.js, dropzone.min.js, export-data.js, export-data.js.map, exporting.js, exporting.js.map, heatmap.js, heatmap.js.map, highchart_dark_theme.js, highcharts.js, highcharts.js.map, highstock.js, highstock.js.map, jquery-3.3.1.min.js, jquery.highlight.js, mapbox-gl-geocoder.min.js, mapbox-gl.js, particles.js, pdfmake.min.js, popper.min.js, select2.full.js, series-label.js, series-label.js.map, tagsinput.min.js, tilt.jquery.js, typeahead.bundle.js
+
+Created files:      libraries/RB_js_css.php
+
+Modified files:     Constant.php
+
+How to call it:
+
+$js_files = array();
+$js_files['login'] = ["actions/login.js",'custom'];
+$js_files['particles'] = ["particles.js",'global'];
+
+$CI =& get_instance();
+$CI->load->library('RB_js_css');
+$CI->rb_js_css->compress($js_files);
+
+!------------------------------------------------
+
+Non-indexing all web-pages (6 July 2020)
+
+!------------------------------------------------
+
+Created files:      robots.txt
+
+Modified files:     application/views/templates/header_view.php
+
+Added a line:  <meta name="robots" content="noindex,nofollow">
+ 
+
+!------------------------------------------------
+
+Directory Manager Library (24 June 2020)
+
+!------------------------------------------------
+
+Created files:     libraries/DirectoryManager.php
+
+Usage: $this->directorymanager->createDirectory("temp");
+
+The above command will create a folder with the name temp in the applications directory with 0777 permissions.
+
+
+    1. To create a folder called myfolder inside the application folder with 777 permissions:
+        createDirectory("myfolder");
+        OR
+        createDirectory("myfolder", "");
+        OR
+        createDirectory("myfolder", "", 777);
+
+    2. To create a folder called myfolder inside the assets folder with permissions 665:
+        createDirectory("myfolder", "assets", 665);
+
+        (same goes for any folder directly inside the project root directory: application, system, ... etc)
+
+    3. To create a folder called myfolder inside the system/core folder with permissions 333:
+        createDirectory("myfolder", "system/core", 333);
+
+        (same goes for any full path directory inside the project root directory: system/core/compact ... etc)
+
+    4. To create a folder called myfolder inside the project root directory with permissions 775:
+        createDirectory("myfolder", "/", 775);
+
+        
+!------------------------------------------------
+
+Generating compress folders on the fly if they do not exits (22 June 2020)
+
+!------------------------------------------------
+
+
+Modified files: application/libraries/Minify.php
+
+
+!------------------------------------------------
+
+Adding Environment variable feature (21 June 2020)
+
+!------------------------------------------------
+
+Updated files:      index.php
+
+Createed files/folders:     system/core/dotenv
+                             .env at your server root folder independent of application (HTML Folder)
+                             
+Usage:              For the simplicity of everyone working with multiple projects; we will make environment variables project specific.
+
+For example:        
+
+Step 1:  Create environment file:
+        sudo nano / .env
+
+Step 2:  Intiailize your envrionment variables:
+
+
+#
+# S stands for Security REPO
+#
+# You will be defining project sepcific baseurl; consult your project manager
+#
+
+S_BaseURL=https://abc.com:7905
+
+
+#
+#       AWS Keys
+#
+AWS_access_key= 
+AWS_secret= 
+
+#
+#       Maptiles
+#
+Rhombus_base_map=
+Rhombus_mapbox_labels=
+
+Step 3: Listen your environment variables
+
+getenv('S_BaseURL')
+getenv('AWS_access_key')
+getenv('AWS_secret')
+
+
+!------------------------------------------------
+
+Adding Python for fetching credentials (10 June 2020)
+
+!------------------------------------------------
+
+Created files:      application/python/get_cred.py
+
+Usage:              Call this python file to fetch DB credentails
+
+For example:        python get_cred.py --new_key "asdasdasdasd" --dbname "rhombustest"
+
+
+!------------------------------------------------
+
+Backend Form Validation (5 June 2020)
+
+!------------------------------------------------
+
+Created files:      libraries/Rhombus_Form_validation.php
+Edited files:       application/config.php
+
+$config['subclass_prefix'] = 'Rhombus_';
+
+Usage: Examples of form validation is at application/controllers/Form_validation_example.php
+
+
+
+!------------------------------------------------
+
+Solving JS caching problem (22 May 2020)
+
+!------------------------------------------------
+
+Updated files:      Home_view.php, constants.php, templates/libraries.php   
+
+Usage: Whenever a js file needs to be added in view. Follow the format in home_view.php and enable file_caching_js in constants.php
+
+//
+// Adding JS files with unique key. A key is defined by the purpose of adding that file
+//
+ $js_files['purpose_1'] = "accessibility.js";
+ $js_files['purpose_2'] = "actions/authsetup.js";
+
+
+!------------------------------------------------
+
+New login and Registeration Page:
+
+!------------------------------------------------
+17-May-2020  
+
+
+C-> Created
+M-> Modified
+F-> Functions added or modified
+
+/application/views:
+
+C-> activate_register_view
+C-> activate_view
+C-> authsetup_form
+C-> login_form
+M-> login_view
+C-> register_form
+
+/application/Models:
+
+C-> Register_model
+C-> Login_model
+M-> Generic: 
+    F-> send_email
+    F-> dump_users_info
+M-> dbs
+M-> DB_ind_model
+    F-> fetch_user_ip 
+    F-> encrypted_string 
+    F-> create_login_indicators 
+
+/application/Controllers:
+
+C-> Key 
+M-> Login 
+C-> Register
+C-> Tfa
+
+/application/Config:
+M-> Config.php 
+M-> Autoload.php 
+
+/js/actions/:
+M-> login.js
+C-> authsetup.js
+C-> forms.js
+C-> key
+C-> register
+C-> tfa
+
+!------------------------------------------------
+
+/Generic_controller/dump_accounts/10
+
+!------------------------------------------------
+
+Create dump passwords
+
+28-Oct-2019:  
+
+Updated files:      Generic_controller.php, constants.php   
+Function added:     dump_accounts in Generic_controller.php
+
+Usage: By default, var RHOMBUS_PASSWORD_GENERATOR is set as 'FALSE' in constants.php. Make it 'TRUE' and from your brower call: base_url/Generic_controller/dump_accounts/10
+
+This will generate 10 random passwords. You need to copy (only encrypted_password and salt) in your db. 
+
+!------------------------------------------------
+
+Listen php environment variables in js script.
+
+23-Oct-2019:  
+
+Updated files:      rhombus.js   
+Function added:     xhr_gb_var request and rb_en_de_fixed()
+
+Created files:      Js.php (contorller file) 
+
+Usage: Simply define variables in Js.php (contorller file) and use the varibale name directly anywhere in the view or js file.
+
+!------------------------------------------------
+
+Add project name on login page
+
+18-Oct-2019:  
+
+Updated files:      constants.php, login_view.php   
+
+!------------------------------------------------
+
+Update dark and light mode dynamically
+
+17-Oct-2019:    
+
+Updated files:      rhombus.js   
+Function added:     rhombus_dark_mode()
+
+//
+//  1: "dark"  or "light" 
+//  2: "switch_true" or "switch_false"
+//
+rhombus_dark_mode("dark","switch_false"); 
+
+

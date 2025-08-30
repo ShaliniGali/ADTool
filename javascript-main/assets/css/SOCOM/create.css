@@ -1,0 +1,71 @@
+.validation-errors > p {
+    background-color: red;
+    color: white;
+    padding: 7px;
+    border-radius: 5px;
+    text-align: center;
+    width: fit-content;
+    margin: 0px 3px 3px 0px;
+  }
+  
+  /* .form-group.form-group-default.active{
+    border: 1px solid #2196F3 !important;
+  } */
+  
+  .select2-container--open .select2-selection,
+  .form-group-default.focused {
+  border: 1px solid #0072EC !important;
+  }
+  /* 
+  .form-control.form-control-sm:focus {
+  border: 1px solid #0072EC;
+  }
+  
+  textarea:focus {
+    border-color: #0072EC !important;
+  } */
+  /* 
+  .form-group.form-group-default > label {
+  color: #867b7b;
+  }
+  
+  .form-control[disabled] {
+  background: #aeaeaf7d !important;
+  color: black !important; 
+  }
+  
+  .form-group.form-group-default:hover,
+  .form-group-default.form-group-default-select2:hover {
+    border: 1px solid #2196F3 !important
+  } */
+  
+  .select2-container--default.select2-container--focus .select2-selection--multiple {
+    border:1px solid #0072EC;
+  }
+  
+  /* .form-check.switch input[type="checkbox"]+label:before {
+    background-image: linear-gradient(to right, #3D8CFE 0%, #3D8CFE 44%, rgba(0, 0, 0, 0.14) 62%, rgba(0, 0, 0, 0.04) 97%) !important;
+  } */
+  
+  
+   .add-margin-left{
+       margin-left:2em !important;
+   }
+    .afkca-filter-trigger.pg-icon{
+        cursor: pointer;
+      width:2em;
+    }
+    #afkca-filter-tag,
+   .afkca-filter-trigger.pg-icon[trigger="on"] > svg > path{
+      color: #0372ec;
+    fill: #0372ec
+   }
+  
+    #afkca-filter-tag {
+      margin-bottom: 1em;
+    }
+   .select2-container .select2-selection {
+      height: 60px;
+      overflow-x: scroll;
+      overflow-y: scroll;
+  } 

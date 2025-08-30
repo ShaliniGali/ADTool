@@ -1,0 +1,7 @@
+curl -w "\n\n" --location --request POST 'http://localhost:8020/facs/register' --header 'Content-Type: application/json' --header 'Accept: application/json' --data-raw '{"key": "<KEY>"}'
+curl -w "\n\n" --location --request POST 'http://localhost:8020/facs/login' --header 'Content-Type: application/json' --header 'Accept: application/json' --data-raw '{"key": "<KEY>"}'
+curl -w "\n\n" --location --request POST 'http://localhost:8020/facs/ingest/' --header 'Content-Type: application/json' --header 'Accept: application/json' --header 'Authorization: Bearer <TOKEN>' --data-raw '{"info_Type": "","info_Value": ""}'
+curl -w "\n\n" --location --request POST 'http://localhost:8020/facs/hasaccess/' --header 'Content-Type: application/json' --header 'Accept: application/json' --header 'Authorization: Bearer <TOKEN>' --data-raw '{"app_name":"","feature_name":"","user_roles":[""],"user_name":""}'
+curl -w "\n\n" --location --request DELETE 'http://localhost:8020/facs/rmfeature/' --header 'Content-Type: application/json' --header 'Accept: application/json' --header 'Authorization: Bearer <TOKEN>' --data-raw '{"app_name":"","feature_name":"","user_name":""}'
+
+curl -w "\n\n" --location --request POST 'http://localhost:8020/facs/hasaccess/' --header 'Content-Type: application/json' --header 'Accept: application/json' --data-raw '{"app_name":"ACTF","subapp_name":"actf","feature_name":"wss1","user_roles":["Admin","Moderator","User1"]}'

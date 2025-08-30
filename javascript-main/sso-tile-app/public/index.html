@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <link rel="icon" href="favicon.ico" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+
+        <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+        <link rel="stylesheet" href="./static/css/all.min.css" />
+        <title>GUARDIAN SSO</title>
+        <script>
+            // Here PHP should include the user data
+            window.USER_DATA = {
+                fullName: 'John Doe',
+                email: 'john.doe@exmaple.com',
+                department: 'R&D',
+            }
+
+            // here PHP should include the apps data. For JSON structure see apps.json
+            window.APPS_DATA = []
+        </script>
+    </head>
+    <body>
+        <noscript>You need to enable JavaScript to run this app.</noscript>
+        <div id="root"></div>
+    </body>
+</html>

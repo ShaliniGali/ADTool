@@ -1,0 +1,8 @@
+{
+    "scripts": {
+        "test:e2e-ci": "npx cypress run --spec cypress/integration/* --env baseUrl=https://competition.staging.dso.mil/ --config video=false,viewportWidth=1920,viewportHeight=1080,retries=1 --headless"
+    },
+    "devDependencies": {
+        "cypress": "^9.7.0"
+    }
+}

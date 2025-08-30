@@ -1,0 +1,68 @@
+ [data-theme="dark"] {
+  background-color: #111 !important;
+  color: #eee;
+}
+
+/*Background color*/
+
+
+[data-theme="dark"] .bg-light {
+  background-color: #262728 !important;
+}
+
+[data-theme="dark"] .bg-white, 
+[data-theme="dark"] .dropdown-menu,
+[data-theme="dark"] .dropdown-item:hover{
+  background-color: rgb(46, 49, 49) !important;
+}
+
+[data-theme="dark"] .table{
+  color:white!important;
+  background-color: rgb(46, 49, 49) !important;
+}
+
+
+[data-theme="dark"] .bg-black {
+  background-color: #eee !important;
+}
+
+/*Text color*/
+
+[data-theme="dark"] .text-light {
+  color: #333 !important;
+}
+
+[data-theme="dark"] .text-white {
+  color: #000 !important;
+}
+
+[data-theme="dark"] .text-black, 
+[data-theme="dark"] .nav-link,
+[data-theme="dark"] .dropdown-item
+ {
+  color: rgb(232, 232, 232) !important;
+}
+
+
+/*Border color*/
+
+[data-theme="dark"] .border {
+    border: 1px solid rgb(46, 49, 49) !important;
+}
+
+
+
+
+[data-theme="dark"] .navbar-toggler{
+	background: #ffffffab!important;
+}
+
+[data-theme="dark"] .nav-pills .nav-link.active,[data-theme="dark"] .nav-pills .show>.nav-link{
+  background: rgb(1, 152, 117)!important;
+}
+
+
+
+
+
+

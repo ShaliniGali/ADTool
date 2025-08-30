@@ -1,0 +1,2 @@
+-i https://${GITLAB_TOKEN_USER}:${GITLAB_TOKEN_HASHI}@git.guardian.rhombus.cloud/api/v4/projects/265/packages/pypi/simple
+rhombus-vacc

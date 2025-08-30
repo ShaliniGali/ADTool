@@ -1,0 +1,41 @@
+/* Sai
+July 10 2020
+ */
+
+ .auth-button{
+    border-radius:0rem;
+    margin-top:20px;
+}
+
+.tfa-modal-content{
+    -webkit-border-radius: 0px !important;
+    -moz-border-radius: 0px !important;
+    border-radius: 0px !important; 
+    background-color: rgb(245, 241, 241);
+}
+
+.tfa-header {
+    border-bottom: 0 none;
+}
+
+.tfa-footer {
+    border-top: 0 none;
+}
+
+/* .tfa-buttons{
+    width:20%;
+} */
+
+.tfa-modal{
+    padding-top: 50px ! important    
+;}
+
+.form-container{
+width: 100vw;
+position: relative;
+
+display: flex;
+flex-flow: column wrap;
+align-items: center;
+}
+
