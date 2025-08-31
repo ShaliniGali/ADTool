@@ -263,6 +263,22 @@
                 </div>
             </div>
 
+            <!-- JWT Authentication -->
+            <div class="service-card">
+                <div class="service-header">
+                    <div class="service-icon">🔐</div>
+                    <div class="service-info">
+                        <h3>JWT Authentication</h3>
+                        <p>JSON Web Token service for SOCOM</p>
+                    </div>
+                    <span class="status-badge">WORKING</span>
+                </div>
+                <div class="service-links">
+                    <button onclick="testJWTCreation()" class="main-link" style="border: none; cursor: pointer;">🔑 Test JWT Creation</button>
+                    <button onclick="testJWTRefresh()" class="secondary-link" style="border: none; cursor: pointer;">🔄 Test JWT Refresh</button>
+                </div>
+            </div>
+
             <!-- JavaScript S3 Service -->
             <div class="service-card">
                 <div class="service-header">
@@ -345,6 +361,88 @@
                 alert(`Python API Health: ${data.status}\nService: ${data.service}\nTimestamp: ${data.timestamp}`);
             } catch (error) {
                 alert('Python API Health Check Failed: ' + error.message);
+            }
+        }
+
+        // Test JWT Creation
+        async function testJWTCreation() {
+            try {
+                const response = await fetch('http://localhost:8020/auth/jwt', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        user_id: 'test_user',
+                        user_role: 'SOCOM_ANALYST',
+                        cap_group: ['ZBT', 'ISS']
+                    })
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    const token = data.access_token;
+                    const tokenType = data.token_type;
+                    
+                    // Decode JWT to show payload (without verification for display purposes)
+                    const payload = JSON.parse(atob(token.split('.')[1]));
+                    const expiration = new Date(payload.exp * 1000).toLocaleString();
+                    
+                    alert(`✅ JWT Creation SUCCESS!\n\nToken Type: ${tokenType}\nUser ID: ${payload.user_id}\nUser Role: ${payload.user_role}\nCap Groups: ${payload.cap_group.join(', ')}\nExpires: ${expiration}\n\nToken Preview: ${token.substring(0, 50)}...`);
+                } else {
+                    const errorData = await response.json();
+                    alert(`❌ JWT Creation FAILED!\nStatus: ${response.status}\nError: ${errorData.detail || 'Unknown error'}`);
+                }
+            } catch (error) {
+                alert('❌ JWT Creation Test Failed: ' + error.message);
+            }
+        }
+
+        // Test JWT Refresh
+        async function testJWTRefresh() {
+            try {
+                // First create a JWT token
+                const createResponse = await fetch('http://localhost:8020/auth/jwt', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        user_id: 'test_user',
+                        user_role: 'SOCOM_ANALYST',
+                        cap_group: ['ZBT', 'ISS']
+                    })
+                });
+                
+                if (!createResponse.ok) {
+                    alert('❌ Cannot test JWT refresh - JWT creation failed first!');
+                    return;
+                }
+                
+                const createData = await createResponse.json();
+                const originalToken = createData.access_token;
+                
+                // Now test refresh
+                const refreshResponse = await fetch(`http://localhost:8020/auth/jwt/refresh?token=${encodeURIComponent(originalToken)}&expires_delta=240`);
+                
+                if (refreshResponse.ok) {
+                    const refreshData = await refreshResponse.json();
+                    const newToken = refreshData.access_token;
+                    
+                    // Decode both tokens to compare
+                    const originalPayload = JSON.parse(atob(originalToken.split('.')[1]));
+                    const newPayload = JSON.parse(atob(newToken.split('.')[1]));
+                    
+                    const originalExp = new Date(originalPayload.exp * 1000).toLocaleString();
+                    const newExp = new Date(newPayload.exp * 1000).toLocaleString();
+                    
+                    alert(`✅ JWT Refresh SUCCESS!\n\nOriginal Token Expires: ${originalExp}\nNew Token Expires: ${newExp}\n\nRefresh Duration: 240 minutes (4 hours)\n\nNew Token Preview: ${newToken.substring(0, 50)}...`);
+                } else {
+                    const errorData = await refreshResponse.json();
+                    alert(`❌ JWT Refresh FAILED!\nStatus: ${refreshResponse.status}\nError: ${errorData.detail || 'Unknown error'}`);
+                }
+            } catch (error) {
+                alert('❌ JWT Refresh Test Failed: ' + error.message);
             }
         }
 

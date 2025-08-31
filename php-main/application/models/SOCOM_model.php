@@ -10,17 +10,53 @@ class  SOCOM_model extends CI_Model {
         $this->colors = [];
         $this->load->library('SOCOM/Dynamic_Year');
 
-        $this->ZBT_YEAR = $this->dynamic_year->getPomYearForSubapp('ZBT_SUMMARY_YEAR');
-        $this->ZBT_FY = $this->ZBT_YEAR % 100;
-        $this->ZBT_YEAR_LIST = $this->dynamic_year->getYearList($this->ZBT_YEAR);
+        try {
+            $this->ZBT_YEAR = $this->dynamic_year->getPomYearForSubapp('ZBT_SUMMARY_YEAR');
+            if (is_numeric($this->ZBT_YEAR)) {
+                $this->ZBT_FY = $this->ZBT_YEAR % 100;
+                $this->ZBT_YEAR_LIST = $this->dynamic_year->getYearList($this->ZBT_YEAR);
+            } else {
+                $this->ZBT_YEAR = 2025;
+                $this->ZBT_FY = 25;
+                $this->ZBT_YEAR_LIST = [2025, 2026, 2027, 2028, 2029, 2030];
+            }
+        } catch (Exception $e) {
+            $this->ZBT_YEAR = 2025;
+            $this->ZBT_FY = 25;
+            $this->ZBT_YEAR_LIST = [2025, 2026, 2027, 2028, 2029, 2030];
+        }
 
-        $this->ISS_YEAR = $this->dynamic_year->getPomYearForSubapp('ISS_SUMMARY_YEAR');
-        $this->ISS_FY = $this->ISS_YEAR % 100;
-        $this->ISS_YEAR_LIST = $this->dynamic_year->getYearList($this->ISS_YEAR);
+        try {
+            $this->ISS_YEAR = $this->dynamic_year->getPomYearForSubapp('ISS_SUMMARY_YEAR');
+            if (is_numeric($this->ISS_YEAR)) {
+                $this->ISS_FY = $this->ISS_YEAR % 100;
+                $this->ISS_YEAR_LIST = $this->dynamic_year->getYearList($this->ISS_YEAR);
+            } else {
+                $this->ISS_YEAR = 2025;
+                $this->ISS_FY = 25;
+                $this->ISS_YEAR_LIST = [2025, 2026, 2027, 2028, 2029, 2030];
+            }
+        } catch (Exception $e) {
+            $this->ISS_YEAR = 2025;
+            $this->ISS_FY = 25;
+            $this->ISS_YEAR_LIST = [2025, 2026, 2027, 2028, 2029, 2030];
+        }
 
-        $this->COA_YEAR = $this->dynamic_year->getPomYearForSubapp('RESOURCE_CONSTRAINED_COA_YEAR');
-        $this->COA_FY = $this->COA_YEAR % 100;
-        $this->COA_YEAR_LIST = $this->dynamic_year->getYearList($this->COA_YEAR);
+        try {
+            $this->COA_YEAR = $this->dynamic_year->getPomYearForSubapp('RESOURCE_CONSTRAINED_COA_YEAR');
+            if (is_numeric($this->COA_YEAR)) {
+                $this->COA_YEAR_FY = $this->COA_YEAR % 100;
+                $this->COA_YEAR_LIST = $this->dynamic_year->getYearList($this->COA_YEAR);
+            } else {
+                $this->COA_YEAR = 2025;
+                $this->COA_YEAR_FY = 25;
+                $this->COA_YEAR_LIST = [2025, 2026, 2027, 2028, 2029, 2030];
+            }
+        } catch (Exception $e) {
+            $this->COA_YEAR = 2025;
+            $this->COA_YEAR_FY = 25;
+            $this->COA_YEAR_LIST = [2025, 2026, 2027, 2028, 2029, 2030];
+        }
 
         $this->page_variables = [
             'zbt_summary' => [
