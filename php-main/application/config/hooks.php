@@ -26,33 +26,36 @@ $hook['post_controller_constructor'][] = array(
   'filepath' => 'hooks',
 );
 
-$hook['post_controller_constructor'][] = array(
-  'class' => 'LoginStatus',
-  'function' => 'checkStatus',
-  'filename' => 'LoginStatus.php',
-  'filepath' => 'hooks',
-);
+// DEVELOPMENT MODE: Authentication hooks disabled
+// $hook['post_controller_constructor'][] = array(
+//   'class' => 'LoginStatus',
+//   'function' => 'checkStatus',
+//   'filename' => 'LoginStatus.php',
+//   'filepath' => 'hooks',
+// );
 
-$hook['post_controller_constructor'][] = array(
-  'class' => 'RoleAccess',
-  'function' => 'checkRoleStatus',
-  'filename' => 'RoleAccess.php',
-  'filepath' => 'hooks',
-);
+// $hook['post_controller_constructor'][] = array(
+//   'class' => 'RoleAccess',
+//   'function' => 'checkRoleStatus',
+//   'filename' => 'RoleAccess.php',
+//   'filepath' => 'hooks',
+// );
 
-$hook['post_controller'] = array(
-  'class' => 'LoginStatus',
-  'function' => 'verifySession',
-  'filename' => 'LoginStatus.php',
-  'filepath' => 'hooks',
-);
+// DEVELOPMENT MODE: Session verification disabled
+// $hook['post_controller'] = array(
+//   'class' => 'LoginStatus',
+//   'function' => 'verifySession',
+//   'filename' => 'LoginStatus.php',
+//   'filepath' => 'hooks',
+// );
 
-$hook['post_controller_constructor'][] = array(
-  'class'    => 'checkSiteUser',
-  'function' => 'isSiteUser',
-  'filename' => 'checkSiteUser.php',
-  'filepath' => 'hooks'
-);
+// DEVELOPMENT MODE: Site user check disabled
+// $hook['post_controller_constructor'][] = array(
+//   'class'    => 'checkSiteUser',
+//   'function' => 'isSiteUser',
+//   'filename' => 'checkSiteUser.php',
+//   'filepath' => 'hooks'
+// );
 
 if (
   RHOMBUS_SSO_KEYCLOAK=='TRUE' || 
@@ -68,12 +71,13 @@ if (
 
 
 
-$hook['post_controller_constructor'][] = array(
-  'class'    => 'SetSOCOMAuth',
-  'function' => 'setUserAuth',
-  'filename' => 'SetSOCOMAuth.php',
-  'filepath' => 'hooks'
-);
+// DEVELOPMENT MODE: SOCOM authentication disabled
+// $hook['post_controller_constructor'][] = array(
+//   'class'    => 'SetSOCOMAuth',
+//   'function' => 'setUserAuth',
+//   'filename' => 'SetSOCOMAuth.php',
+//   'filepath' => 'hooks'
+// );
 
 $hook['post_controller_constructor'][] = array(
   'class' => 'SetDynamicYear',

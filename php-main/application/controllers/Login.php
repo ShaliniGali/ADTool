@@ -8,6 +8,23 @@ class Login extends CI_Controller
 
 	public function index()
 	{
+		// DEVELOPMENT MODE: Auto-login bypass
+		if (defined('SOCOM_ENVIRONMENT') && SOCOM_ENVIRONMENT === 'siprdevelopment') {
+			// Auto-login with hardcoded credentials for development
+			$user_data = array(
+				'email' => 'admin@dev.local',
+				'name' => 'Development Admin',
+				'account_type' => 'ADMIN',
+				'timestamp' => time(),
+				'profile_image' => '', // Optional field, can be empty
+				'id' => 1
+			);
+			
+			$this->session->set_userdata('logged_in', $user_data);
+			redirect('Home');
+			return;
+		}
+
 		$private_subnet_access_required = $this->Login_private_subnet_model->enforcePrivateSubnetLogin();
 
 		if (is_file(APPPATH . 'first_admin_folder/FirstAdminFlag.txt')) {
@@ -41,6 +58,28 @@ class Login extends CI_Controller
 	 * @param string $hash: encrypted string
 	 * @return DOM A DOM with success message
 	 */
+	// DEVELOPMENT MODE: Direct SOCOM access
+	public function dev_socom_access()
+	{
+		if (defined('SOCOM_ENVIRONMENT') && SOCOM_ENVIRONMENT === 'siprdevelopment') {
+					// Auto-login with hardcoded credentials for development
+		$user_data = array(
+			'email' => 'user@dev.local',
+			'name' => 'Development User',
+			'account_type' => 'USER',
+			'timestamp' => time(),
+			'profile_image' => '', // Optional field, can be empty
+			'id' => 2
+		);
+			
+			$this->session->set_userdata('logged_in', $user_data);
+			redirect('socom/index');
+			return;
+		}
+		
+		show_error('Development access not enabled', 403);
+	}
+
 	public function activate_register()
 	{
 		$data_check = $this->DB_ind_model->validate_post($this->input->post()); //validating input posts

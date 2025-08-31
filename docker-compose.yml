@@ -34,6 +34,7 @@ services:
       - SOCOM_P1=TRUE
       - SOCOM_BASE_URL=http://localhost:80/
       - SOCOM_UI=SOCOM_UI
+      - SHOW_SOCOM=TRUE
       - SOCOM_ENVIRONMENT=siprdevelopment
       - SOCOM_DEPLOYMENT=TRUE
       - SOCOM_guardian_deepdive_region=us-gov-west-1

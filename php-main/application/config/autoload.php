@@ -135,6 +135,7 @@ $autoloaded_helpers[] = 'cycle';
 $autoloaded_helpers[] = 'coa';
 $autoloaded_helpers[] = 'auth_user_role_aoad';
 $autoloaded_helpers[] = 'auth_user_role_import_upload';
+$autoloaded_helpers[] = 'auth_bypass';
 $autoloaded_helpers[] = 'auth_user_role_coa';
 $autoloaded_helpers[] = 'auth_user_role_zbt_summary';
 $autoload['helper'] = $autoloaded_helpers;

@@ -60,7 +60,7 @@ $db['socom_guardian_users'] = array(
 );
 
 // SOCOM_UI database connection
-$db['socom_ui'] = array(
+$db['SOCOM_UI'] = array(
     'dsn'          => '',
     'hostname'     => 'rhombus-mysql',
     'username'     => 'rhombus_user',

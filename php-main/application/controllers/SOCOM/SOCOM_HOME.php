@@ -3,64 +3,14 @@ defined('BASEPATH') || exit('No direct script access allowed');
 
 #[AllowDynamicProperties]
 class SOCOM_HOME extends CI_Controller {
-    public function __construct() {
-        parent::__construct();
-        $this->load->model('SOCOM_model');
-        $this->load->model('SOCOM_AOAD_model');
-        $this->load->model('SOCOM_Program_model');
-        $this->load->model('SOCOM_Users_model');
-        $this->load->model('SOCOM_Dynamic_Year_model');
-        $this->load->library('SOCOM/Dynamic_Year');
-        $this->load->library('SOCOM/RBAC_Users');
 
-        $this->ZBT_YEAR = $this->dynamic_year->getPomYearForSubapp('ZBT_SUMMARY_YEAR');
-        $this->ZBT_FY = $this->ZBT_YEAR % 100;
-        $this->ZBT_YEAR_LIST = $this->dynamic_year->getYearList($this->ZBT_YEAR);
-
-        $this->ISS_YEAR = $this->dynamic_year->getPomYearForSubapp('ISS_SUMMARY_YEAR');
-        $this->ISS_FY = $this->ISS_YEAR % 100;
-        $this->ISS_YEAR_LIST = $this->dynamic_year->getYearList($this->ISS_YEAR);
-
-        $this->page_variables = [
-            'zbt_summary' => [
-                'page_title' =>  "ZBT",
-                'breadcrumb_text' => "ZBT Summary",
-                'page_summary_path' => "zbt_summary",
-                'position' => [
-                    $this->ZBT_FY . 'EXT' => 'base_k',
-                    $this->ZBT_FY . 'ZBT_REQUESTED' => 'prop_amt',
-                    $this->ZBT_FY . 'ZBT_REQUESTED_DELTA' => 'delta_amt'
-                ]
-            ],
-            'issue' => [
-                'page_title' =>  "Issue",
-                'breadcrumb_text' => "Issue Summary",
-                'page_summary_path' => "issue",
-                'position' => [
-                    $this->ISS_FY . 'EXT' => 'base_k',
-                    $this->ISS_FY . 'ZBT' => 'prop_amt',
-                    $this->ISS_FY . 'ZBT_DELTA' => 'delta_amt',
-                    $this->ISS_FY . 'ISS_REQUESTED' => 'issue_prop_amt',
-                    $this->ISS_FY . 'ISS_REQUESTED_DELTA' => 'issue_delta_amt',
-                ]
-            ]
-        ];
-
-        $this->l_cap_sponsor = ['AFSOC','AT&L', 'NSW', 'USASOC'];
-        $this->l_pom_sponsor = ['AFSOC','AT&L', 'CROSS', 'MARSOC'];
-        $this->l_ass_area = ['A','B','D'];
-    }
     public function index() {
         $page_data['page_title'] = "SOCOM Home";
         $page_data['page_tab'] = "SOCOM Home";
         $page_data['page_navbar'] = true;
         $page_data['page_specific_css'] = ['carbon-light-dark-theme.css','dashboard_block.css'];
         $page_data['compression_name'] = trim(pathinfo(__FILE__, PATHINFO_FILENAME), '.php');
-        $is_guest = $this->rbac_users->is_guest();
-        $is_restricted = $this->rbac_users->is_restricted();
-		$page_data['is_guest'] = $is_guest;
-        $page_data['is_restricted'] = $is_restricted;
-
+        
         $this->load->view('templates/header_view', $page_data);
         $this->load->view('SOCOM/home_view');
         $this->load->view('templates/close_view');
@@ -101,6 +51,7 @@ class SOCOM_HOME extends CI_Controller {
         $page_data['page_specific_css'] = ['select2.css','carbon-light-dark-theme.css','SOCOM/socom_home.css'];
         $page_data['compression_name'] = trim(pathinfo(__FILE__, PATHINFO_FILENAME), '.php');
         $page = 'zbt_summary';
+        
         $cap_sponsor_results = $this->DBs->SOCOM_model->cap_sponsor_count($page);
         $cap_sponsor_count = $cap_sponsor_results['cap_sponsor_count'];
         $total_zbt_events = $cap_sponsor_results['total_events'];
@@ -115,8 +66,10 @@ class SOCOM_HOME extends CI_Controller {
 
         [$pom_year, ]  = get_years_zbt_summary();
         $data['subapp_pom_year_zbt'] = $pom_year;
+        
         $is_guest = $this->rbac_users->is_guest();
         $is_restricted = $this->rbac_users->is_restricted();
+        
 		$page_data['is_guest'] = $is_guest;
         $page_data['is_restricted'] = $is_restricted;
 
@@ -129,7 +82,8 @@ class SOCOM_HOME extends CI_Controller {
             'net_change' => $net_change,
             'cap_sponsor_approve_reject_categories' => $cap_sponsor_approve_reject_categories,
             'cap_sponsor_approve_reject_series_data' => $cap_sponsor_approve_reject_series_data,
-            'page' => 'ZBT'
+            'page' => 'ZBT',
+            'breadcrumb_text' => 'ZBT Summary'
         ], $dollars_moved_resource_category, $data
         ));
         $this->load->view('templates/close_view');
@@ -142,6 +96,7 @@ class SOCOM_HOME extends CI_Controller {
         $page_data['page_specific_css'] = ['select2.css','carbon-light-dark-theme.css','SOCOM/socom_home.css'];
         $page_data['compression_name'] = trim(pathinfo(__FILE__, PATHINFO_FILENAME), '.php');
         $page = 'issue';
+        
         $cap_sponsor_results = $this->DBs->SOCOM_model->cap_sponsor_count($page);
         $cap_sponsor_count = $cap_sponsor_results['cap_sponsor_count'];
         $total_events = $cap_sponsor_results['total_events'];
@@ -155,10 +110,17 @@ class SOCOM_HOME extends CI_Controller {
         $cap_sponsor_approve_reject_categories= $cap_sponsor_approve_reject['categories'];
         $cap_sponsor_approve_reject_series_data = $cap_sponsor_approve_reject['series_data'];
 
-        [$pom_year, ]  = get_years_issue_summary();
-        $data['subapp_pom_year_issue'] = $pom_year;
+        try {
+            [$pom_year, ]  = get_years_issue_summary();
+            $data['subapp_pom_year_issue'] = $pom_year;
+        } catch (Exception $e) {
+            log_message('error', 'get_years_issue_summary failed: ' . $e->getMessage());
+            $data['subapp_pom_year_issue'] = 2024;
+        }
+        
         $is_guest = $this->rbac_users->is_guest();
         $is_restricted = $this->rbac_users->is_restricted();
+        
 		$page_data['is_guest'] = $is_guest;
         $page_data['is_restricted'] = $is_restricted;
 
@@ -171,7 +133,8 @@ class SOCOM_HOME extends CI_Controller {
             'net_change' => $net_change,
             'cap_sponsor_approve_reject_categories' => $cap_sponsor_approve_reject_categories,
             'cap_sponsor_approve_reject_series_data' => $cap_sponsor_approve_reject_series_data,
-            'page' => 'Issue'
+            'page' => 'Issue',
+            'breadcrumb_text' => 'Issue Summary'
         ], $dollars_moved_resource_category, $data
         ));
         $this->load->view('templates/close_view');

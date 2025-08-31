@@ -59,13 +59,20 @@ if (! function_exists('php_api_call'))
         $context = stream_context_create($opts);
         $result = file_get_contents($url, false, $context);
         
+        // Initialize http_response_header if not set
+        if (!isset($http_response_header)) {
+            $http_response_header = [];
+        }
+        
         php_api_debug($url, $params, $headers, $result, $http_response_header);
         php_api_error($url, $http_response_header);
         
         $php_api_http_status = php_api_response_http_status($http_response_header);
 
         if ($result === false) {
-            show_error('Unable to contact API', 500);
+            // Log the failed API call instead of showing error
+            log_message('error', 'API call failed: ' . $url);
+            return false; // Return false instead of showing error
         }
         
         return $result;

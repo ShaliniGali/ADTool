@@ -4,8 +4,24 @@
  * Project Specific Routes
  */
 
-$route['SOCOM'] = LOGIN_ROUTE;
-$route['SOCOM/(.+)'] = LOGIN_ROUTE;
+// ========================================
+// DEVELOPMENT MODE: Authentication Bypass
+// ========================================
+// TEMPORARILY DISABLED FOR DEVELOPMENT - UNCOMMENT FOR PRODUCTION
+// $route['SOCOM'] = LOGIN_ROUTE;
+// $route['SOCOM/(.+)'] = LOGIN_ROUTE;
+
+// JWT bypass routes for development
+$route['socom/jwt_login'] = 'SOCOM/JWT_Login/index';
+$route['socom/jwt_login/generate_token'] = 'SOCOM/JWT_Login/generate_token';
+$route['socom/jwt_login/validate'] = 'SOCOM/JWT_Login/validate';
+
+// DEVELOPMENT: Simple SOCOM test route
+$route['socom/test_socom'] = 'SOCOM/Test_SOCOM/index';
+$route['socom/test_socom/test'] = 'SOCOM/Test_SOCOM/test';
+// ========================================
+// END DEVELOPMENT MODE
+// ========================================
 $route['socom/index'] = 'SOCOM/SOCOM_HOME/index';
 $route['socom/zbt_summary'] = 'SOCOM/SOCOM_HOME/zbt_summary';
 $route['socom/issue'] = 'SOCOM/SOCOM_HOME/issue';
