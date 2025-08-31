@@ -11,11 +11,6 @@ class SOCOM_Event_Summary extends CI_Controller
             'Approve at Scale',
             'Disapprove'
         ],
-        'zbt' => [
-            'Approve',
-            'Approve at Scale',
-            'Disapprove'
-        ],
         'issue' => [
             'Approve',
             'Approve at Scale',
@@ -25,12 +20,6 @@ class SOCOM_Event_Summary extends CI_Controller
 
     protected const AD_CONSENSUS_FILTER_CHOICES = [
         'zbt_summary' => [
-            'Approve',
-            'Approve at Scale',
-            'Disapprove',
-            'Not Decided'
-        ],
-        'zbt' => [
             'Approve',
             'Approve at Scale',
             'Disapprove',
@@ -46,11 +35,6 @@ class SOCOM_Event_Summary extends CI_Controller
 
     protected const REVIEW_STATUS_CHOICES = [
         'zbt_summary' => [
-            'Disapproval Flag',
-            'No Disapproval Flag',
-            'Unreviewed'
-        ],
-        'zbt' => [
             'Disapproval Flag',
             'No Disapproval Flag',
             'Unreviewed'
@@ -73,41 +57,14 @@ class SOCOM_Event_Summary extends CI_Controller
 
         $this->load->model('SOCOM_Dynamic_Year_model');
         $this->load->library('SOCOM/Dynamic_Year');
-        
-        // Initialize the Dynamic_Year library
-        $this->dynamic_year->setFromCurrentYear();
 
-        try {
-            $this->ZBT_YEAR = $this->dynamic_year->getPomYearForSubapp('ZBT_SUMMARY_YEAR');
-            if (is_numeric($this->ZBT_YEAR)) {
-                $this->ZBT_FY = $this->ZBT_YEAR % 100;
-                $this->ZBT_YEAR_LIST = $this->dynamic_year->getYearList($this->ZBT_YEAR);
-            } else {
-                $this->ZBT_YEAR = 2025;
-                $this->ZBT_FY = 25;
-                $this->ZBT_YEAR_LIST = [2025, 2026, 2027, 2028, 2029, 2030];
-            }
-        } catch (Exception $e) {
-            $this->ZBT_YEAR = 2025;
-            $this->ZBT_FY = 25;
-            $this->ZBT_YEAR_LIST = [2025, 2026, 2027, 2028, 2029, 2030];
-        }
+        $this->ZBT_YEAR = $this->dynamic_year->getPomYearForSubapp('ZBT_SUMMARY_YEAR');
+        $this->ZBT_FY = $this->ZBT_YEAR % 100;
+        $this->ZBT_YEAR_LIST = $this->dynamic_year->getYearList($this->ZBT_YEAR);
 
-        try {
-            $this->ISS_YEAR = $this->dynamic_year->getPomYearForSubapp('ISS_SUMMARY_YEAR');
-            if (is_numeric($this->ISS_YEAR)) {
-                $this->ISS_FY = $this->ISS_YEAR % 100;
-                $this->ISS_YEAR_LIST = $this->dynamic_year->getYearList($this->ISS_YEAR);
-            } else {
-                $this->ISS_YEAR = 2025;
-                $this->ISS_FY = 25;
-                $this->ISS_YEAR_LIST = [2025, 2026, 2027, 2028, 2029, 2030];
-            }
-        } catch (Exception $e) {
-            $this->ISS_YEAR = 2025;
-            $this->ISS_FY = 25;
-            $this->ISS_YEAR_LIST = [2025, 2026, 2027, 2028, 2029, 2030];
-        }
+        $this->ISS_YEAR = $this->dynamic_year->getPomYearForSubapp('ISS_SUMMARY_YEAR');
+        $this->ISS_FY = $this->ISS_YEAR % 100;
+        $this->ISS_YEAR_LIST = $this->dynamic_year->getYearList($this->ISS_YEAR);
     }
 
     public function event_summary($page, $event_name=null) {
@@ -133,13 +90,11 @@ class SOCOM_Event_Summary extends CI_Controller
 
         $breadcrumb_text = [
             'zbt_summary' => 'ZBT Summary',
-            'zbt' => 'ZBT Summary',
             'issue' => 'Issue Summary'
         ];
 
         $year = [
             'zbt_summary' => $this->ZBT_YEAR,
-            'zbt' => $this->ZBT_YEAR,
             'issue' => $this->ISS_YEAR
         ][$page];
 
@@ -161,7 +116,7 @@ class SOCOM_Event_Summary extends CI_Controller
         // $pom_sponsor = $this->DBs->SOCOM_model->get_sponsor('LOOKUP_SPONSOR', 'POM');
         // $ass_area = $this->DBs->SOCOM_model->get_assessment_area_code();
 
-        if ($page == 'zbt_summary' || $page == 'zbt'){
+        if ($page == 'zbt_summary'){
             [$pomYear, $year_list] = get_years_zbt_summary();
         }
         elseif($page == 'issue'){
@@ -206,7 +161,6 @@ class SOCOM_Event_Summary extends CI_Controller
 
         $api_endpoint = [
             'zbt_summary' => RHOMBUS_PYTHON_URL.'/socom/zbt/event_summary/?event_names='.$event_name,
-            'zbt' => RHOMBUS_PYTHON_URL.'/socom/zbt/event_summary/?event_names='.$event_name,
             'issue' => RHOMBUS_PYTHON_URL.'/socom/iss/event_summary/?event_names='.$event_name
         ][$page];
         $response = php_api_call(
@@ -220,7 +174,7 @@ class SOCOM_Event_Summary extends CI_Controller
         if ($page === 'issue') {
             $review_status_data = $this->SOCOM_Event_Funding_Lines_model->get_review_status_iss();
         } else 
-            if ($page === 'zbt_summary' || $page === 'zbt') {
+            if ($page === 'zbt_summary') {
             $review_status_data = $this->SOCOM_Event_Funding_Lines_model->get_review_status_zbt();
         }
 
@@ -256,7 +210,7 @@ class SOCOM_Event_Summary extends CI_Controller
         $post_data = $data_check['post_data'];
         $event_names = $post_data['event_names'] ?? [];
 
-        if ($page === 'zbt_summary' || $page === 'zbt') {
+        if ($page === 'zbt_summary') {
             $route_type = 'zbt';
         }  
         else {
@@ -298,7 +252,7 @@ class SOCOM_Event_Summary extends CI_Controller
                 $api = 'iss';
                 $review_status_data = $this->SOCOM_Event_Funding_Lines_model->get_review_status_iss();
                 $type_of_coa= 'iss-extract';
-            } else if ($page === 'zbt_summary' || $page === 'zbt') {
+            } else if ($page === 'zbt_summary') {
                 $api = 'zbt';
                 $review_status_data = $this->SOCOM_Event_Funding_Lines_model->get_review_status_zbt();
                 $type_of_coa= 'zbt-extract';
@@ -334,7 +288,8 @@ class SOCOM_Event_Summary extends CI_Controller
             foreach($table_data as &$event){
                 $event['REVIEW_STATUS'] = $review_status_map[$event['EVENT_NAME']] ?? 'Unreviewed';
             }
-
+            asort($result['all_years']);
+            $result['all_years'] = array_values($result['all_years']);
             $response = [
                 'overall_sum' => $this->SOCOM_Event_Funding_Lines_model->get_summary_overall_sum($event_names, $l_ad_consensus, $page),
                 'overall_sum_approve' => $this->SOCOM_Event_Funding_Lines_model->get_summary_overall_sum_approve($event_names, $l_ad_consensus, $page),
@@ -442,7 +397,6 @@ class SOCOM_Event_Summary extends CI_Controller
 
         $breadcrumb_text = [
             'zbt_summary' => 'ZBT Summary',
-            'zbt' => 'ZBT Summary',
             'issue' => 'Issue Summary'
         ];
 
@@ -463,7 +417,7 @@ class SOCOM_Event_Summary extends CI_Controller
         $review_status_choices = self::REVIEW_STATUS_CHOICES[$page];
         $aac_list= $this->DBs->SOCOM_model->get_aac_code($page);
 
-        if ($page == 'zbt_summary' || $page == 'zbt'){
+        if ($page == 'zbt_summary'){
             [$data['subapp_pom_year'], $year_list] = get_years_zbt_summary();
         }
         elseif($page == 'issue'){
