@@ -38,7 +38,7 @@ class ServicesDashboard {
         
         if (!content) return;
         
-        content.innerHTML = '<p>Loading error logs...</p>';
+        content.innerHTML = '<p>Loading health status...</p>';
         
         try {
             const response = await fetch(this.config.endpoints.phpErrors);
@@ -138,7 +138,72 @@ class ServicesDashboard {
             <div style="background: #fff3e0; border-left: 4px solid #ffc107; padding: 15px; border-radius: 4px;">
                 <h4 style="color: #856404; margin-top: 0;">⚠️ Cannot Access PHP Logs</h4>
                 <p style="margin-bottom: 10px;"><strong>Error:</strong> ${error.message}</p>
-                <p style="margin-bottom: 0;"><strong>Note:</strong> Check if the LogViewer controller is accessible at /socom/php_errors</p>
+                <p style="margin-bottom: 0;"><strong>Note:</strong> PHP logs are not accessible. Using health endpoint instead.</p>
+            </div>
+        `;
+    }
+
+    displayHealthStatus(data) {
+        const content = document.getElementById('errorLogsContent');
+        
+        let status = '🟢 HEALTHY';
+        let statusColor = '#28a745';
+        let bgColor = '#d4edda';
+        let borderColor = '#c3e6cb';
+        
+        if (data.status === 'healthy') {
+            status = '🟢 HEALTHY';
+            statusColor = '#28a745';
+            bgColor = '#d4edda';
+            borderColor = '#c3e6cb';
+        } else {
+            status = '🔴 UNHEALTHY';
+            statusColor = '#dc3545';
+            bgColor = '#f8d7da';
+            borderColor = '#f5c6cb';
+        }
+        
+        content.innerHTML = `
+            <div style="display: flex; align-items: center; margin-bottom: 20px;">
+                <h3 style="color: ${statusColor}; margin: 0; font-size: 1.4rem;">${status}</h3>
+                <span style="margin-left: auto; background: ${bgColor}; color: ${statusColor}; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; border: 1px solid ${borderColor};">
+                    ${data.services ? Object.keys(data.services).length : 0} Services
+                </span>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px;">
+                <div style="background: ${data.status === 'healthy' ? '#d4edda' : '#f8d7da'}; padding: 15px; border-radius: 8px; border: 1px solid ${data.status === 'healthy' ? '#c3e6cb' : '#f5c6cb'};">
+                    <h4 style="color: ${data.status === 'healthy' ? '#28a745' : '#dc3545'}; margin: 0 0 8px 0;">🐘 PHP Application</h4>
+                    <p style="margin: 0; font-size: 1.2rem; font-weight: bold; color: ${data.status === 'healthy' ? '#28a745' : '#dc3545'};">
+                        ${data.status === 'healthy' ? '🟢 HEALTHY' : '🔴 ERROR'}
+                    </p>
+                </div>
+                <div style="background: #e3f2fd; padding: 15px; border-radius: 8px; border: 1px solid #bbdefb;">
+                    <h4 style="color: #1976d2; margin: 0 0 8px 0;">⏰ Uptime</h4>
+                    <p style="margin: 0; font-size: 1.2rem; font-weight: bold; color: #1976d2;">
+                        ${data.uptime || 'Unknown'}
+                    </p>
+                </div>
+                <div style="background: #e8f5e8; padding: 15px; border-radius: 8px; border: 1px solid #4caf50;">
+                    <h4 style="color: #2e7d32; margin: 0 0 8px 0;">🐍 PHP Version</h4>
+                    <p style="margin: 0; font-size: 1.2rem; font-weight: bold; color: #2e7d32;">
+                        ${data.php_version || 'Unknown'}
+                    </p>
+                </div>
+            </div>
+            
+            <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; border: 1px solid #e9ecef;">
+                <h4 style="color: #495057; margin: 0 0 15px 0;">📋 Service Details:</h4>
+                <div style="background: white; padding: 15px; border-radius: 6px; max-height: 250px; overflow-y: auto; border: 1px solid #dee2e6;">
+                    <pre style="margin: 0; font-size: 0.75rem; color: #495057; white-space: pre-wrap; line-height: 1.4;">${JSON.stringify(data, null, 2)}</pre>
+                </div>
+            </div>
+            
+            <div style="background: #e8f5e8; padding: 12px; border-radius: 6px; border: 1px solid #4caf50; margin-top: 15px;">
+                <p style="margin: 0; color: #2e7d32; font-size: 0.85rem;">
+                    💡 <strong>Auto-refreshing every 2 minutes.</strong> This shows the current health status of your PHP application.
+                    Last updated: ${new Date().toLocaleString()}
+                </p>
             </div>
         `;
     }

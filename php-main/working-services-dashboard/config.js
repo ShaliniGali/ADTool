@@ -2,7 +2,7 @@
 const DASHBOARD_CONFIG = {
     // API Endpoints
     endpoints: {
-        phpErrors: 'http://localhost/socom/php_errors',
+        phpErrors: 'http://localhost/socom/php_errors', // PHP error logs endpoint
         phpHealth: 'http://localhost/health.php',
         pythonHealth: 'http://localhost:5000/health',
         databaseHealth: 'http://localhost/health-database.php'
