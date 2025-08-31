@@ -3,55 +3,63 @@ defined('BASEPATH') || exit('No direct script access allowed');
 
 #[AllowDynamicProperties]
 class SOCOM_HOME extends CI_Controller {
-
     public function __construct() {
         parent::__construct();
         $this->load->model('SOCOM_model');
-    }
+        $this->load->model('SOCOM_AOAD_model');
+        $this->load->model('SOCOM_Program_model');
+        $this->load->model('SOCOM_Users_model');
+        $this->load->model('SOCOM_Dynamic_Year_model');
+        $this->load->library('SOCOM/Dynamic_Year');
 
-    public function php_errors() {
-        // Simple method to serve PHP error logs
-        $log_file = APPPATH . 'logs/log-' . date('Y-m-d') . '.php';
-        
-        if (file_exists($log_file)) {
-            $content = file_get_contents($log_file);
-            // Remove the PHP opening tag and extract just the log content
-            $content = preg_replace('/^<\?php.*?\?>/s', '', $content);
-            
-            // Split content into lines and get recent errors
-            $lines = explode("\n", $content);
-            $recent_errors = array_slice(array_filter($lines, function($line) {
-                return strpos($line, 'ERROR') !== false;
-            }), -20); // Last 20 error lines
-            
-            $response = [
-                'status' => 'success',
-                'log_file' => basename($log_file),
-                'last_updated' => date('Y-m-d H:i:s', filemtime($log_file)),
-                'content' => $content,
-                'total_errors' => substr_count($content, 'ERROR'),
-                'critical_errors' => substr_count($content, 'Severity: error'),
-                'warnings' => substr_count($content, 'Warning'),
-                'recent_errors' => $recent_errors
-            ];
-        } else {
-            $response = [
-                'status' => 'error',
-                'message' => 'Log file not found'
-            ];
-        }
-        
-        header('Content-Type: application/json');
-        echo json_encode($response);
-    }
+        $this->ZBT_YEAR = $this->dynamic_year->getPomYearForSubapp('ZBT_SUMMARY_YEAR');
+        $this->ZBT_FY = $this->ZBT_YEAR % 100;
+        $this->ZBT_YEAR_LIST = $this->dynamic_year->getYearList($this->ZBT_YEAR);
 
+        $this->ISS_YEAR = $this->dynamic_year->getPomYearForSubapp('ISS_SUMMARY_YEAR');
+        $this->ISS_FY = $this->ISS_YEAR % 100;
+        $this->ISS_YEAR_LIST = $this->dynamic_year->getYearList($this->ISS_YEAR);
+
+        $this->page_variables = [
+            'zbt_summary' => [
+                'page_title' =>  "ZBT",
+                'breadcrumb_text' => "ZBT Summary",
+                'page_summary_path' => "zbt_summary",
+                'position' => [
+                    $this->ZBT_FY . 'EXT' => 'base_k',
+                    $this->ZBT_FY . 'ZBT_REQUESTED' => 'prop_amt',
+                    $this->ZBT_FY . 'ZBT_REQUESTED_DELTA' => 'delta_amt'
+                ]
+            ],
+            'issue' => [
+                'page_title' =>  "Issue",
+                'breadcrumb_text' => "Issue Summary",
+                'page_summary_path' => "issue",
+                'position' => [
+                    $this->ISS_FY . 'EXT' => 'base_k',
+                    $this->ISS_FY . 'ZBT' => 'prop_amt',
+                    $this->ISS_FY . 'ZBT_DELTA' => 'delta_amt',
+                    $this->ISS_FY . 'ISS_REQUESTED' => 'issue_prop_amt',
+                    $this->ISS_FY . 'ISS_REQUESTED_DELTA' => 'issue_delta_amt',
+                ]
+            ]
+        ];
+
+        $this->l_cap_sponsor = ['AFSOC','AT&L', 'NSW', 'USASOC'];
+        $this->l_pom_sponsor = ['AFSOC','AT&L', 'CROSS', 'MARSOC'];
+        $this->l_ass_area = ['A','B','D'];
+    }
     public function index() {
         $page_data['page_title'] = "SOCOM Home";
         $page_data['page_tab'] = "SOCOM Home";
         $page_data['page_navbar'] = true;
         $page_data['page_specific_css'] = ['carbon-light-dark-theme.css','dashboard_block.css'];
         $page_data['compression_name'] = trim(pathinfo(__FILE__, PATHINFO_FILENAME), '.php');
-        
+        $is_guest = $this->rbac_users->is_guest();
+        $is_restricted = $this->rbac_users->is_restricted();
+		$page_data['is_guest'] = $is_guest;
+        $page_data['is_restricted'] = $is_restricted;
+
         $this->load->view('templates/header_view', $page_data);
         $this->load->view('SOCOM/home_view');
         $this->load->view('templates/close_view');
@@ -92,25 +100,22 @@ class SOCOM_HOME extends CI_Controller {
         $page_data['page_specific_css'] = ['select2.css','carbon-light-dark-theme.css','SOCOM/socom_home.css'];
         $page_data['compression_name'] = trim(pathinfo(__FILE__, PATHINFO_FILENAME), '.php');
         $page = 'zbt_summary';
-        
-        $cap_sponsor_results = $this->SOCOM_model->cap_sponsor_count($page);
+        $cap_sponsor_results = $this->DBs->SOCOM_model->cap_sponsor_count($page);
         $cap_sponsor_count = $cap_sponsor_results['cap_sponsor_count'];
         $total_zbt_events = $cap_sponsor_results['total_events'];
-        $cap_sponsor_dollar_results = $this->SOCOM_model->cap_sponsor_dollar($page);
+        $cap_sponsor_dollar_results = $this->DBs->SOCOM_model->cap_sponsor_dollar($page);
         $cap_sponsor_dollar = $cap_sponsor_dollar_results['cap_sponsor_dollar'];
         $dollars_moved = $cap_sponsor_dollar_results['dollars_moved'];
-        $net_change = $this->SOCOM_model->net_change($page);
+        $net_change = $this->DBs->SOCOM_model->net_change($page);
         $dollars_moved_resource_category = $this->dollars_moved_resource_category_cross_join($page);
-        $cap_sponsor_approve_reject = $this->SOCOM_model->cap_sponsor_approve_reject($page);
+        $cap_sponsor_approve_reject = $this->DBs->SOCOM_model->cap_sponsor_approve_reject($page);
         $cap_sponsor_approve_reject_categories= $cap_sponsor_approve_reject['categories'];
         $cap_sponsor_approve_reject_series_data = $cap_sponsor_approve_reject['series_data'];
 
         [$pom_year, ]  = get_years_zbt_summary();
         $data['subapp_pom_year_zbt'] = $pom_year;
-        
         $is_guest = $this->rbac_users->is_guest();
         $is_restricted = $this->rbac_users->is_restricted();
-        
 		$page_data['is_guest'] = $is_guest;
         $page_data['is_restricted'] = $is_restricted;
 
@@ -123,16 +128,11 @@ class SOCOM_HOME extends CI_Controller {
             'net_change' => $net_change,
             'cap_sponsor_approve_reject_categories' => $cap_sponsor_approve_reject_categories,
             'cap_sponsor_approve_reject_series_data' => $cap_sponsor_approve_reject_series_data,
-            'page' => 'zbt',
-            'breadcrumb_text' => 'ZBT Summary'
+            'page' => 'ZBT'
         ], $dollars_moved_resource_category, $data
         ));
         $this->load->view('templates/close_view');
     }
-
-
-
-
 
     public function issue() {
         $page_data['page_title'] = "Issue";
@@ -141,7 +141,6 @@ class SOCOM_HOME extends CI_Controller {
         $page_data['page_specific_css'] = ['select2.css','carbon-light-dark-theme.css','SOCOM/socom_home.css'];
         $page_data['compression_name'] = trim(pathinfo(__FILE__, PATHINFO_FILENAME), '.php');
         $page = 'issue';
-        
         $cap_sponsor_results = $this->DBs->SOCOM_model->cap_sponsor_count($page);
         $cap_sponsor_count = $cap_sponsor_results['cap_sponsor_count'];
         $total_events = $cap_sponsor_results['total_events'];
@@ -155,17 +154,10 @@ class SOCOM_HOME extends CI_Controller {
         $cap_sponsor_approve_reject_categories= $cap_sponsor_approve_reject['categories'];
         $cap_sponsor_approve_reject_series_data = $cap_sponsor_approve_reject['series_data'];
 
-        try {
-            [$pom_year, ]  = get_years_issue_summary();
-            $data['subapp_pom_year_issue'] = $pom_year;
-        } catch (Exception $e) {
-            log_message('error', 'get_years_issue_summary failed: ' . $e->getMessage());
-            $data['subapp_pom_year_issue'] = 2024;
-        }
-        
+        [$pom_year, ]  = get_years_issue_summary();
+        $data['subapp_pom_year_issue'] = $pom_year;
         $is_guest = $this->rbac_users->is_guest();
         $is_restricted = $this->rbac_users->is_restricted();
-        
 		$page_data['is_guest'] = $is_guest;
         $page_data['is_restricted'] = $is_restricted;
 
@@ -178,8 +170,7 @@ class SOCOM_HOME extends CI_Controller {
             'net_change' => $net_change,
             'cap_sponsor_approve_reject_categories' => $cap_sponsor_approve_reject_categories,
             'cap_sponsor_approve_reject_series_data' => $cap_sponsor_approve_reject_series_data,
-            'page' => 'issue',
-            'breadcrumb_text' => 'Issue Summary'
+            'page' => 'Issue'
         ], $dollars_moved_resource_category, $data
         ));
         $this->load->view('templates/close_view');
