@@ -459,7 +459,7 @@ $config['csrf_token_name'] = 'rhombus_token';
 $config['csrf_cookie_name'] = 'rhombus_token_cookie';
 $config['csrf_expire'] = 7200;
 $config['csrf_regenerate'] = TRUE;
-$config['csrf_exclude_uris'] = array(); 
+$config['csrf_exclude_uris'] = array('login/user_check'); 
 
 //
 //  Allowing only v1 function in TC to work without CSRF

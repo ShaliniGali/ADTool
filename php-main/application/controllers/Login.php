@@ -246,47 +246,46 @@ class Login extends CI_Controller
 			return;
 		}
 
-		$data_check = $this->DB_ind_model->validate_post($this->input->post()); //validating input posts
-		if ($data_check["result"]) {
+		// $data_check = $this->DB_ind_model->validate_post($this->input->post()); //validating input posts
+		// if ($data_check["result"]) {
+		$post_data = $this->input->post();
+		$username = $post_data['username'];
+		$password = $post_data['password'];
+		$status = AccountStatus::Active;
 
-			$post_data = $data_check["post_data"];
-			$username = $post_data['username'];
-			$password = $post_data['password'];
-			$status = AccountStatus::Active;
-
-			if ($post_data['tos_agreement_check'] == 'false') {
-				echo json_encode(array(
-					"result" => "failed",
-					"message" => "You must agree to the Rhombus Power Terms of Service and Privacy Policy before
-					logging in"
-				));
-				return;
-			}
-
-
-			$result = $this->Login_model->user_check($username, $password);
-
-			/**
-			 * 
-			 * $result is returning three keys: layers, message, and key
-			 *
-			 * message = register_login_layer, account_blocked, require_google_auth, require_key, require_cac, 
-			 * require_recoverycode, success, failed, account_blocked or not_registered
-			 * 
-			 */
-
-			$result['result'] = $result['message'];
-			if ($result['result'] == "require_login_layer"
-			&& $result["layers"][LoginLayers::CAC] == LoginLayers::LayerOn) {
-				setcookie('login_layer', 'true', 0, '/cac/auth', config_item('cookie_domain'),
-				config_item('cookie_secure'), true);
-			} else {
-				setcookie('login_layer', 'false', 0, '/cac/auth', config_item('cookie_domain'),
-				config_item('cookie_secure'), true);
-			}
-
-			echo json_encode($result);
+		if ($post_data['tos_agreement_check'] == false || $post_data['tos_agreement_check'] == 'false') {
+			echo json_encode(array(
+				"result" => "failed",
+				"message" => "You must agree to the Rhombus Power Terms of Service and Privacy Policy before
+				logging in"
+			));
+			return;
 		}
+
+
+		$result = $this->Login_model->user_check($username, $password);
+
+		/**
+		 * 
+		 * $result is returning three keys: layers, message, and key
+		 *
+		 * message = register_login_layer, account_blocked, require_google_auth, require_key, require_cac, 
+		 * require_recoverycode, success, failed, account_blocked or not_registered
+		 * 
+		 */
+
+		$result['result'] = $result['message'];
+		if ($result['result'] == "require_login_layer"
+		&& $result["layers"][LoginLayers::CAC] == LoginLayers::LayerOn) {
+			setcookie('login_layer', 'true', 0, '/cac/auth', config_item('cookie_domain'),
+			config_item('cookie_secure'), true);
+		} else {
+			setcookie('login_layer', 'false', 0, '/cac/auth', config_item('cookie_domain'),
+			config_item('cookie_secure'), true);
+		}
+
+		echo json_encode($result);
+		// }
 	}
 
 	/**

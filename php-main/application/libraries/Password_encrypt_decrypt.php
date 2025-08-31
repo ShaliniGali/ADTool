@@ -39,6 +39,22 @@ class Password_encrypt_decrypt {
     }
 
     /**
+     * Verify a password against a stored hash
+     * 
+     * @param string $password The plain text password to verify
+     * @param string $stored_hash The stored hash to compare against
+     * @param string $salt The salt used to generate the stored hash
+     * @return bool True if password matches, false otherwise
+     */
+    public function verify_password($password, $stored_hash, $salt) {
+        // Generate hash from input password using the stored salt
+        $input_hash = base64_encode(hash_pbkdf2("sha256", $password, base64_decode($salt), self::PBKDF2_ITERATIONS, self::ALGORITHM_KEY_SIZE, true));
+        
+        // Compare the generated hash with stored hash
+        return hash_equals($stored_hash, $input_hash);
+    }
+
+    /**
      * @author Moheb, September 3rd, 2020
      * Returns true if the password is strong; otherwise, returns false.
      * 

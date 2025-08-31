@@ -1,11 +1,11 @@
-<form id="rhombus_login" class="needs-validation py-5 px-3" novalidate>
+<?php echo form_open('login/user_check', array('id' => 'rhombus_login', 'class' => 'needs-validation py-5 px-3', 'novalidate' => '')); ?>
 	<div class="form-row">
 		<div class="col-md-12 mb-3 pb-4">
 			<div class="input-group">
 			<div class="input-group-prepend">
 				<span class="input-group-text text-muted bg-dark border-dark input_icons" data-toggle="tooltip" data-placement="top" title="Email"><em class="far fa-envelope"></em></span>
 			</div>
-			<input type="email" class="form-control border-0" name="user_email_login" id="user_email_login" placeholder="Enter email" value="" required>
+			<input type="email" class="form-control border-0" name="username" id="user_email_login" placeholder="Enter email" value="" required>
 			</div>
 			<div class="valid-feedback"></div>
 		</div>
@@ -15,7 +15,7 @@
                     <span class="input-group-text text-muted bg-dark border-dark input_icons" data-toggle="tooltip" data-placement="top" title="Password"><em class="fas fa-lock"></em></span>
                 </div>
                 
-                <input type="password" class="form-control border-0" name="user_password_login" id="user_password_login" style="border-radius:1px;" placeholder="Enter password" value="" autocomplete="off" required>
+                <input type="password" class="form-control border-0" name="password" id="user_password_login" style="border-radius:1px;" placeholder="Enter password" value="" autocomplete="off" required>
                 
                 <div class="input-group-append show-password">
                     <span class="input-group-text text-muted bg-dark border-dark input_icons">
@@ -35,7 +35,7 @@
 	</div>
 	<button class="btn btn-success mt-4 w-100 mb-4" type="submit" id="rhombus_login_submit" style="cursor:default" disabled>LOGIN</button>
 	<a href = "#" class="small" onclick="forgot_password_switch('reset')">Forgot Password?</a>
-</form>
+<?php echo form_close(); ?>
 <form id = "forgot_password" class="needs-validation py-5 px-3 d-none">
 	<div class="form-row">
 		<div class="col-md-12 mb-3 pb-4">
