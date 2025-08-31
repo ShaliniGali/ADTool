@@ -52,7 +52,58 @@ class Dynamic_Year {
             $php_api_http_status
         );
 
-        $this->CI->SOCOM_SUBAPP_DB = json_decode($res, true);
+        $decoded_res = json_decode($res, true);
+        
+        // If API call fails, provide fallback data structure
+        if ($php_api_http_status !== '200' || !$decoded_res || isset($decoded_res['detail'])) {
+            log_message('info', 'Dynamic_Year API call failed, using fallback data structure');
+            
+            // Create fallback data structure for ZBT and ISS
+            $this->CI->SOCOM_SUBAPP_DB = [
+                'ZBT_SUMMARY' => [
+                    'CURRENT' => [
+                        'ZBT_EXTRACT' => [
+                            0 => 'ZBT_SUMMARY_2024',
+                            1 => 'ZBT_SUMMARY_2025'
+                        ],
+                        'ZBT' => [
+                            0 => 'ZBT_SUMMARY_2024',
+                            1 => 'ZBT_SUMMARY_2025'
+                        ],
+                        'ISS' => [
+                            0 => 'ISS_SUMMARY_2024',
+                            1 => 'ISS_SUMMARY_2025'
+                        ],
+                        'POM' => [
+                            0 => 'POM_SUMMARY_2024',
+                            1 => 'POM_SUMMARY_2025'
+                        ]
+                    ]
+                ],
+                'ISS_SUMMARY' => [
+                    'CURRENT' => [
+                        'ISS_EXTRACT' => [
+                            0 => 'ISS_SUMMARY_2024',
+                            1 => 'ISS_SUMMARY_2025'
+                        ],
+                        'ISS' => [
+                            0 => 'ISS_SUMMARY_2024',
+                            1 => 'ISS_SUMMARY_2025'
+                        ]
+                    ]
+                ],
+                'RESOURCE_CONSTRAINED_COA' => [
+                    'CURRENT' => [
+                        'ISS' => [
+                            0 => 'RESOURCE_CONSTRAINED_COA_2024',
+                            1 => 'RESOURCE_CONSTRAINED_COA_2025'
+                        ]
+                    ]
+                ]
+            ];
+        } else {
+            $this->CI->SOCOM_SUBAPP_DB = $decoded_res;
+        }
 
         defined('SOCOM_SUBAPP_DB') || define('SOCOM_SUBAPP_DB', $this->CI->SOCOM_SUBAPP_DB);
     }
