@@ -31,7 +31,7 @@ services:
       - ./php-main/application/logs:/var/www/html/application/logs
     environment:
       - SOCOM_guardian_users=rhombus_db
-      - SOCOM_P1=TRUE
+      - SOCOM_P1=FALSE
       - SOCOM_BASE_URL=http://localhost:80/
       - SOCOM_UI=SOCOM_UI
       - SHOW_SOCOM=TRUE
@@ -56,6 +56,9 @@ services:
       - SOCOM_FILE_DOWNLOAD=FALSE
       - SOCOM_admin_emails=admin@example.com
       - SOCOM_RHOMBUS_DEBUG=TRUE
+      - SOCOM_JWT_SECRET_KEY=your-super-secret-jwt-key-here-12345
+      - SOCOM_JWT_ALGORITHM=HS256
+      - SOCOM_PYTHON_URL=http://rhombus-python:8020
       - CI_CREDENTIALS_HOST=rhombus-mysql
       - CI_CREDENTIALS_USERNAME=rhombus_user
       - CI_CREDENTIALS_PASSWORD=rhombus_password
@@ -80,6 +83,8 @@ services:
       - ./python-main:/code
     environment:
       - DATABASE_URL=mysql://rhombus_user:rhombus_password@mysql:3306/rhombus_db
+      - SOCOM_JWT_SECRET_KEY=your-super-secret-jwt-key-here-12345
+      - SOCOM_JWT_ALGORITHM=HS256
     networks:
       - rhombus-network
     depends_on:
