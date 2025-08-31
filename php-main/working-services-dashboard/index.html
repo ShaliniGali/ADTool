@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rhombus - Working Services Dashboard</title>
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 Rhombus - Working Services Dashboard</h1>
+            <p>Monitor and manage all system services in real-time</p>
+            
+            <!-- SOCOM Dashboard Info -->
+            <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px; margin-top: 20px; max-width: 600px; margin-left: auto; margin-right: auto;">
+                <p style="margin: 0; font-size: 1.1rem;">🎯 <strong>SOCOM Dashboard:</strong> Click the "🚀 SOCOM Dashboard" link to access the actual production SOCOM application</p>
+            </div>
+        </div>
+
+        <div class="services-grid">
+            <!-- PHP Application -->
+            <div class="service-card">
+                <div class="service-header">
+                    <div class="service-icon">🐘</div>
+                    <div class="service-info">
+                        <h3>SOCOM Application</h3>
+                        <p>Production SOCOM dashboard and business logic</p>
+                    </div>
+                    <span class="status-badge" id="php-status">WORKING</span>
+                </div>
+                <div class="service-links">
+                    <a href="http://localhost/health" target="_blank" class="main-link">🏥 Health Check</a>
+                    <a href="http://localhost/socom/index" target="_blank" class="secondary-link">🚀 SOCOM Dashboard</a>
+                    <button onclick="viewPHPLogs()" class="secondary-link" style="border: none; cursor: pointer;">📋 View Logs</button>
+                </div>
+            </div>
+
+            <!-- Python API -->
+            <div class="service-card">
+                <div class="service-header">
+                    <div class="service-icon">🐍</div>
+                    <div class="service-info">
+                        <h3>Python API</h3>
+                        <p>FastAPI with SOCOM endpoints</p>
+                    </div>
+                    <span class="status-badge" id="python-status">WORKING</span>
+                </div>
+                <div class="service-links">
+                    <a href="http://localhost:8020/docs" target="_blank" class="main-link">📚 Swagger UI</a>
+                    <button onclick="checkPythonHealth()" class="secondary-link" style="border: none; cursor: pointer;">🏥 Check Health</button>
+                    <button onclick="viewPythonLogs()" class="secondary-link" style="border: none; cursor: pointer;">📋 View Logs</button>
+                </div>
+            </div>
+
+            <!-- JWT Authentication -->
+            <div class="service-card">
+                <div class="service-header">
+                    <div class="service-icon">🔐</div>
+                    <div class="service-info">
+                        <h3>JWT Authentication</h3>
+                        <p>JSON Web Token service for SOCOM</p>
+                    </div>
+                    <span class="status-badge" id="jwt-status">WORKING</span>
+                </div>
+                <div class="service-links">
+                    <button onclick="testJWTCreation()" class="main-link" style="border: none; cursor: pointer;">🔑 Test JWT Creation</button>
+                    <button onclick="testJWTRefresh()" class="secondary-link" style="border: none; cursor: pointer;">🔄 Test JWT Refresh</button>
+                    <button onclick="viewJWTLogs()" class="secondary-link" style="border: none; cursor: pointer;">📋 View Logs</button>
+                </div>
+            </div>
+
+            <!-- JavaScript S3 Service -->
+            <div class="service-card">
+                <div class="service-header">
+                    <div class="service-icon">⚛️</div>
+                    <div class="service-info">
+                        <h3>JavaScript S3 Service</h3>
+                        <p>S3 file service and React UI</p>
+                    </div>
+                    <span class="status-badge" id="javascript-status">WORKING</span>
+                </div>
+                <div class="service-links">
+                    <a href="http://localhost:3000" target="_blank" class="main-link">📁 S3 File Service</a>
+                    <a href="/api-documentation.html" target="_blank" class="secondary-link">📚 API Documentation</a>
+                    <button onclick="viewJavaScriptLogs()" class="secondary-link" style="border: none; cursor: pointer;">📋 View Logs</button>
+                </div>
+            </div>
+
+            <!-- Docker Container Logs -->
+            <div class="service-card">
+                <div class="service-header">
+                    <div class="service-icon">🐳</div>
+                    <div class="service-info">
+                        <h3>Docker Container Logs</h3>
+                        <p>Real-time container status and logs</p>
+                    </div>
+                    <span class="status-badge" id="docker-status">WORKING</span>
+                </div>
+                <div class="service-links">
+                    <button onclick="viewDockerLogs()" class="main-link" style="border: none; cursor: pointer; background: #00BCD4;">🐳 View All Container Logs</button>
+                    <button onclick="viewPHPDockerLogs()" class="secondary-link" style="border: none; cursor: pointer; background: #9C27B0;">🐘 PHP Container</button>
+                    <button onclick="viewPythonDockerLogs()" class="secondary-link" style="border: none; cursor: pointer; background: #FF9800;">🐍 Python Container</button>
+                </div>
+            </div>
+
+            <!-- Database -->
+            <div class="service-card">
+                <div class="service-header">
+                    <div class="service-icon">🗄️</div>
+                    <div class="service-info">
+                        <h3>MySQL Database</h3>
+                        <p>Database connected and ready</p>
+                    </div>
+                    <span class="status-badge" id="db-status">WORKING</span>
+                </div>
+                <div class="service-links">
+                    <a href="http://localhost:8080" target="_blank" class="main-link">🗄️ phpMyAdmin</a>
+                    <button onclick="showDatabaseTables()" class="secondary-link" style="border: none; cursor: pointer;">📊 View Tables</button>
+                    <button onclick="viewDatabaseLogs()" class="secondary-link" style="border: none; cursor: pointer;">📋 View Logs</button>
+                </div>
+            </div>
+        </div>
+
+        <button class="refresh-btn" onclick="location.reload()">🔄 Refresh Page</button>
+
+        <!-- Database Tables Modal -->
+        <div id="tablesModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <span class="close" onclick="closeTablesModal()">&times;</span>
+                <h2>🗄️ Database Tables & Data</h2>
+                <div id="tablesContent">
+                    <p>Loading database tables...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Logs Modal -->
+        <div id="logsModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <span class="close" onclick="closeLogsModal()">&times;</span>
+                <h2>🔧 Service Logs</h2>
+                <div id="logsContent">
+                    <p>Loading logs...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Real-Time Error Logs Section -->
+        <div style="background: #f8f9fa; border-radius: 15px; padding: 25px; margin: 30px 0; border: 1px solid #e9ecef;">
+            <div style="display: flex; align-items: center; margin-bottom: 20px;">
+                <h2 style="color: #495057; margin: 0; font-size: 1.8rem;">🐳 Real-Time Docker & PHP Error Logs</h2>
+                <button onclick="refreshErrorLogs()" style="margin-left: auto; background: #00BCD4; color: white; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 0.9rem;">
+                    🔄 Refresh Logs
+                </button>
+            </div>
+            
+            <div class="refresh-controls">
+                <div class="auto-refresh-info">
+                    💡 Auto-refreshing every 2 minutes. Last updated: <span id="lastUpdate">Loading...</span>
+                </div>
+            </div>
+
+            <div id="errorLogsContent">
+                <p>Loading error logs...</p>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>&copy; 2025 Rhombus Services Dashboard | Real-time monitoring and error tracking</p>
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="dashboard.js"></script>
+</body>
+</html>

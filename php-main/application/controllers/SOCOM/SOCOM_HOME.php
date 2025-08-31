@@ -4,6 +4,11 @@ defined('BASEPATH') || exit('No direct script access allowed');
 #[AllowDynamicProperties]
 class SOCOM_HOME extends CI_Controller {
 
+    public function __construct() {
+        parent::__construct();
+        $this->load->model('SOCOM_model');
+    }
+
     public function index() {
         $page_data['page_title'] = "SOCOM Home";
         $page_data['page_tab'] = "SOCOM Home";
@@ -52,15 +57,15 @@ class SOCOM_HOME extends CI_Controller {
         $page_data['compression_name'] = trim(pathinfo(__FILE__, PATHINFO_FILENAME), '.php');
         $page = 'zbt_summary';
         
-        $cap_sponsor_results = $this->DBs->SOCOM_model->cap_sponsor_count($page);
+        $cap_sponsor_results = $this->SOCOM_model->cap_sponsor_count($page);
         $cap_sponsor_count = $cap_sponsor_results['cap_sponsor_count'];
         $total_zbt_events = $cap_sponsor_results['total_events'];
-        $cap_sponsor_dollar_results = $this->DBs->SOCOM_model->cap_sponsor_dollar($page);
+        $cap_sponsor_dollar_results = $this->SOCOM_model->cap_sponsor_dollar($page);
         $cap_sponsor_dollar = $cap_sponsor_dollar_results['cap_sponsor_dollar'];
         $dollars_moved = $cap_sponsor_dollar_results['dollars_moved'];
-        $net_change = $this->DBs->SOCOM_model->net_change($page);
+        $net_change = $this->SOCOM_model->net_change($page);
         $dollars_moved_resource_category = $this->dollars_moved_resource_category_cross_join($page);
-        $cap_sponsor_approve_reject = $this->DBs->SOCOM_model->cap_sponsor_approve_reject($page);
+        $cap_sponsor_approve_reject = $this->SOCOM_model->cap_sponsor_approve_reject($page);
         $cap_sponsor_approve_reject_categories= $cap_sponsor_approve_reject['categories'];
         $cap_sponsor_approve_reject_series_data = $cap_sponsor_approve_reject['series_data'];
 
@@ -82,12 +87,16 @@ class SOCOM_HOME extends CI_Controller {
             'net_change' => $net_change,
             'cap_sponsor_approve_reject_categories' => $cap_sponsor_approve_reject_categories,
             'cap_sponsor_approve_reject_series_data' => $cap_sponsor_approve_reject_series_data,
-            'page' => 'ZBT',
+            'page' => 'zbt',
             'breadcrumb_text' => 'ZBT Summary'
         ], $dollars_moved_resource_category, $data
         ));
         $this->load->view('templates/close_view');
     }
+
+
+
+
 
     public function issue() {
         $page_data['page_title'] = "Issue";
@@ -133,7 +142,7 @@ class SOCOM_HOME extends CI_Controller {
             'net_change' => $net_change,
             'cap_sponsor_approve_reject_categories' => $cap_sponsor_approve_reject_categories,
             'cap_sponsor_approve_reject_series_data' => $cap_sponsor_approve_reject_series_data,
-            'page' => 'Issue',
+            'page' => 'issue',
             'breadcrumb_text' => 'Issue Summary'
         ], $dollars_moved_resource_category, $data
         ));

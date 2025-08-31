@@ -51,6 +51,9 @@ $route['socom/get_dollars_moved_resource_category'] = 'SOCOM/SOCOM_HOME/get_doll
 $route['socom/(:any)/event_summary'] = 'SOCOM/SOCOM_Event_Summary/event_summary/$1';
 $route['socom/(:any)/event_summary/(:any)'] = 'SOCOM/SOCOM_Event_Summary/event_summary/$1/$2';
 $route['socom/(:any)/event_summary_overall'] = 'SOCOM/SOCOM_Event_Summary/overall_event_summary/$1';
+
+// log viewer
+
 $route['socom/(:any)/get_event_summary_data/(:any)'] = 'SOCOM/SOCOM_Event_Summary/get_event_summary_data/$1/$2';
 $route['socom/(:any)/get_exported_event_summary_data'] = 'SOCOM/SOCOM_Event_Summary/get_exported_event_summary_data/$1';
 $route['socom/(:any)/get_overall_event_summary_data'] = 'SOCOM/SOCOM_Event_Summary/get_overall_event_summary_data/$1';
