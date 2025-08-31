@@ -9,6 +9,42 @@ class SOCOM_HOME extends CI_Controller {
         $this->load->model('SOCOM_model');
     }
 
+    public function php_errors() {
+        // Simple method to serve PHP error logs
+        $log_file = APPPATH . 'logs/log-' . date('Y-m-d') . '.php';
+        
+        if (file_exists($log_file)) {
+            $content = file_get_contents($log_file);
+            // Remove the PHP opening tag and extract just the log content
+            $content = preg_replace('/^<\?php.*?\?>/s', '', $content);
+            
+            // Split content into lines and get recent errors
+            $lines = explode("\n", $content);
+            $recent_errors = array_slice(array_filter($lines, function($line) {
+                return strpos($line, 'ERROR') !== false;
+            }), -20); // Last 20 error lines
+            
+            $response = [
+                'status' => 'success',
+                'log_file' => basename($log_file),
+                'last_updated' => date('Y-m-d H:i:s', filemtime($log_file)),
+                'content' => $content,
+                'total_errors' => substr_count($content, 'ERROR'),
+                'critical_errors' => substr_count($content, 'Severity: error'),
+                'warnings' => substr_count($content, 'Warning'),
+                'recent_errors' => $recent_errors
+            ];
+        } else {
+            $response = [
+                'status' => 'error',
+                'message' => 'Log file not found'
+            ];
+        }
+        
+        header('Content-Type: application/json');
+        echo json_encode($response);
+    }
+
     public function index() {
         $page_data['page_title'] = "SOCOM Home";
         $page_data['page_tab'] = "SOCOM Home";

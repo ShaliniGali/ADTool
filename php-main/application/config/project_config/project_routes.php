@@ -11,6 +11,8 @@
 // $route['SOCOM'] = LOGIN_ROUTE;
 // $route['SOCOM/(.+)'] = LOGIN_ROUTE;
 
+
+
 // JWT bypass routes for development
 $route['socom/jwt_login'] = 'SOCOM/JWT_Login/index';
 $route['socom/jwt_login/generate_token'] = 'SOCOM/JWT_Login/generate_token';
@@ -53,6 +55,7 @@ $route['socom/(:any)/event_summary/(:any)'] = 'SOCOM/SOCOM_Event_Summary/event_s
 $route['socom/(:any)/event_summary_overall'] = 'SOCOM/SOCOM_Event_Summary/overall_event_summary/$1';
 
 // log viewer
+$route['socom/php_errors'] = 'SOCOM/SOCOM_HOME/php_errors';
 
 $route['socom/(:any)/get_event_summary_data/(:any)'] = 'SOCOM/SOCOM_Event_Summary/get_event_summary_data/$1/$2';
 $route['socom/(:any)/get_exported_event_summary_data'] = 'SOCOM/SOCOM_Event_Summary/get_exported_event_summary_data/$1';
