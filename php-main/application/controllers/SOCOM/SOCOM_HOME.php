@@ -231,9 +231,38 @@ class SOCOM_HOME extends CI_Controller {
             'categories' => []
         ];
 
+        // Get capability sponsors from the actual data table for pb_comparison
+        $capability_sponsor_codes = $this->DBs->SOCOM_model->get_capability_sponsor_code($page);
         $capability_sponsor = [];
+        
+        // Get the full sponsor information from lookup table for the codes found in data
+        if (!empty($capability_sponsor_codes)) {
+            $codes = array_column($capability_sponsor_codes, 'CAPABILITY_SPONSOR_CODE');
+            $this->DBs->SOCOM_UI->select('SPONSOR_CODE, SPONSOR_TITLE');
+            $this->DBs->SOCOM_UI->from('LOOKUP_SPONSOR');
+            $this->DBs->SOCOM_UI->where('SPONSOR_TYPE', 'CAPABILITY');
+            $this->DBs->SOCOM_UI->where_in('SPONSOR_CODE', $codes);
+            $this->DBs->SOCOM_UI->order_by('SPONSOR_TITLE');
+            $capability_sponsor = $this->DBs->SOCOM_UI->get()->result_array();
+        }
+        
         $pom_sponsor = [];
-        $ass_area = [];
+        $ass_area = $this->DBs->SOCOM_model->get_assessment_area_code();
+        
+        // Get program groups from the actual data table for pb_comparison
+        $program_groups = $this->DBs->SOCOM_UI
+            ->select('PROGRAM_GROUP')
+            ->distinct()
+            ->from('DT_PB_COMPARISON')
+            ->where('PROGRAM_GROUP IS NOT NULL')
+            ->order_by('PROGRAM_GROUP')
+            ->get()
+            ->result_array();
+        
+        $program = [];
+        foreach ($program_groups as $group) {
+            $program[] = ['PROGRAM_GROUP' => $group['PROGRAM_GROUP']];
+        }
         $is_guest = $this->rbac_users->is_guest();
         $is_restricted = $this->rbac_users->is_restricted();
 		$page_data['is_guest'] = $is_guest;
@@ -247,7 +276,7 @@ class SOCOM_HOME extends CI_Controller {
             'capability_sponsor' => $capability_sponsor,
             'pom_sponsor' => $pom_sponsor,
             'ass_area' => $ass_area,
-            'program' => [],
+            'program' => $program,
             'resource_category' => [],
             'execution_manager_code' => [],
             'program_code' => [],
@@ -377,6 +406,20 @@ class SOCOM_HOME extends CI_Controller {
 
     public function update_resource_category_filter_be() {
         $this->update_resource_category_filter("budget_to_execution");
+    }
+
+    public function update_program_filter_be() {
+        $this->update_program_filter("budget_to_execution");
+    }
+
+    public function filter($page, $type, $action) {
+        if ($page === 'budget_to_execution' && $type === 'program' && $action === 'update') {
+            $this->update_program_filter("budget_to_execution");
+        } elseif ($page === 'pb_comparison' && $type === 'program' && $action === 'update') {
+            $this->update_program_filter("pb_comparison");
+        } else {
+            show_404();
+        }
     }
 
     public function update_resource_category_filter($section) {
@@ -724,9 +767,45 @@ class SOCOM_HOME extends CI_Controller {
         $graph_data['data'] =  $formmatted_data['data'];
         $graph_data["categories"] =  $formmatted_data['years'];
 
-        $capability_sponsor = $this->DBs->SOCOM_model->get_sponsor('LOOKUP_SPONSOR', 'CAPABILITY');
+        // Get capability sponsors from the actual data table for budget_to_execution
+        $capability_sponsor_codes = $this->DBs->SOCOM_UI
+            ->select('CAPABILITY_SPONSOR_CODE')
+            ->distinct()
+            ->from('DT_BUDGET_EXECUTION')
+            ->where('CAPABILITY_SPONSOR_CODE IS NOT NULL')
+            ->order_by('CAPABILITY_SPONSOR_CODE')
+            ->get()
+            ->result_array();
+        
+        $capability_sponsor = [];
+        if (!empty($capability_sponsor_codes)) {
+            $codes = array_column($capability_sponsor_codes, 'CAPABILITY_SPONSOR_CODE');
+            $this->DBs->SOCOM_UI->select('SPONSOR_CODE, SPONSOR_TITLE');
+            $this->DBs->SOCOM_UI->from('LOOKUP_SPONSOR');
+            $this->DBs->SOCOM_UI->where('SPONSOR_TYPE', 'CAPABILITY');
+            $this->DBs->SOCOM_UI->where_in('SPONSOR_CODE', $codes);
+            $this->DBs->SOCOM_UI->order_by('SPONSOR_TITLE');
+            $capability_sponsor = $this->DBs->SOCOM_UI->get()->result_array();
+        }
+        
         $pom_sponsor = $this->DBs->SOCOM_model->get_sponsor('LOOKUP_SPONSOR', 'POM');
         $ass_area = $this->DBs->SOCOM_model->get_assessment_area_code();
+        
+        // Get program groups from the actual data table for budget_to_execution
+        $program_groups = $this->DBs->SOCOM_UI
+            ->select('PROGRAM_GROUP')
+            ->distinct()
+            ->from('DT_BUDGET_EXECUTION')
+            ->where('PROGRAM_GROUP IS NOT NULL')
+            ->order_by('PROGRAM_GROUP')
+            ->get()
+            ->result_array();
+        
+        $program = [];
+        foreach ($program_groups as $group) {
+            $program[] = ['PROGRAM_GROUP' => $group['PROGRAM_GROUP']];
+        }
+        
         $is_guest = $this->rbac_users->is_guest();
         $is_restricted = $this->rbac_users->is_restricted();
 		$page_data['is_guest'] = $is_guest;
@@ -740,7 +819,7 @@ class SOCOM_HOME extends CI_Controller {
             'capability_sponsor' => $capability_sponsor,
             'pom_sponsor' => $pom_sponsor,
             'ass_area' => $ass_area,
-            'program' => [],
+            'program' => $program,
             'resource_category' => []
         ]);
         $this->load->view('templates/close_view');

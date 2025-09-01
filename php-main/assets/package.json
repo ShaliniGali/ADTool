@@ -1,0 +1,46 @@
+{
+    "name": "socom",
+    "version": "1.0.0",
+    "description": "Rhombus IT Department",
+    "main": "index.js",
+    "scripts": {
+        "nuke-dist": "rm -rf ../dist/assets",
+        "build": "npm run nuke-dist && webpack --config webpack.config.js --env type='production' && npm run copy-to-dist",
+        "nuke-dist-dev": "rm -f js/dist/*",
+        "dev-build": "npm run nuke-dist-dev && webpack --config webpack.config.js --env type='development'",
+        "copy-to-dist": "mkdir -p ../dist/assets/js && cp -r images css webfonts ../dist/assets && cp -r js/* ../dist/assets/js",
+        "test:unit": "jest --coverage js/",
+        "test:one": "jest",
+        "lint": "npx eslint js --ext .js"
+    },
+    "jest": {
+        "testPathIgnorePatterns": [
+            ".eslintrc.js",
+            "js/coverage"
+        ],
+        "collectCoverage": true,
+        "collectCoverageFrom": [
+            "**/*.js",
+            "!js/webpack.config.js",
+            "!js/NIPR/*",
+            "!js/NIPR",
+            "!js/dist",
+            "!js/dist/*",
+            "!node_modules/",
+            "!node_moduels/*",
+            "!js/tests/coverage/lcov-report/*",
+            "!js/tests/coverage/lcov-report",
+            "!coverage/lcov-report/*",
+            "!.eslintrc.js",
+            "!coverage/lcov-report"
+        ]
+    },
+    "repository": {
+        "type": "",
+        "url": ""
+    },
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {},
+    "dependencies": {}
+}

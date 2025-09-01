@@ -9,6 +9,7 @@ $js_files = array();
     $js_files['sanitize_html.js'] = ['sanitize-html.js','global'];
     $js_files['tilt'] = ['tilt.jquery.js','global'];
     $js_files['cryptoJS'] = ['cryptoJS.js','global'];
+    $js_files['moment'] = ['moment.min.js','global'];
     $js_files['rhombus'] = ['essential/rhombus.js','custom'];
     $js_files['d3'] = ['d3.min.js','global'];
     $js_files['carbon'] = ['carbon.min.js', 'global'];

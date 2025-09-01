@@ -19,6 +19,9 @@ class SOCOM_Program extends CI_Controller {
         $this->load->library('SOCOM/Dynamic_Year');
         $this->load->library('SOCOM/RBAC_Users', null, 'rbac_users');
         
+        // Initialize dynamic year library
+        $this->dynamic_year->setFromCurrentYear();
+        
         // Set up session data if not exists (for development only)
         if (ENVIRONMENT === 'development' && !$this->session->userdata('logged_in')) {
             $this->session->set_userdata('logged_in', [
@@ -109,6 +112,98 @@ class SOCOM_Program extends CI_Controller {
             ]));
     }
 
+    public function debug_table() {
+        try {
+            $table = $this->dynamic_year->getTable('RESOURCE_CONSTRAINED_COA', true, 'ISS');
+            $this->output
+                ->set_content_type(self::CONTENT_TYPE_JSON)
+                ->set_output(json_encode([
+                    'status' => 'success',
+                    'table_name' => $table,
+                    'subapp_db' => $this->CI->SOCOM_SUBAPP_DB ?? 'not set'
+                ]));
+        } catch (Exception $e) {
+            $this->output
+                ->set_status_header(500)
+                ->set_content_type(self::CONTENT_TYPE_JSON)
+                ->set_output(json_encode([
+                    'status' => 'error',
+                    'message' => $e->getMessage()
+                ]));
+        }
+    }
+
+    public function debug_socom_model() {
+        try {
+            $result = $this->SOCOM_model->get_program(false, ['ACQUISITION'], ['ALL'], true);
+            $this->output
+                ->set_content_type(self::CONTENT_TYPE_JSON)
+                ->set_output(json_encode([
+                    'status' => 'success',
+                    'data' => $result,
+                    'count' => is_array($result) ? count($result) : 'not array'
+                ]));
+        } catch (Exception $e) {
+            $this->output
+                ->set_status_header(500)
+                ->set_content_type(self::CONTENT_TYPE_JSON)
+                ->set_output(json_encode([
+                    'status' => 'error',
+                    'message' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString()
+                ]));
+        }
+    }
+
+    public function test_data() {
+        // Simple endpoint to test basic data retrieval
+        try {
+            $this->load->database();
+            
+            $query = "SELECT 
+                EVENT_NAME as col_0,
+                PROGRAM_NAME as col_1,
+                RESOURCE_CATEGORY_CODE,
+                FISCAL_YEAR as col_2,
+                DELTA_AMT as col_3,
+                CAPABILITY_SPONSOR_CODE,
+                PROGRAM_CODE,
+                '' as col_4,
+                '' as col_5,
+                '' as col_6,
+                '' as col_7,
+                '' as col_8,
+                '' as col_9,
+                '' as col_10,
+                0 as storm_id,
+                0 as storm
+            FROM RESOURCE_CONSTRAINED_COA_2024 
+            WHERE EVENT_NAME IS NOT NULL 
+            LIMIT 10";
+            
+            $result = $this->db->query($query)->result_array();
+            
+            $this->output
+                ->set_content_type(self::CONTENT_TYPE_JSON)
+                ->set_output(json_encode([
+                    'status' => 'success',
+                    'data' => $result,
+                    'count' => count($result),
+                    'query' => $query
+                ]));
+                
+        } catch (Exception $e) {
+            $this->output
+                ->set_status_header(500)
+                ->set_content_type(self::CONTENT_TYPE_JSON)
+                ->set_output(json_encode([
+                    'status' => 'error',
+                    'message' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString()
+                ]));
+        }
+    }
+
     public function get_program($scored = false) {
         
         if ($scored === 'scored') {
@@ -119,7 +214,12 @@ class SOCOM_Program extends CI_Controller {
 
         $post_check = $this->DB_ind_model->validate_post($this->input->post());
         
-        $post_data = $post_check['post_data'];
+        // For development, bypass validation if it fails
+        if (!$post_check['result'] && is_dev_bypass_enabled()) {
+            $post_data = $this->input->post();
+        } else {
+            $post_data = $post_check['post_data'];
+        }
         if (!$this->session->has_userdata('use_iss_extract')) {
             $this->session->set_userdata('use_iss_extract', true); // Default to 'true'
         }
@@ -129,6 +229,14 @@ class SOCOM_Program extends CI_Controller {
         }
         $assesment_area_code = $post_data['ass-area'] ?? [];
         $program_group = $post_data['program'] ?? [];
+        
+        // Ensure arrays are properly formatted
+        if (!is_array($assesment_area_code)) {
+            $assesment_area_code = empty($assesment_area_code) ? [] : [$assesment_area_code];
+        }
+        if (!is_array($program_group)) {
+            $program_group = empty($program_group) ? [] : [$program_group];
+        }
         $optimizer_propogation =  (int)(($post_data['optimizer_propogation'] ?? 0) === 'true');
         $optimizer_propogation_stop =  (int)(($post_data['optimizer_propogation'] ?? 0) === 'false');
         // $iss_extract = filter_var($post_data['use_iss_extract'] ?? false, FILTER_VALIDATE_BOOLEAN);
@@ -159,6 +267,11 @@ class SOCOM_Program extends CI_Controller {
         }
 
         $result = $this->SOCOM_model->get_program($scored, $assesment_area_code, $program_group, $iss_extract);
+
+        // Debug output for development
+        if (is_dev_bypass_enabled()) {
+            error_log("DEBUG: get_program called with scored=$scored, assesment_area_code=" . json_encode($assesment_area_code) . ", program_group=" . json_encode($program_group) . ", iss_extract=$iss_extract");
+        }
 
         $http_status = 200;
 

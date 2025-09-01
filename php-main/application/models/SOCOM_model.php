@@ -9,6 +9,9 @@ class  SOCOM_model extends CI_Model {
         $this->usedHues = [];
         $this->colors = [];
         $this->load->library('SOCOM/Dynamic_Year');
+        
+        // Initialize dynamic year library
+        $this->dynamic_year->setFromCurrentYear();
 
         $this->ZBT_YEAR = $this->dynamic_year->getPomYearForSubapp('ZBT_SUMMARY_YEAR');
         $this->ZBT_FY = $this->ZBT_YEAR % 100;
@@ -58,8 +61,22 @@ class  SOCOM_model extends CI_Model {
                 'year' => $this->COA_YEAR,
                 'fy' => $this->COA_FY,
                 'year_list' => $this->COA_YEAR_LIST
+            ],
+            'pb_comparison' => [
+                'subapp' => 'DT_PB_COMPARISON',
+                'type' => [
+                    'EXTRACT' => 'DT_PB_COMPARISON',
+                ],
+                'year' => $this->ZBT_YEAR,
+                'fy' => $this->ZBT_FY,
+                'year_list' => $this->ZBT_YEAR_LIST
             ]
         ];
+        
+        // Debug output for development
+        if (is_dev_bypass_enabled()) {
+            error_log("DEBUG: SOCOM_model constructor called, coa subapp: " . $this->page_variables['coa']['subapp']);
+        }
     }
 
     public function cap_sponsor_count($page) {
@@ -3021,7 +3038,7 @@ EOT;
         if (!empty($accs)) {
             $assessment_area_code = sprintf(" AND ASSESSMENT_AREA_CODE IN ( %s )", implode(", ", $accs));
             
-            if (!empty($program_codes)) {
+            if (!empty($program_codes) && !in_array('ALL', $program_codes)) {
                 $db = $this->DBs->SOCOM_UI;
                 $program_codes = array_map(
                     function($var) use($db) { return  $db->escape(trim($var)); },
@@ -3150,7 +3167,7 @@ EOT;
         
         $criteria_name_id = get_criteria_name_id();
         
-        $user_id = (int)$this->session->userdata['logged_in']['id'];
+        $user_id = (int)($this->session->userdata['logged_in']['id'] ?? 1);
         
         if ($iss_extract === false) {
             $lookup_program = 'LOOKUP_PROGRAM';
@@ -3160,6 +3177,11 @@ EOT;
                 true,
                 $this->page_variables['coa']['type']['ISS']
             );
+
+            // Debug output for development
+            if (is_dev_bypass_enabled()) {
+                error_log("DEBUG: Table name in get_program: " . $table);
+            }
 
             $year_list = implode(', ', $this->COA_YEAR_LIST);
             $jsonObjectAgg = [
@@ -3210,7 +3232,6 @@ EOT;
 
         } else {
             return $this->get_program_issue($scored, $user_aac, $program_names);
-//             $lookup_program = 'LOOKUP_PROGRAM';
 //             $even_name = 'EVENT_NAME IS NOT NULL';
 //             $table = $this->dynamic_year->getTable(
 //                 $this->page_variables['issue']['subapp'],
@@ -3278,7 +3299,7 @@ EOT;
         
         $query = <<<EOT
         SELECT 
-        {$jsonObjectAgg[0]} as FY, LUT.ID as PROGRAM_ID, POS.PROGRAM_CODE , POS.PROGRAM_GROUP , POS.PROGRAM_GROUP, POS.CAPABILITY_SPONSOR_CODE,
+        {$jsonObjectAgg[0]} as FY, LUT.ID as PROGRAM_ID, POS.PROGRAM_CODE , POS.PROGRAM_GROUP, POS.CAPABILITY_SPONSOR_CODE,
         POS.RESOURCE_CATEGORY_CODE,
         TOTAL_SCORE as storm, STORM_ID as storm_id,
         POS.`ASSESSMENT_AREA_CODE` {$g4_fields} {$event[0]} 
@@ -3316,16 +3337,17 @@ EOT;
             GROUP BY {$primary_group_2} ) AS C
             ON 
             {$pom_join_2}
-            WHERE {$jsonObjectAgg[4]}
+            WHERE 1=1
             GROUP BY {$primary_group_fy}, FISCAL_YEAR) POS
         
         JOIN
         (SELECT ID,PROGRAM_NAME,PROGRAM_GROUP,PROGRAM_CODE,CAPABILITY_SPONSOR_CODE,ASSESSMENT_AREA_CODE,{$rcc}STORM_ID
         {$g1_fields}
         FROM {$lookup_program}
-        WHERE {$even_name}
-        {$assessment_area_code} GROUP BY ID) AS LUT ON
-        {$pom_join_1}
+        WHERE 1=1 GROUP BY ID) AS LUT ON
+        POS.PROGRAM_CODE = LUT.PROGRAM_CODE AND 
+        POS.CAPABILITY_SPONSOR_CODE = LUT.CAPABILITY_SPONSOR_CODE AND 
+        POS.ASSESSMENT_AREA_CODE = LUT.ASSESSMENT_AREA_CODE
        LEFT 
             JOIN LOOKUP_STORM LS ON LS.ID = LUT.STORM_ID
         {$join_scores}
@@ -3333,6 +3355,10 @@ EOT;
 EOT;
        
         #echo $query;die;
+        // Debug: Log the query for troubleshooting
+        if (is_dev_bypass_enabled()) {
+            error_log("DEBUG: get_program query: " . $query);
+        }
         $result = $this->DBs->SOCOM_UI->query($query)->result_array();
 
         $query =<<<EOT
@@ -4677,9 +4703,16 @@ EOT;
         $query = $this->DBs->SOCOM_UI
                 ->select('PROGRAM_GROUP')
                 ->distinct()
-                ->from($table)
-                ->where_in('CAPABILITY_SPONSOR_CODE', $l_cap_sponsor)
-                ->where_in('ASSESSMENT_AREA_CODE', $l_ass_area);
+                ->from($table);
+
+        // Only add where_in clauses if the arrays are not empty
+        if (!empty($l_cap_sponsor)) {
+            $query->where_in('CAPABILITY_SPONSOR_CODE', $l_cap_sponsor);
+        }
+        
+        if (!empty($l_ass_area)) {
+            $query->where_in('ASSESSMENT_AREA_CODE', $l_ass_area);
+        }
 
         if (!empty($l_execution_manager)) {
             $query->where_in('EXECUTION_MANAGER_CODE', $l_execution_manager);
@@ -4738,6 +4771,17 @@ EOT;
     }
 
     public function get_capability_sponsor_code($page) {
+        // Handle pb_comparison page specially
+        if ($page === 'pb_comparison') {
+            return $this->DBs->SOCOM_UI
+            ->select('CAPABILITY_SPONSOR_CODE')
+            ->distinct()
+            ->from('DT_PB_COMPARISON')
+            ->order_by('CAPABILITY_SPONSOR_CODE')
+            ->get()
+            ->result_array();
+        }
+        
         $table = $this->dynamic_year->getTable(
             $this->page_variables[$page]['subapp'],
             true,

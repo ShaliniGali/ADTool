@@ -1,0 +1,39 @@
+#score_view_modal div.bx--modal-container, #weight_view_modal div.bx--modal-container  {
+    height: 90vh;
+    width: 60vw;
+}
+
+#score_view_modal div.bx--modal-content, #weight_view_modal div.bx--modal-content {
+    height: 100%;
+    padding-right: 10%;
+    overflow: scroll-y;
+}
+
+#score-notifications, #score-notifications-list {
+    margin-bottom: 10px;
+}
+
+#score_listing_list_filter {
+    justify-content: right;
+    display: flex;
+    margin-bottom: 3px;
+}
+
+#score_outer_box {
+    width: 800px;
+    min-width: 400px;
+    height: 75%;
+}
+
+#score_tab_data {
+    width: 400px;
+    min-height: 200px;
+    height: 80%;
+    overflow: hidden;
+}
+
+#score_form_elems {
+    margin-left: 2px;
+    width: 360px;
+    height: 200px;
+}

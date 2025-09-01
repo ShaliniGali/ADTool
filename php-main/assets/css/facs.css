@@ -1,0 +1,32 @@
+.select2-container--default.select2-container--focus .select2-selection--multiple{
+    background-color: #1c1c1c !important;
+  }
+
+.select2-search select2-search--inline{
+    background-color: #1c1c1c !important;
+}
+  
+[data-theme="dark"] .select2-search, .select2-search input, .select2-results, .select2-container--default .select2-selection__rendered{
+    background-color: #1c1c1c !important;
+}
+
+.select2-container--default .select2-selection--multiple{
+    background-color: #1c1c1c !important;
+    overflow-y: scroll !important;
+    max-height: 120px !important;
+    height: 100px !important;
+}
+
+#role_mappings_input_user_roles .select2-container--default .select2-selection--multiple {
+    height: 65px !important;
+}
+
+.select2-container--default .select2-results__option--selected{
+    background-color: #ddd !important;
+    color: black !important;
+    border: 1px solid black !important;
+}
+
+.select2-selection__choice{
+    margin: 2px;
+}

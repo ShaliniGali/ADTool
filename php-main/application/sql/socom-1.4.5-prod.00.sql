@@ -1,0 +1,8 @@
+SET @dbname = DATABASE();
+SET @tablename = 'USR_LOOKUP_USER_CRITERIA_TERMS';
+SET @newcol = 'CRITERIA_DESCRIPTION';
+SELECT count(*) INTO @updated FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = @dbname and TABLE_NAME=@tablename and COLUMN_NAME=@newcol;
+SET @sql := IF(@updated = 1,'SELECT "Table already updated";',CONCAT('ALTER TABLE ', @dbname, '.', @tablename, ' ', " ADD COLUMN CRITERIA_DESCRIPTION VARCHAR(500) NOT NULL AFTER CRITERIA_TERM;"));
+PREPARE stmt FROM @sql;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;

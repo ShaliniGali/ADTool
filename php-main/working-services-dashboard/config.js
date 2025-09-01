@@ -2,10 +2,11 @@
 const DASHBOARD_CONFIG = {
     // API Endpoints
     endpoints: {
-        phpErrors: 'http://localhost/socom/php_errors', // PHP error logs endpoint
+        phpErrors: 'http://localhost/php_errors.php?key=rhombus_logs_2024', // PHP error logs endpoint with API key
         phpHealth: 'http://localhost/health.php',
         pythonHealth: 'http://localhost:5000/health',
-        databaseHealth: 'http://localhost/health-database.php'
+        databaseHealth: 'http://localhost/health-database.php',
+        dockerLogs: 'http://localhost/docker_logs.php?key=rhombus_logs_2024' // Docker container logs endpoint with API key
     },
     
     // Refresh Intervals (in milliseconds)

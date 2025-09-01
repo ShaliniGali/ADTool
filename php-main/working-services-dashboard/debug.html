@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug PHP Errors Endpoint</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .debug-section { margin: 20px 0; padding: 15px; border: 1px solid #ccc; border-radius: 5px; }
+        .error { color: red; }
+        .success { color: green; }
+        pre { background: #f5f5f5; padding: 10px; border-radius: 3px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Debug PHP Errors Endpoint</h1>
+    
+    <div class="debug-section">
+        <h3>1. Testing Direct Endpoint Access</h3>
+        <button onclick="testDirectAccess()">Test Direct Access</button>
+        <div id="direct-result"></div>
+    </div>
+    
+    <div class="debug-section">
+        <h3>2. Testing Fetch from Dashboard</h3>
+        <button onclick="testFetchAccess()">Test Fetch Access</button>
+        <div id="fetch-result"></div>
+    </div>
+    
+    <div class="debug-section">
+        <h3>3. Testing CORS</h3>
+        <button onclick="testCORS()">Test CORS</button>
+        <div id="cors-result"></div>
+    </div>
+    
+    <div class="debug-section">
+        <h3>4. Current Configuration</h3>
+        <pre id="config-display"></pre>
+    </div>
+
+    <script>
+        const DASHBOARD_CONFIG = {
+            endpoints: {
+                phpErrors: 'http://localhost/php_errors.php',
+                phpHealth: 'http://localhost/health.php',
+                pythonHealth: 'http://localhost:5000/health',
+                databaseHealth: 'http://localhost/health-database.php',
+                dockerLogs: 'http://localhost/docker_logs.php'
+            }
+        };
+
+        function testDirectAccess() {
+            const resultDiv = document.getElementById('direct-result');
+            resultDiv.innerHTML = '<p>Testing...</p>';
+            
+            fetch('http://localhost/php_errors.php')
+                .then(response => {
+                    console.log('Response status:', response.status);
+                    console.log('Response headers:', response.headers);
+                    return response.text();
+                })
+                .then(data => {
+                    console.log('Response data:', data);
+                    try {
+                        const jsonData = JSON.parse(data);
+                        resultDiv.innerHTML = `
+                            <p class="success">✅ Direct access successful!</p>
+                            <pre>${JSON.stringify(jsonData, null, 2)}</pre>
+                        `;
+                    } catch (e) {
+                        resultDiv.innerHTML = `
+                            <p class="error">❌ Response is not valid JSON:</p>
+                            <pre>${data.substring(0, 500)}...</pre>
+                        `;
+                    }
+                })
+                .catch(error => {
+                    resultDiv.innerHTML = `
+                        <p class="error">❌ Fetch error: ${error.message}</p>
+                    `;
+                });
+        }
+
+        function testFetchAccess() {
+            const resultDiv = document.getElementById('fetch-result');
+            resultDiv.innerHTML = '<p>Testing...</p>';
+            
+            fetch(DASHBOARD_CONFIG.endpoints.phpErrors)
+                .then(response => {
+                    console.log('Dashboard fetch - Response status:', response.status);
+                    return response.text();
+                })
+                .then(data => {
+                    console.log('Dashboard fetch - Response data:', data);
+                    try {
+                        const jsonData = JSON.parse(data);
+                        resultDiv.innerHTML = `
+                            <p class="success">✅ Dashboard fetch successful!</p>
+                            <pre>${JSON.stringify(jsonData, null, 2)}</pre>
+                        `;
+                    } catch (e) {
+                        resultDiv.innerHTML = `
+                            <p class="error">❌ Dashboard fetch - Response is not valid JSON:</p>
+                            <pre>${data.substring(0, 500)}...</pre>
+                        `;
+                    }
+                })
+                .catch(error => {
+                    resultDiv.innerHTML = `
+                        <p class="error">❌ Dashboard fetch error: ${error.message}</p>
+                    `;
+                });
+        }
+
+        function testCORS() {
+            const resultDiv = document.getElementById('cors-result');
+            resultDiv.innerHTML = '<p>Testing...</p>';
+            
+            fetch('http://localhost/php_errors.php', {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => {
+                    console.log('CORS test - Response status:', response.status);
+                    console.log('CORS test - Response headers:', response.headers);
+                    return response.text();
+                })
+                .then(data => {
+                    resultDiv.innerHTML = `
+                        <p class="success">✅ CORS test successful!</p>
+                        <pre>${data.substring(0, 300)}...</pre>
+                    `;
+                })
+                .catch(error => {
+                    resultDiv.innerHTML = `
+                        <p class="error">❌ CORS test error: ${error.message}</p>
+                    `;
+                });
+        }
+
+        // Display current configuration
+        document.getElementById('config-display').textContent = JSON.stringify(DASHBOARD_CONFIG, null, 2);
+    </script>
+</body>
+</html>

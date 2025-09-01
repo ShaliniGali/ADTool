@@ -1,0 +1,248 @@
+.grey-background{
+    background-color: var(--cds-ui-03, #e0e0e0);
+}
+.white-background{
+    background-color: var(--cds-ui-background, #fff);
+}
+.pie-chart-container {
+    height: 350px;
+    border-radius: 10px;
+    margin:10px;
+    background-color: var(--cds-ui-background, #ffffff);
+}
+
+.wss-banner{
+    width: 100%;
+    background: #d1a700;
+    text-align: center;
+    padding: 8px;
+    color: white;
+    font-weight: 600;
+    font-size: medium;
+}
+
+.green-background {
+    background: #139500 !important;
+}
+
+.red-background{
+    background-color:#f65959 !important;
+}
+
+.chart-container{
+    height: 400px;
+    border-radius: 10px;
+    margin:10px;
+    background-color: var(--cds-ui-background, #ffffff);
+}
+
+.table-container{
+    margin:10px;
+    overflow-y: scroll !important;
+}
+
+.bx--data-table th{
+    background-color: #cbcbcb;
+}
+
+.w-60{
+    width: 60%;
+}
+
+.w-40{
+    width: 40%;
+}
+
+.w-80{
+    width: 80%;
+}
+
+.w-25{
+    width: 20%;
+}
+    
+.exec-container-child-1{
+    background-color: var(--cds-ui-background, #ffffff);
+    padding:10px;
+    border-radius: 10px;
+}
+
+.bold-labels{
+    width:100%;
+    font-size:15px;
+    font-style: normal;
+    font-family: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+    font-weight:700;
+    margin-left: 10px;
+}
+.yellow-box{
+    margin:10px 0 10px 0;
+    background: repeating-linear-gradient( -55deg, var(--cds-ui-background), var(--cds-ui-background) 1px, var(--cds-ui-03) 2px, var(--cds-support-03) 3px );
+    height:8vh;
+    line-height: 8vh;
+    text-align: center;
+    align-items: center;
+}
+#executed-hours{
+    line-height: normal;
+    display: inline-block;
+    vertical-align: middle;
+    font-weight:700;
+    font-size:48px;
+}
+.hours-label{
+    font-size:12px;
+    font-style: italic;
+    font-weight:400;
+    margin-bottom:20px;
+    text-align:center;
+}
+.hours-parent{
+    display:flex;
+    flex-direction:row;
+    justify-content: space-between;
+}
+#programmed-hours, #required-hours{
+    background-color: var(--cds-ui-03);
+    margin-bottom:10px;
+    text-align:center;
+    padding-top:1.8vh;
+    padding-left:0.5vh;
+    padding-right:0.5vh;
+    margin-top:10px;
+    width:7.5vw;
+    height:8vh;
+    width:7.5vw;
+    height:8vh;
+    font-weight:700;
+    font-size:20px;
+}
+
+.content-wrapper {
+    background-color: var(--cds-ui-01, #f4f4f4);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+}
+.content-wrapper > header {
+    background-color: var(--cds-ui-background,#ffffff);
+    padding: var(--cds-spacing-05, 16px) var(--cds-spacing-07, 32px) var(--cds-spacing-05, 16px);
+}
+
+.bx--tag {
+    font-size: 0.85rem !important;
+    font-weight: 550 !important;
+}
+
+.filter-container{
+    border-radius: 10px;
+    margin:10px;
+}
+
+.select2-selection__rendered{
+    /* width: 15vw; */
+    line-height:25px !important;
+    margin: 10px;
+}
+
+/* .select2-container{
+    margin-right: 6vw;
+} */
+
+.medium-label {
+    font-size: 16px !important;
+    font-weight: 500;
+}
+
+.select2-container--default .select2-selection--single {
+    border-radius: 2px;
+    border: 1px solid #cbcbcb;
+}
+
+.select2-selection {
+-webkit-box-shadow: 0;
+box-shadow: 0;
+background-color: #fff;
+border: 0;
+border-radius: 0;
+color: #555555;
+font-size: 14px;
+outline: 0;
+min-height: 48px;
+text-align: left;
+}
+
+.select2-selection__arrow {
+margin: 10px;
+}
+
+.select2-results__option {
+    padding: 14px;
+}
+
+.select2-search--dropdown .select2-search__field {
+    padding: 9px;
+}
+
+.disabled-color{
+    color:gray;
+}
+
+.select2-selection__clear{
+    display:block;
+}
+
+.select2-selection__clear {
+    display:none;
+}
+
+.select2-selection__clear {
+    display:none;
+}
+
+.select2-container--default .select2-selection--multiple{
+    padding: 7px;
+    /* width: 15vw; */
+    border-radius: 2px;
+    border: 1px solid #cbcbcb;
+}
+
+.highcharts-title, .highcharts-axis, .highcharts-root{
+    font-family: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif !important;
+}
+
+.header-button{
+    margin-right: 1rem;
+}
+
+.select2-container--default .select2-results__option--selected{
+    color: var(--cds-ui-background, #000000);
+}
+
+.select2-container--default .select2-results__option--selectable {
+    background-color: var(--cds-ui-02, white);
+}
+
+.select2-container--default .select2-selection--multiple {
+    background-color: var(--cds-ui-02, white);
+}
+
+.select2-container--default .select2-results__option--selected{
+    background-color: #ddd;
+    color: white;
+}
+.card-body {
+    background-color: var(--cds-ui-background, #ffffff);
+}
+.bx--data-table th {
+    color: #161616;
+}
+
+#weighted_values { 
+    overflow: hidden;
+}
+
+#weight_chooser, #fp-weight-sel {
+    width: 200px;
+}

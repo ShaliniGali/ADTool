@@ -4,9 +4,15 @@
 let userUsedThePage = false
 let timeoutInterval = null
 
+// Temporarily disable session timeout for development
+let sessionTimeoutDisabled = true;
 
 //on mouse move set user touch to true
 $(document).ready(function () {
+    // Skip timeout if disabled
+    if (sessionTimeoutDisabled) {
+        return;
+    }
     let idleInterval = setInterval(function () {
         if (userUsedThePage) {
             userUsedThePage = false;

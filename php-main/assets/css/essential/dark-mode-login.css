@@ -1,28 +1,246 @@
-/* Dark Mode Login Styles */
+/* coolr grey
+coolGray10 = #f2f4f8
+coolGray20 = #dde1e6
+coolGray30 = #c1c7cd
+coolGray40 = #a2a9b0
+coolGray50 = #878d96
+coolGray60 = #697077
+coolGray70 = #4d5358
+coolGray80 = #343a3f
+coolGray90 = #21272a
+const coolGray100 = #121619
 
-.dark-mode .login-container {
-    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+
+export const gray10 = '#f4f4f4';
+export const gray20 = '#e0e0e0';
+export const gray30 = '#c6c6c6';
+export const gray40 = '#a8a8a8';
+export const gray50 = '#8d8d8d';
+export const gray60 = '#6f6f6f';
+export const gray70 = '#525252';
+export const gray80 = '#393939';
+export const gray90 = '#262626';
+export const gray100 = '#161616';
+*/
+
+
+/* e6 
+
+:root {
+  --card-bg: #161616d9;
+  --input-bg: #262626;
+  --input-focus: #6f6f6f;
+  --input-hover: #525252;
+  --input-text: #c6c6c6;
+  --nav-bg: #393939;
+  --nav-text: #c6c6c6;
+  --modal-bg: #161616;
+  --modal-header: #262626
+}*/
+
+:root {
+    --card-bg: #161616d9;
+    --input-bg: #262626;
+    --input-focus: #0f62fe;
+    --input-hover: #525252;
+    --input-text: #c6c6c6;
+    --nav-bg: #393939;
+    --nav-text: #c6c6c6;
+    --nav-text-2: #6f6f6f;
+    --modal-bg: #161616;
+    --modal-header: #262626
 }
 
-.dark-mode .login-card {
-    background-color: #2d2d2d;
-    border: 1px solid #404040;
+
+/* :root {
+    --card-bg: #262626f2;
+    --input-bg: #393939;
+    --input-focus: #8d8d8d;
+    --input-hover: #6f6f6f;
+    --input-text: #c6c6c6;
+    --nav-bg: #525252;
+    --nav-text: #c6c6c6;
+    --modal-bg: #262626;
+    --modal-header: #393939
+} */
+
+
+/* particles */
+
+
+/* body {
+    background: none;
+} */
+
+[data-theme="dark"] {
+    background-color: #121619 !important;
+    color: #c1c7cd;
 }
 
-.dark-mode .login-header h1 {
-    color: #ffffff;
+[data-theme="dark"] .btn {
+    color: rgb(255, 255, 255);
+    background-color: var(--nav-bg);
+    border-color: var(--nav-bg);
 }
 
-.dark-mode .login-form input {
-    background-color: #1a1a1a;
-    color: #ffffff;
-    border: 1px solid #404040;
+[data-theme="dark"] .btn:hover {
+    background: #0f62fe;
+    border-color: #0f62fe;
 }
 
-.dark-mode .login-form input::placeholder {
-    color: #888888;
+[data-theme="dark"] .shadow-lg {
+    box-shadow: none !important;
 }
 
-.dark-mode .login-btn {
-    background: linear-gradient(135deg, #404040 0%, #555555 100%);
+[data-theme="dark"] .btn-success.disabled {
+    color: rgb(255, 255, 255);
+    background-color: var(--nav-bg);
+    border-color: var(--nav-bg);
+}
+
+
+/* input boxes */
+
+[data-theme="dark"] input,
+[data-theme="dark"] textarea,
+[data-theme="dark"] select {
+    background-color: var(--input-bg) !important;
+    outline: none;
+    border: none;
+    box-shadow: none;
+    color: var(--input-text);
+}
+
+[data-theme="dark"] input:focus,
+[data-theme="dark"] textarea:focus,
+[data-theme="dark"] select:focus,
+[data-theme="dark"] input:active,
+[data-theme="dark"] textarea:active,
+[data-theme="dark"] select:active {
+    box-shadow: none;
+    color: var(--input-text);
+}
+
+[data-theme="dark"] select:focus {
+    border-bottom: 1px solid var(--input-focus) !important;
+    color: var(--input-focus) !important
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+    -webkit-text-fill-color: var(--input-text);
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+[data-theme="dark"] .input-group,
+[data-theme="dark"] select {
+    border-bottom: 1px solid var(--input-hover);
+    border-radius: 0.25rem;
+    opacity: 0.55
+}
+
+[data-theme="dark"] .input-group:active,
+[data-theme="dark"] .input-group:focus-within {
+    border-bottom: 1px solid var(--input-focus) !important;
+    color: var(--input-focus) !important
+}
+
+[data-theme="dark"] .input_icons {
+    background: var(--input-bg) !important;
+    border: var(--input-bg) !important;
+    color: inherit !important
+}
+
+
+/*Text color*/
+
+[data-theme="dark"] .text-light {
+    color: #333 !important;
+}
+
+[data-theme="dark"] .text-white {
+    color: #000 !important;
+}
+
+[data-theme="dark"] .text-black,
+[data-theme="dark"] .nav-link,
+[data-theme="dark"] .dropdown-item {
+    color: rgb(232, 232, 232) !important;
+}
+
+
+/*Border color*/
+
+[data-theme="dark"] .border {
+    border: 1px solid var(--input-bg) !important;
+}
+
+
+/* nav */
+
+[data-theme="dark"] .navbar-toggler {
+    background: #ffffffab!important;
+}
+
+[data-theme="dark"] .nav {
+    border-bottom: 1px solid var(--input-bg);
+}
+
+[data-theme="dark"] .nav-link {
+    /* background: #4c4c4c!important; */
+    color: var(--nav-text-2)!important;
+    border: none!important;
+}
+
+[data-theme="dark"] .nav-pills .nav-link.active,
+[data-theme="dark"] .nav-pills .show>.nav-link,
+[data-theme="dark"] .btn-secondary {
+    background: var( --nav-bg)!important;
+    color: var( --nav-text)!important;
+    border: none!important;
+}
+
+[data-theme="dark"] .card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--card-bg);
+    /* opacity: .9 */
+}
+
+[data-theme="dark"] select {
+    padding-left: 2em;
+    border-radius: .25rem
+}
+
+[data-theme="dark"] .checkmark {
+    background: var(--input-bg) !important;
+}
+
+
+/* .qr_input_verification {
+    border: none
+} */
+
+[data-theme="dark"] .modal-content {
+    background-color: var(--modal-bg);
+}
+
+[data-theme="dark"] .tos_modal .modal-body {
+    background: var(--modal-bg) !important;
+}
+
+[data-theme="dark"] .tos_modal .modal-header,
+[data-theme="dark"] .tos_modal .modal-footer {
+    background: var(--modal-header) !important;
+}
+
+[data-theme="dark"] #tos_link:hover {
+    text-decoration: underline var(--input-hover);
 }

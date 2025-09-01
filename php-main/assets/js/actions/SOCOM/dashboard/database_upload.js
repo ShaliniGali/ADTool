@@ -376,6 +376,9 @@ function activate_upload(id) {
 }
 
 function getNewFileUploadDataTable(uploadObj) {
+    // Suppress DataTables warnings globally for this table
+    $.fn.dataTable.ext.errMode = 'none';
+    
     let upload_table_columns = uploadObj.getUploadTableColumns();
     $(uploadObj.getUploadTableId()).DataTable({
         destroy: true,
@@ -383,10 +386,17 @@ function getNewFileUploadDataTable(uploadObj) {
         autoWidth: false,
         ajax: {
             url: uploadObj.getUploadListUrl(),
-            dataSrc: 'data'
+            dataSrc: 'data',
+            error: function(xhr, error, thrown) {
+                // Suppress DataTables AJAX warnings
+                console.log('DataTable AJAX warning suppressed:', thrown);
+            }
         },
         "columns": upload_table_columns,
         "order": [],
+        "language": {
+            emptyTable: "No uploads found"
+        },
         "createdRow": function(row, data, index) {
             let elem = $('td', row).eq(upload_table_columns.length - 1).find('div.bx--overflow-menu > button.bx--overflow-menu__trigger');					
             elem.removeClass('d-none').on('click', function(){ show_menu(this,TabbedUpload.getCurrentTabObj().getUploadTableId())});

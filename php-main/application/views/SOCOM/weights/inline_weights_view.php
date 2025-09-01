@@ -25,7 +25,7 @@
 
     </div>
     <?php
-       $selected_value = filter_var($this->session->userdata('use_iss_extract') ?? true, FILTER_VALIDATE_BOOLEAN); // Default to 'true' (Issue Optimization)
+       $selected_value = filter_var($this->session->userdata('use_iss_extract') ?? false, FILTER_VALIDATE_BOOLEAN); // Default to 'false' (Resource Constraining)
     ?>
     <div id="dataset-radio-buttons-optimizer" class="d-flex flex-row w-25 px-2 align-top">
         <div  style="width: 1rem;height: 1rem;"><?php $this->load->view('components/loading_small', ['hidden' => true]); ?></div>

@@ -1,0 +1,147 @@
+CREATE TABLE IF NOT EXISTS `USR_DT_GIT_DATA` (
+  ID INT NOT NULL AUTO_INCREMENT,
+  TYPE ENUM('Upload_File', 'Process_file', 'Cancel_File', 'Delete_File', 'Create_Metadata', 'Create_Database', 'User_Data_Open', 'User_Data_Edit', 'User_Data_History_Add', 'User_Data_Save', 'User_Data_Cancel', 'User_Data_Final_Submission', 'Admin_Approval') NOT NULL,
+  USER_ID INT NOT NULL,
+  CREATED_DATETIME DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  UPDATED_DATETIME DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY(ID)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE IF NOT EXISTS `USR_DT_GIT_MAP` (
+ID INT NOT NULL AUTO_INCREMENT,
+USR_DT_GIT_DATA_ID INT NOT NULL,
+TYPE ENUM('Upload_File', 'Process_file', 'Cancel_File', 'Delete_File', 'Create_Metadata', 'Create_Database', 'User_Data_Open', 'User_Data_Edit', 'User_Data_History_Add', 'User_Data_Save', 'User_Data_Cancel', 'User_Data_Final_Submission', 'Admin_Approval') NOT NULL,
+MAP_ID INT NOT NULL,
+CREATED_DATETIME DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+UPDATED_DATETIME DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+PRIMARY KEY(ID)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE IF NOT EXISTS `USR_CAP_USERS` (
+  `ID` int NOT NULL AUTO_INCREMENT,
+  `GROUP` VARCHAR(13) NOT NULL,
+  `USER_ID` int NOT NULL,
+  `CREATED_DATETIME` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `UPDATED_DATETIME` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `IS_DELETED` tinyint(1) NOT NULL DEFAULT '0',
+  `UPDATE_USER` int DEFAULT NULL,
+  `HISTORY_DATETIME` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `user_id_uniq` (`USER_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE IF NOT EXISTS `USR_CAP_USERS_HISTORY` (
+  `ID` int NOT NULL AUTO_INCREMENT,
+  `CAP_USER_ID` int NOT NULL,
+  `GROUP` varchar(500) NOT NULL DEFAULT 'NONE',
+  `USER_ID` int NOT NULL,
+  `CREATED_DATETIME` datetime NOT NULL,
+  `UPDATED_DATETIME` datetime NOT NULL,
+  `IS_DELETED` tinyint(1) NOT NULL DEFAULT '0',
+  `UPDATE_USER` int DEFAULT NULL,
+  `HISTORY_DATETIME` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE IF NOT EXISTS `USR_SITE_USERS` (
+  `ID` int NOT NULL AUTO_INCREMENT,
+  `GROUP` enum('None','Pom Admin','Pom User') NOT NULL DEFAULT 'None',
+  `USER_ID` int NOT NULL,
+  `CREATED_DATETIME` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `UPDATED_DATETIME` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `IS_DELETED` tinyint(1) NOT NULL DEFAULT '0',
+  `UPDATE_USER` int DEFAULT NULL,
+  `HISTORY_DATETIME` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `user_id_uniq` (`USER_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE IF NOT EXISTS `USR_SITE_USERS_HISTORY` (
+  `ID` int NOT NULL AUTO_INCREMENT,
+  `SITE_USER_ID` int NOT NULL,
+  `GROUP` varchar(500) NOT NULL DEFAULT 'NONE',
+  `USER_ID` int NOT NULL,
+  `CREATED_DATETIME` datetime NOT NULL,
+  `UPDATED_DATETIME` datetime NOT NULL,
+  `IS_DELETED` tinyint(1) NOT NULL DEFAULT '0',
+  `UPDATE_USER` int DEFAULT NULL,
+  `HISTORY_DATETIME` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE IF NOT EXISTS `USR_DT_LOOKUP_METADATA` (
+  `ID` int NOT NULL AUTO_INCREMENT,
+  `USR_DT_UPLOAD_ID` int NOT NULL,
+  `TABLE_NAME` varchar(50) NOT NULL,
+  `IS_APPEND_DATASET` tinyint NOT NULL DEFAULT '0',
+  `POM_YEAR` varchar(45) NOT NULL,
+  `TABLE_TYPE_DESCR` varchar(30) NOT NULL,
+  `CREATED_DATETIME` datetime DEFAULT CURRENT_TIMESTAMP,
+  `UPDATED_DATETIME` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+SET @dbname = DATABASE();
+SET @tablename = 'USR_DT_SCHEDULER';
+SET @newcol = 'TYPE';
+SET @newtype = "ENUM('PROGRAM_SCORE_UPLOAD', 'DT_UPLOAD_BASE_UPLOAD', 'DT_UPLOAD_BASE_UPLOAD_APPEND', 'DT_UPLOAD_EXTRACT_UPLOAD')";
+SELECT count(*) INTO @updated FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = @dbname and TABLE_NAME=@tablename and COLUMN_NAME=@newcol AND COLUMN_TYPE=@newtype;
+SET @sql := IF(@updated = 1,'SELECT "Table already updated";',CONCAT('ALTER TABLE ', @dbname, '.', @tablename, ' ', " CHANGE COLUMN `TYPE` `TYPE` ENUM('PROGRAM_SCORE_UPLOAD', 'DT_UPLOAD_BASE_UPLOAD', 'DT_UPLOAD_BASE_UPLOAD_APPEND', 'DT_UPLOAD_EXTRACT_UPLOAD');"));
+PREPARE stmt FROM @sql;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+
+SET @dbname = DATABASE();
+SET @tablename = 'USR_ZBT_AO_SAVES';
+SET @index_name = "uniq_user_event_pom";
+SELECT count(*) INTO @updated FROM INFORMATION_SCHEMA.STATISTICS WHERE TABLE_SCHEMA = @dbname AND TABLE_NAME=@tablename AND INDEX_NAME=@index_name and NON_UNIQUE=0;
+SET @sql := IF(@updated = 3,'SELECT "Table already updated";',CONCAT('ALTER TABLE ', @dbname, '.', @tablename, ' ', " ADD UNIQUE INDEX `uniq_user_event_pom` (`AO_USER_ID` , `EVENT_ID` , `POM_ID` );"));
+PREPARE stmt FROM @sql;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+
+
+SET @dbname = DATABASE();
+SET @tablename = 'USR_ISSUE_AO_SAVES';
+SET @index_name = "uniq_user_event_pom";
+SELECT count(*) INTO @updated FROM INFORMATION_SCHEMA.STATISTICS WHERE TABLE_SCHEMA = @dbname AND TABLE_NAME=@tablename AND INDEX_NAME=@index_name and NON_UNIQUE=0;
+SET @sql := IF(@updated = 3,'SELECT "Table already updated";',CONCAT('ALTER TABLE ', @dbname, '.', @tablename, ' ', " ADD UNIQUE INDEX `uniq_user_event_pom` (`AO_USER_ID` , `EVENT_ID` , `POM_ID` );"));
+PREPARE stmt FROM @sql;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+
+SET @dbname = DATABASE();
+SET @tablename = 'USR_ISSUE_AD_SAVES';
+SET @index_name = "uniq_user_event_pom";
+SELECT count(*) INTO @updated FROM INFORMATION_SCHEMA.STATISTICS WHERE TABLE_SCHEMA = @dbname AND TABLE_NAME=@tablename AND INDEX_NAME=@index_name and NON_UNIQUE=0;
+SET @sql := IF(@updated = 3,'SELECT "Table already updated";',CONCAT('ALTER TABLE ', @dbname, '.', @tablename, ' ', " ADD UNIQUE INDEX `uniq_user_event_pom` (`AD_USER_ID` , `EVENT_ID` , `POM_ID` );"));
+PREPARE stmt FROM @sql;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+
+SET @dbname = DATABASE();
+SET @tablename = 'USR_ZBT_AD_SAVES';
+SET @index_name = "uniq_user_event_pom";
+SELECT count(*) INTO @updated FROM INFORMATION_SCHEMA.STATISTICS WHERE TABLE_SCHEMA = @dbname AND TABLE_NAME=@tablename AND INDEX_NAME=@index_name and NON_UNIQUE=0;
+SET @sql := IF(@updated = 3,'SELECT "Table already updated";',CONCAT('ALTER TABLE ', @dbname, '.', @tablename, ' ', " ADD UNIQUE INDEX `uniq_user_event_pom` (`AD_USER_ID` , `EVENT_ID` , `POM_ID` );"));
+PREPARE stmt FROM @sql;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+
+SET @dbname = DATABASE();
+SET @tablename = 'USR_ZBT_AD_FINAL_SAVES';
+SET @index_name = "uniq_user_event_pom";
+SELECT count(*) INTO @updated FROM INFORMATION_SCHEMA.STATISTICS WHERE TABLE_SCHEMA = @dbname AND TABLE_NAME=@tablename AND INDEX_NAME=@index_name and NON_UNIQUE=0;
+SET @sql := IF(@updated = 3,'SELECT "Table already updated";',CONCAT('ALTER TABLE ', @dbname, '.', @tablename, ' ', " ADD UNIQUE INDEX `uniq_user_event_pom` (`AD_USER_ID` , `EVENT_NAME` , `POM_ID` );"));
+PREPARE stmt FROM @sql;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+
+SET @dbname = DATABASE();
+SET @tablename = 'USR_ISSUE_AD_FINAL_SAVES';
+SET @index_name = "uniq_user_event_pom";
+SELECT count(*) INTO @updated FROM INFORMATION_SCHEMA.STATISTICS WHERE TABLE_SCHEMA = @dbname AND TABLE_NAME=@tablename AND INDEX_NAME=@index_name and NON_UNIQUE=0;
+SET @sql := IF(@updated = 3,'SELECT "Table already updated";',CONCAT('ALTER TABLE ', @dbname, '.', @tablename, ' ', " ADD UNIQUE INDEX `uniq_user_event_pom` (`AD_USER_ID` , `EVENT_NAME` , `POM_ID` );"));
+PREPARE stmt FROM @sql;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;

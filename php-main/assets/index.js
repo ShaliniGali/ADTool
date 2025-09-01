@@ -1,0 +1,1 @@
+Redirecting to /@carbon/icons@11.66.0/lib/index.js

@@ -46,11 +46,17 @@ function fetchOverallEventSummaryData(post_data) {
             data.forEach(event => {
                 let fiscalYears = {}, AD_CONSENSUS = event.AD_CONSENSUS.toUpperCase().replace(/ /g, '_'), fydp_proposed = 0, fydp_granted = 0;
                 
+                // Debug: Log the event object to see its structure
+                console.log('Event object:', event);
+                console.log('Event keys:', Object.keys(event));
+                
                 // Extract fiscal year data from individual properties
                 const yearKeys = Object.keys(event).filter(key => /^\d{4}$/.test(key)); // Get year keys like "2024", "2025", etc.
+                console.log('Year keys found:', yearKeys);
                 
                 yearKeys.forEach(fy => {
                     const fy_val = event[fy];
+                    console.log(`Processing year ${fy} with value ${fy_val}`);
                     if (AD_CONSENSUS === 'APPROVE_AT_SCALE' &&  
                     Object.values(final_ad_actions[event.EVENT_NAME] ?? {}).length > 0) {
                         let granted_class = (fy_val !== final_ad_actions[event.EVENT_NAME][fy] ? 'ember-cell': '');
@@ -69,6 +75,8 @@ function fetchOverallEventSummaryData(post_data) {
                         fydp_proposed += parseInt(fy_val);
                     }
                 });
+                
+                console.log('Fiscal years object:', fiscalYears);
                 
                 let fydp = 0;
                 if (AD_CONSENSUS === 'APPROVE_AT_SCALE' && Object.values(final_ad_actions[event.EVENT_NAME] ?? {}).length > 0) {
@@ -328,6 +336,8 @@ function updateOverallEventSumTable(overall_sum, overall_sum_approve) {
     let overallEventSumTable, 
         year_list = JSON.parse(overall_sum['YEAR_LIST']);
     
+    // Suppress DataTables warnings globally for this table
+    $.fn.dataTable.ext.errMode = 'none';
 
     if ($.fn.DataTable.isDataTable('#overall-event-sum-table')) {
         overallEventSumTable = $('#overall-event-sum-table').DataTable();
@@ -344,6 +354,7 @@ function updateOverallEventSumTable(overall_sum, overall_sum_approve) {
                 targets: parseInt(i),
                 data: `FY_${fyi}_sum`,
                 title: `FY${year_list[i]}`,
+                defaultContent: '0'
             })
         }
         
@@ -351,6 +362,7 @@ function updateOverallEventSumTable(overall_sum, overall_sum_approve) {
             targets: 5,
             data: 'FYDP',
             title: 'FYDP',
+            defaultContent: '0'
         });
 
         overallEventSumTable = $(`#overall-event-sum-table`).DataTable({
@@ -361,7 +373,14 @@ function updateOverallEventSumTable(overall_sum, overall_sum_approve) {
             orderable: false,
             ordering: false,
             info: false,
-            columnDefs: columnDefs
+            columnDefs: columnDefs,
+            language: {
+                emptyTable: "No data available"
+            },
+            error: function(xhr, error, thrown) {
+                // Suppress DataTables warnings
+                console.log('DataTable warning suppressed:', thrown);
+            }
         });
     }
 

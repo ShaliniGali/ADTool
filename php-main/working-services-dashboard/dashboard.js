@@ -42,7 +42,24 @@ class ServicesDashboard {
         
         try {
             const response = await fetch(this.config.endpoints.phpErrors);
-            const data = await response.json();
+            
+            // Check if response is OK
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            
+            // Get response as text first to check if it's JSON
+            const responseText = await response.text();
+            
+            // Try to parse as JSON
+            let data;
+            try {
+                data = JSON.parse(responseText);
+            } catch (parseError) {
+                // If it's not JSON, it might be HTML or other content
+                console.error('Response is not JSON:', responseText.substring(0, 200));
+                throw new Error('Response is not valid JSON. Received: ' + responseText.substring(0, 100));
+            }
             
             if (data.error) {
                 this.displayErrorLogIssue(data.error);
@@ -53,6 +70,7 @@ class ServicesDashboard {
             this.updateLastUpdateTime();
             
         } catch (error) {
+            console.error('Error loading PHP logs:', error);
             this.displayErrorLogError(error);
         }
     }

@@ -1,106 +1,201 @@
+/*
 
-.home-blocks {
-    background: #fff;
-    border: 1px solid #dcdde0;
-    border-radius: 3px;
-    color: inherit;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    transition: box-shadow .25s,transform .25s;
-    width: 100%;
-    margin: 0.5rem;
+Login Page
+
+*/
+
+.particles-js-canvas-el{
+  position: absolute;
+  left: 0;
 }
-    
-.landing-page-opts a:hover{
-    box-shadow: 0 16px 28px rgb(37 38 45 / 12%);
-    transform: translateY(-4px);
-}
-    
-a,a:hover {
-    text-decoration: none;
-    color: unset;
-}
-    
-.landing-page-opts .content {
-    display: flex;
-    padding: 0;
-}
-    
-.landing-page-opts .icon{
-    flex-shrink: 1;
-    align-items: center;
-    display: flex;
-    height: 80px;
-    justify-content: center;
-    margin-bottom: 40px;
-    width: 100%;
-}
-    
-.landing-page-opts .icon picture {
-    height: 100%;
-    text-align: center;
-    width: 100%;
-}
-    
-.landing-page-opts .text {
-    padding: 25px;
-    text-align: left;
-    text-align: center;
-    width: 100%;
-}
-    
-.landing-page-opts .text h3 {
-    margin: 0 0 8px;
-}
-    
-.landing-page-opts a:hover>.faux-link
-{
-    background: linear-gradient(-225deg, #039FCE, #034DC4);
-    color:white;
-    font-weight:bold;
-}
-     
-a.home-blocks.disabled,a.home-blocks.disabled:hover{
-    background: #cecbcb;
-    color: white;
-    cursor: not-allowed !important;
-}
-    
-.g-type-display-4 {
-    font-size: 1.438rem;
-    letter-spacing: -.004em;
-    line-height: 1.391em;
+#particles-js{
+  background-image: url('');
+  background-size: cover;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
 }
 
-.g-type-body, .g-type-body-strong {
-    font-size: 1.063rem;
-    letter-spacing: .01em;
-    line-height: 1.647em;
+/*
+
+Bootstrap CSS
+
+*/
+.nav-pills .nav-link.active, .nav-pills .show>.nav-link{
+  background: rgb(1, 152, 117)!important;
 }
 
-.landing-page-opts .faux-link {
-    border-top: 1px solid #dcdde0;
-    padding: 23px;
-    text-align: center;
-}
-.g-type-buttons-and-standalone-links {
-    font-size: 1rem;
-    line-height: 1.5em;
+
+a:hover,.rb_cp {
+ cursor:pointer!important;
 }
 
-.landing-page-opts a:hover > .faux-link > svg > path
-{ 
-    fill:white;
+
+
+/*
+
+Sai June 22 2020
+*/
+
+.checkboxcontainer input{
+  display:none;
+  }
+  .checkboxcontainer{
+      display:inline-block;
+      padding-left:30px;
+      position: relative;
+      cursor:pointer;
+      text-transform: capitalize;
+      user-select:none;
+  }
+  .checkboxcontainer .checkmark{
+      display:inline-block;
+      width:20px;
+      height:20px;
+      background: rgb(82, 82, 81);
+      position: absolute;
+      left:0;
+      top:0;
+      border-radius: 3px;
+  }
+  
+  .checkboxcontainer input:checked+.checkmark{
+      background-color: #232324;;
+  }
+  .checkboxcontainer:hover .checkmark{
+      background-color: #313131;
+  }
+  
+  .checkboxcontainer input:checked+.checkmark:after{
+      content:"";
+      position: absolute;
+      height:8px;
+      width:13px;
+      border:4px solid #28a745;
+      border-right:2px;
+      border-top:2px;
+      top:50%;
+      left:50%;
+      transform:translate(-50%,-50%) rotate(-45deg);
+  }
+.button_column_selector {
+    background-color: #444444;
+    color:#2f3232;
+    height:2.4em;
 }
 
-.home-blocks:hover > .content > div > .icon-image > svg, 
-.home-blocks:hover > .content > div > .icon-image > svg > g
-{ 
-    fill:#034DC4 !important;
+.fa-cog{
+    color:#999;
 }
 
-.icon-image{
-    width: 5em !important;
-    height: 4em !important;
+.keep-open {
+    border-bottom: 3px solid #504f4f;
+    border-top: 3px solid #504f4f;
+    border-left: 3px solid #504f4f;
+    border-right: 3px solid #504f4f;
+    background-color: hsl(180, 3%, 19%);
+    color:#2f3232;
+}
+
+[data-theme="dark"] .copy{
+  background-color: #444;
+  color: #aaa;
+  border: none;
+}
+
+[data-theme="dark"] .copy.active{
+  box-shadow:none !important;
+  background-color: #282828!important;
+}
+
+[data-theme="dark"] .copy:hover{
+  background-color: #333;
+  color:white;
+}
+
+.copy:focus{
+  box-shadow:none !important;
+}
+
+[data-theme="dark"] .copy:disabled{
+  background-color: #4a4a4a;
+  color:#999;
+}
+
+.copy:disabled{
+  border: none;
+  cursor: auto;
+}
+
+
+
+/*
+Custom Radio button 
+Sai July 17th 2020
+*/
+
+
+/* custom radio */
+.radio {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 12px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* hide the browser's default radio button */
+.radio input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* create custom radio */
+.radio .check {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  background-color: rgb(244, 247, 245);
+  border: 1px solid #28a745;
+  border-radius: 50%;
+}
+
+/* on mouse-over, add border color */
+.radio:hover input ~ .check {
+  border: 2px solid rgb(143, 144, 145);
+}
+
+/* add background color when the radio is checked */
+.radio input:checked ~ .check {
+  background-color: #2f3232;
+  border:none;
+}
+
+/* create the radio and hide when not checked */
+.radio .check:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* show the radio when checked */
+.radio input:checked ~ .check:after {
+  display: block;
+}
+
+/* radio style */
+.radio .check:after {
+  top: 6px;
+  left: 6px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #28a745;
 }

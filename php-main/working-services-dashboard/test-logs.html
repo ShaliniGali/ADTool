@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Log Endpoints</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ccc; border-radius: 5px; }
+        .success { color: green; }
+        .error { color: red; }
+        pre { background: #f5f5f5; padding: 10px; border-radius: 3px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Test Log Endpoints</h1>
+    
+    <div class="test-section">
+        <h3>1. Test PHP Errors Endpoint</h3>
+        <button onclick="testPhpErrors()">Test PHP Errors</button>
+        <div id="php-result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h3>2. Test Docker Logs Endpoint</h3>
+        <button onclick="testDockerLogs()">Test Docker Logs</button>
+        <div id="docker-result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h3>3. Test Dashboard Config</h3>
+        <button onclick="testConfig()">Test Config</button>
+        <div id="config-result"></div>
+    </div>
+
+    <script>
+        const DASHBOARD_CONFIG = {
+            endpoints: {
+                phpErrors: 'http://localhost/php_errors.php?key=rhombus_logs_2024',
+                dockerLogs: 'http://localhost/docker_logs.php?key=rhombus_logs_2024'
+            }
+        };
+
+        function testPhpErrors() {
+            const resultDiv = document.getElementById('php-result');
+            resultDiv.innerHTML = '<p>Testing...</p>';
+            
+            fetch(DASHBOARD_CONFIG.endpoints.phpErrors)
+                .then(response => {
+                    console.log('PHP Errors - Response status:', response.status);
+                    return response.text();
+                })
+                .then(data => {
+                    console.log('PHP Errors - Response data:', data);
+                    try {
+                        const jsonData = JSON.parse(data);
+                        resultDiv.innerHTML = `
+                            <p class="success">✅ PHP Errors endpoint working!</p>
+                            <p><strong>Total Errors:</strong> ${jsonData.total_errors}</p>
+                            <p><strong>Critical Errors:</strong> ${jsonData.critical_errors}</p>
+                            <p><strong>Warnings:</strong> ${jsonData.warnings}</p>
+                        `;
+                    } catch (e) {
+                        resultDiv.innerHTML = `
+                            <p class="error">❌ PHP Errors - Response is not valid JSON:</p>
+                            <pre>${data.substring(0, 500)}...</pre>
+                        `;
+                    }
+                })
+                .catch(error => {
+                    resultDiv.innerHTML = `
+                        <p class="error">❌ PHP Errors - Fetch error: ${error.message}</p>
+                    `;
+                });
+        }
+
+        function testDockerLogs() {
+            const resultDiv = document.getElementById('docker-result');
+            resultDiv.innerHTML = '<p>Testing...</p>';
+            
+            fetch(DASHBOARD_CONFIG.endpoints.dockerLogs)
+                .then(response => {
+                    console.log('Docker Logs - Response status:', response.status);
+                    return response.text();
+                })
+                .then(data => {
+                    console.log('Docker Logs - Response data:', data);
+                    try {
+                        const jsonData = JSON.parse(data);
+                        resultDiv.innerHTML = `
+                            <p class="success">✅ Docker Logs endpoint working!</p>
+                            <p><strong>Total Containers:</strong> ${jsonData.total_containers}</p>
+                            <p><strong>Healthy Containers:</strong> ${jsonData.healthy_containers}</p>
+                            <p><strong>Unhealthy Containers:</strong> ${jsonData.unhealthy_containers}</p>
+                        `;
+                    } catch (e) {
+                        resultDiv.innerHTML = `
+                            <p class="error">❌ Docker Logs - Response is not valid JSON:</p>
+                            <pre>${data.substring(0, 500)}...</pre>
+                        `;
+                    }
+                })
+                .catch(error => {
+                    resultDiv.innerHTML = `
+                        <p class="error">❌ Docker Logs - Fetch error: ${error.message}</p>
+                    `;
+                });
+        }
+
+        function testConfig() {
+            const resultDiv = document.getElementById('config-result');
+            resultDiv.innerHTML = `
+                <p class="success">✅ Config loaded successfully!</p>
+                <pre>${JSON.stringify(DASHBOARD_CONFIG, null, 2)}</pre>
+            `;
+        }
+    </script>
+</body>
+</html>
