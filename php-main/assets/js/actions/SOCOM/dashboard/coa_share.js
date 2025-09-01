@@ -1,4 +1,52 @@
 "use strict";
+
+// Column definitions for DataTables
+const sharedCoaByMeColDef = [
+    { targets: 0, title: 'COA Name', data: 'COA_TITLE'},
+    { targets: 1, title: 'COA Description', data: 'COA_DESCRIPTION' },
+    { targets: 2, title: 'Shared Date', data: "SHARED_DATETIME" },
+    {
+        targets: 3,
+        title: 'Shared To',
+        data: 'NEW_USER_ID',
+        render: function(data) {
+            return user_emails[data] ?? '';
+        }
+    },
+    {
+        targets: 4,
+        title: 'Actions',
+        searchable: false,
+        orderable: false,
+        lengthChange: false,
+        render: data => `<div class="bx--overflow-menu" data-floating-menu-container>
+            <button class="bx--overflow-menu__trigger" aria-label="Overflow menu description" aria-expanded="false" aria-haspopup="true" id="overflow-menu-trigger">
+                <svg focusable="false" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" fill="currentColor" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+                    <circle cx="8" cy="2" r="1"></circle>
+                    <circle cx="8" cy="8" r="1"></circle>
+                    <circle cx="8" cy="14" r="1"></circle>
+                </svg>
+            </button>
+            <div class="bx--overflow-menu-options" tabindex="-1" role="menu" aria-label="Overflow menu description" data-floating-menu-direction="bottom">
+                <button class="bx--overflow-menu-options__btn" role="delete" disabled>Revoke</button>
+            </div>
+        </div>`
+    }
+];
+
+const sharedCoaToMeColDef = [
+    { targets: 0, title: 'COA Name', data: 'COA_TITLE'},
+    { targets: 1, title: 'COA Description', data: 'COA_DESCRIPTION' },
+    { targets: 2, title: 'Shared Date', data: "SHARED_DATETIME" },
+    {
+        targets: 3,
+        title: 'Shared By',
+        data: 'ORIGINAL_USER_ID',
+        render: function(data) {
+            return user_emails[data] ?? ''; 
+        }
+    }
+];
     
 function onReady() {
     
