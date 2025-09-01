@@ -367,7 +367,7 @@ function updateOverallEventSumTable(overall_sum, overall_sum_approve) {
     for(let i in year_list) {
         let fyi = (parseInt(i)+1), 
             osvas = parseInt(overall_sum[`FY_${fyi}_sum`]), 
-            osva = parseInt(overall_sum_approve[`FY_${fyi}_sum`] ?? 0);
+            osva = parseInt(overall_sum_approve[i]?.SUM_DELTA ?? 0);
         
         overall_sum['FYDP'] +=  osvas + osva;
         overall_sum[`FY_${fyi}_sum`] = new Intl.NumberFormat("en-US", {
