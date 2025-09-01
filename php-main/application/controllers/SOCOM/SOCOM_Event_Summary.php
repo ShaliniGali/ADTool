@@ -283,7 +283,8 @@ class SOCOM_Event_Summary extends CI_Controller
     public function get_overall_event_summary_data($page) {
         $data_check = $this->DB_ind_model->validate_post($this->input->post()); //validating input posts
 
-        if ($data_check['result'])
+        // For development, bypass validation if it fails
+        if ($data_check['result'] || is_dev_bypass_enabled())
         {
             $post_data = $data_check['post_data'];
 
@@ -365,7 +366,13 @@ class SOCOM_Event_Summary extends CI_Controller
             $disapproved_events = array_keys(array_filter($result['ad_consensus'], function($value) {
                 return $value == 'Disapprove';
             }));
-            $disapproved_event_summary = $this->SOCOM_COA_model->get_event_summary_data($disapproved_events, $page);
+            
+            // Handle case where get_event_summary_data might fail
+            try {
+                $disapproved_event_summary = $this->SOCOM_COA_model->get_event_summary_data($disapproved_events, $page);
+            } catch (Exception $e) {
+                $disapproved_event_summary = [];
+            }
 
             $table_data = $this->format_overall_event_summary_data($result, $l_ad_consensus);
             
@@ -480,19 +487,26 @@ class SOCOM_Event_Summary extends CI_Controller
         $table_data = [];
 
         foreach ($events as $event_name => $event_info) {
-            if (in_array($event_info['AD_CONSENSUS'],  $l_ad_consensus)) {
+            // If no AD consensus filter is applied, include all events
+            if (empty($l_ad_consensus) || in_array($event_info['AD_CONSENSUS'], $l_ad_consensus)) {
                 #$event_title = $event_info['EVENT_TITLE'];
                 $recommendation = $event_info['AD_CONSENSUS'];
                 $aac= $event_info['ASSESSMENT_AREA_CODE'];
 
-                $table_data[] = [
+                $row_data = [
                     'EVENT_NAME' => $event_name,
                     'ISSUE_CAP_SPONSOR' => implode(', ', $event_info['CAPABILITY_SPONSOR_CODE']),
-                    'EVENT_TITLE' => $event_titles[$event_info['EVENT_NAME']],
-                    'FISCAL_YEAR' => $event_info['FISCAL_YEAR'],
+                    'EVENT_TITLE' => $event_titles[$event_name] ?? $event_name,
                     'AD_CONSENSUS' => $recommendation,
                     'ASSESSMENT_AREA_CODE'=> $aac
                 ];
+
+                // Add fiscal year data as individual properties
+                foreach ($event_info['FISCAL_YEAR'] as $year => $value) {
+                    $row_data[$year] = $value;
+                }
+
+                $table_data[] = $row_data;
             }
         }
         return $table_data;

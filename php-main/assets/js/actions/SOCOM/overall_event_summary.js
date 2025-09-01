@@ -45,7 +45,12 @@ function fetchOverallEventSummaryData(post_data) {
 
             data.forEach(event => {
                 let fiscalYears = {}, AD_CONSENSUS = event.AD_CONSENSUS.toUpperCase().replace(/ /g, '_'), fydp_proposed = 0, fydp_granted = 0;
-                for (const [fy, fy_val] of Object.entries(event.FISCAL_YEAR)) {
+                
+                // Extract fiscal year data from individual properties
+                const yearKeys = Object.keys(event).filter(key => /^\d{4}$/.test(key)); // Get year keys like "2024", "2025", etc.
+                
+                yearKeys.forEach(fy => {
+                    const fy_val = event[fy];
                     if (AD_CONSENSUS === 'APPROVE_AT_SCALE' &&  
                     Object.values(final_ad_actions[event.EVENT_NAME] ?? {}).length > 0) {
                         let granted_class = (fy_val !== final_ad_actions[event.EVENT_NAME][fy] ? 'ember-cell': '');
@@ -63,7 +68,7 @@ function fetchOverallEventSummaryData(post_data) {
                         fiscalYears[fy] = fy_val;
                         fydp_proposed += parseInt(fy_val);
                     }
-                }
+                });
                 
                 let fydp = 0;
                 if (AD_CONSENSUS === 'APPROVE_AT_SCALE' && Object.values(final_ad_actions[event.EVENT_NAME] ?? {}).length > 0) {
