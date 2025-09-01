@@ -75,7 +75,7 @@
 </div>
 
 <div id="program-execution-drilldown-milestones-table-view" class="milestones-grid">
-  <?php $this->load->view('SOCOM/portfolio_viewer/milestones_table_view'); ?>
+  <?php $this->load->view('SOCOM/portfolio_viewer/components/program_execution_drilldown/milestones_table_view.php'); ?>
 </div>
 
 </div>

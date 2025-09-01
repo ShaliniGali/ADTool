@@ -63,7 +63,7 @@
                 <label for="year-input3" class="bx--label">Fiscal Year</label>
                 <select  id="year-input3" name="year3" class="bx--select-input">
                     <option disabled selected value="0"> -- select -- </option>
-                    <?php foreach($filtered_pom_years as $year):?>
+                    <?php foreach($fiscal_years_out_of_pom as $year):?>
                         <option class="bx--select-option" value="<?=$year;?>"><?=$year;?></option>
                     <?php endforeach; ?>
                 </select>

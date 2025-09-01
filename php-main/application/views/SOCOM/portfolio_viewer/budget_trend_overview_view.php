@@ -6,6 +6,8 @@
         border-radius: 12px;
         width: 100%;
         padding: 12px;
+        overflow-x: hidden;
+        max-width: 100%;
     }
 
     .card-container {
@@ -13,6 +15,18 @@
         border-radius: 12px;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         width: 100%;
+    }
+    
+    .bar-chart-wrapper,
+    .line-plot-container {
+        width: 100% !important;
+        max-width: 100% !important;
+        overflow-x: hidden;
+    }
+    
+    .chart-column {
+        width: 100% !important;
+        max-width: 100% !important;
     }
 </style>
 
@@ -24,9 +38,10 @@
     </div>
     <div id="budget-trend-chart-container">
         <div class="card-container mb-3">
-            <?php $this->load->view('SOCOM/portfolio_viewer/line_plot_view.php', ['type' => 'budget-trend-overview']); ?>
+            <?php $this->load->view('SOCOM/portfolio_viewer/components/common/line_plot_view.php', ['type' => 'budget-trend-overview']); ?>
         </div>
-        <?php $this->load->view('SOCOM/portfolio_viewer/bar_chart_view.php', array()); ?>
+        <?php $this->load->view('SOCOM/portfolio_viewer/components/common/bar_chart_view.php', array()); ?>
     </div>
 
+</div>
 </div>

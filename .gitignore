@@ -1,93 +1,32 @@
-# Docker and containers
-docker-compose.override.yml
-.dockerignore
-minio-data/
-mysql-data/
-redis-data/
-
-# Logs
-*.log
-logs/
-log/
-
-# Environment files
-.env
-.env.local
-.env.production
-.env.staging
-
-# IDE and editor files
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-
-# OS generated files
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
-
-# Node.js
-node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-.npm
-.yarn-integrity
-
-# PHP
-vendor/
-composer.lock
-*.cache
-
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-env/
-venv/
-ENV/
-env.bak/
-venv.bak/
-.pytest_cache/
-.coverage
-htmlcov/
-
-# Database
-*.sql
-*.db
-*.sqlite
+# Session files
+php-main/application/sessions/rhombus_session*
 
 # Temporary files
 *.tmp
 *.temp
-*.bak
-*.backup
+*.log
 
-# Build outputs
-dist/
-build/
-*.tar.gz
-*.zip
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
 
-# Secrets and credentials
-secrets/
-credentials/
-*.pem
-*.key
-*.crt
+# OS files
+.DS_Store
+Thumbs.db
 
-# Backup files
-backup/
-*.backup
+# Node modules (if any)
+node_modules/
 
-# Cache directories
-.cache/
-cache/
+# Compiled assets
+php-main/assets/css_compress/
+php-main/assets/js_compress/
+
+# Backup files (keep only the scripts)
+database_backups/*.sql
+database_backups/socom_complete_backup_*/
+
+# Keep the backup scripts
+!database_backups/*.sh
+!database_backups/complete_database_backup.sql

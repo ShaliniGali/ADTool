@@ -61,7 +61,7 @@
 </div>
 
 <script>
-     $(document).ready(function () {
+     $(function () {
         $('#processed-list4').DataTable({
             scrollX: true,
             columns: get_processed_table_columns_zbt_issue()
@@ -194,10 +194,8 @@
             ];
         }
     }
-</script>
 
-<script>
-$(document).on('click', '.view-warning-btn', function () {
+$('#processed-list4').on('click', '.view-warning-btn', function () {
     const tableId = $(this).data('table-id');
     const table = $('#' + tableId).DataTable();
     const row = table.row($(this).closest('tr')).data();
@@ -210,7 +208,8 @@ $(document).on('click', '.view-warning-btn', function () {
     $('#warning_text_area').text(warningText || 'No warnings available.');
     $('#warning_modal').find('.bx--modal').addClass('is-visible');
 });
- $(document).on('click', '.view-error-btn', function () {
+
+$('#processed-list4').on('click', '.view-error-btn', function () {
     const tableId = $(this).data('table-id');
     const table = $('#' + tableId).DataTable();
 
@@ -225,25 +224,14 @@ $(document).on('click', '.view-warning-btn', function () {
     $('#error_modal').find('.bx--modal').addClass('is-visible');
 });
 
-$(document).on('click', '#processed-list4 .view-status-btn-4', function(){
+$('#processed-list4').on('click', '.view-status-btn-4', function(){
     const table = $('#processed-list4').DataTable();
     const row = table.row($(this).closest('tr')).data();
     update_modal_content_zbt_iss_guest(row);
     $('#status_modal_cap_sponsor > .bx--modal.bx--modal-tall').addClass('is-visible');
 });
 
-$(document).ready(function () {
-    const table = $('#processed-list').DataTable();
-    table.on('draw', function () {
-        $('#processed-list .view-status-btn-4').closest('td').css({
-            width: '0px',
-            padding: '0',
-            border: 'none'
-        }).empty();
-    });
-});
 
- $(document).on('click', '#processed-list4 .cap-submit-btn', handleSaveSubmitClick);
- $(document).on('click', '#processed-list4 .cap-parse-btn', handleSaveParseClick);
-
+$('#processed-list4').on('click', '.cap-submit-btn', handleSaveSubmitClick);
+$('#processed-list4').on('click', '.cap-parse-btn', handleSaveParseClick);
 </script>

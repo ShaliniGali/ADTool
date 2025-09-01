@@ -3,8 +3,8 @@
 #[AllowDynamicProperties]
 class  AWS extends CI_Model {
 	public function __construct() {
-		if (!P1_FLAG) {
-			require_once(APPPATH . 'libraries/aws-autoloader.php');
+		if (!P1_FLAG && ENVIRONMENT === 'development') {
+			require_once(FCPATH . 'vendor/autoload.php');
 		}
 	}
 

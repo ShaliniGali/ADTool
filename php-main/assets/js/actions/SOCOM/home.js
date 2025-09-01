@@ -11,7 +11,8 @@ let current_page = {
 
 function onReady() {
     if (page == 'ZBT' || page == 'Issue') {
-        $(`#${page}-summary-breadcrumb`).attr("hidden",true);
+        // Show the breadcrumb instead of hiding it
+        $(`#${page}-summary-breadcrumb`).attr("hidden",false);
         Highcharts.chart('pie-1', {
             chart: {
                 backgroundColor: 'transparent',

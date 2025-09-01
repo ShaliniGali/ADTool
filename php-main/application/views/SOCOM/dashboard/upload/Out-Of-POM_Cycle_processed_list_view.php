@@ -1,5 +1,5 @@
 <style>
-      .dataTables_wrapper {
+    .dataTables_wrapper {
         width: 100%;
         overflow-x: auto;
     }

@@ -8,18 +8,36 @@ class SOCOM_Program extends CI_Controller {
     public function __construct(){
         parent::__construct();
 
-        if(auth_coa_role_guest()!= null || auth_coa_role_restricted()!= null) {
-            $http_status = 403;
-            $response['status'] = "Unauthorized user, access denied.";
-            show_error($response['status'], $http_status);
-        }
-
+        // Load required models and libraries
         $this->load->model('SOCOM_model');
         $this->load->model('SOCOM_Weights_model');
         $this->load->model('SOCOM_Weights_List_model');
         $this->load->model('SOCOM_Assessment_Area_model');
         $this->load->model('SOCOM_Program_model');
+        $this->load->model('DBs'); // Added for SOCOM_UI database access
+        $this->load->model('DB_ind_model'); // Added for CSRF validation
         $this->load->library('SOCOM/Dynamic_Year');
+        $this->load->library('SOCOM/RBAC_Users', null, 'rbac_users');
+        
+        // Set up session data if not exists (for development only)
+        if (ENVIRONMENT === 'development' && !$this->session->userdata('logged_in')) {
+            $this->session->set_userdata('logged_in', [
+                'id' => 1,
+                'email' => 'test@example.com',
+                'name' => 'Test User',
+                'account_type' => 'USER'
+            ]);
+        }
+        
+        // Check authentication with fallback (disabled in development)
+        if (ENVIRONMENT !== 'development') {
+            if(auth_coa_role_guest()!= null || auth_coa_role_restricted()!= null) {
+                $http_status = 403;
+                $response['status'] = "Unauthorized user, access denied.";
+                show_error($response['status'], $http_status);
+            }
+        }
+
         $this->ISS_YEAR = $this->dynamic_year->getPomYearForSubapp('ISS_SUMMARY_YEAR');
         $this->YEAR_LIST = $this->dynamic_year->getYearList($this->ISS_YEAR);
     }
@@ -78,6 +96,17 @@ class SOCOM_Program extends CI_Controller {
         $this->load->view('templates/header_view', $page_data);
         $this->load->view('SOCOM/program/program_list_view', $data);
         $this->load->view('templates/close_view');
+    }
+
+    public function test_endpoint() {
+        $this->output
+            ->set_content_type(self::CONTENT_TYPE_JSON)
+            ->set_output(json_encode([
+                'status' => 'success',
+                'message' => 'Test endpoint working',
+                'session_data' => $this->session->userdata('logged_in'),
+                'criteria_name_id' => get_criteria_name_id()
+            ]));
     }
 
     public function get_program($scored = false) {

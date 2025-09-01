@@ -85,13 +85,19 @@ function loadCoa() {
     // send warning messag to user if selected COAs is not equal to 2
     if (selectedCoas.length !== 2) {
         displayToastNotification('error', 'Error: Please select exactly two COAs');
+        $("#merge-coa-table-loading").addClass("d-none");
         return false;
     }
 
     let input_object =  {
-        rhombus_token: rhombuscookie(),
         selected_coas: selectedCoas,
         pom_cycle_type: pom_cycle_type
+    }
+
+    // Add CSRF token only if it exists (for production)
+    let csrf_token = rhombuscookie();
+    if (csrf_token) {
+        input_object.rhombus_token = csrf_token;
     }
 
     //merge_coa_table
@@ -101,8 +107,9 @@ function loadCoa() {
         url,
         input_object,
         function() {
-            setBudgetTable();
+            getProposedBudgetValue(); // Call this instead of setBudgetTable() to properly set up budget inputs
             closeMergeCoaModal();
+            $("#merge-coa-table-loading").addClass("d-none");
         }
     )
 }
@@ -276,7 +283,14 @@ function getProposedBudgetValue() {
         '#proposed-budget-input',
         url,
         input_object,
-        function() {
+        function(response, status, xhr) {
+            if (status === 'error') {
+                console.error('Error calling loadPageData:', xhr.status, xhr.statusText);
+                attachFYDPBudgetListener();
+                $("#merge-coa-table-loading").addClass('d-none'); // Hide spinner on error
+                return;
+            }
+            
             $.post('/optimizer/get_coa_data', 
                 {
                     rhombus_token: rhombuscookie(),
@@ -305,9 +319,13 @@ function getProposedBudgetValue() {
                         $(`#text-input-budget-fydp`).val(fydp_k)
                     }
                     attachFYDPBudgetListener();
-                    $("#merge-coa-table-loading").addClass('d-none');
+                    $("#merge-coa-table-loading").addClass('d-none'); // Always hide spinner regardless of data
                 }
-            )
+            ).fail(function(xhr, status, error) {
+                console.error('Error calling /optimizer/get_coa_data:', error);
+                attachFYDPBudgetListener();
+                $("#merge-coa-table-loading").addClass('d-none'); // Hide spinner even on error
+            });
         }
     )
 }

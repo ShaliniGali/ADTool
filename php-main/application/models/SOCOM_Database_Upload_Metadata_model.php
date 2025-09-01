@@ -6,7 +6,7 @@ require_once(APPPATH.'models/SOCOM_Database_Upload_model.php');
 class SOCOM_Database_Upload_Metadata_model extends SOCOM_Database_Upload_model
 {
 	/**
-	 * Save metadata information to the database USR_DT_LOOKUP_METADATA,
+	 * Save metadata information to the database USR_DT_UPLOADS_METADATA,
 	 * 
 	 * @param int $user_id
 	 * @param array $params
@@ -25,10 +25,10 @@ class SOCOM_Database_Upload_Metadata_model extends SOCOM_Database_Upload_model
 			$log = sprintf('User ID: %s, does not have a Capability Sponsor', $user_id ?? 'Not Logged In');
 			throw new ErrorException($log);
 		}
-
+		
 		if ($uploadType->value === UploadType::DT_OUT_POM->value) {
 			$table_name = $table_listing;
-			$dirty_table_name = '';
+			$dirty_table_name = null;
 		} else {
 			$table_name = "DT_{$table_listing}_{$pom_year}";
 			$dirty_table_name = "DT_{$table_listing}_DIRTY_{$pom_year}";
@@ -37,27 +37,33 @@ class SOCOM_Database_Upload_Metadata_model extends SOCOM_Database_Upload_model
 		$this->DBs->SOCOM_UI->trans_start();
 
 		$usr_dt_table_metadata_id = $this->set_table_meta($table_name, $dirty_table_name, $user_id);
+		if (is_int($usr_dt_table_metadata_id)) {
+			$this->DBs->SOCOM_UI
+				->set('USR_DT_UPLOADS_ID', $usr_dt_uploads_id)
+				->set('POM_YEAR', $pom_year)
+				->set('TABLE_TYPE_DESCR', $table_listing)
+				->set('TABLE_NAME', $table_name)
+				->set('CAP_SPONSOR', $cap_sponsor)
+				->set('USR_DT_TABLE_METADATA_ID', $usr_dt_table_metadata_id)
+				->insert('USR_DT_UPLOADS_METADATA');
 
-		$this->DBs->SOCOM_UI
-			->set('USR_DT_UPLOAD_ID', $usr_dt_uploads_id)
-			->set('IS_APPEND_DATASET', $is_append)
-			->set('POM_YEAR', $pom_year)
-			->set('TABLE_TYPE_DESCR', $table_listing)
-			->set('TABLE_NAME', $table_name)
-			->set('DIRTY_TABLE_NAME', $dirty_table_name)
-			->set('CAP_SPONSOR', $cap_sponsor)
-			->set('USR_DT_TABLE_METADATA_ID', $usr_dt_table_metadata_id)
-			->insert('USR_DT_LOOKUP_METADATA');
+			$user_id = (int)$this->session->userdata['logged_in']['id'];
 
+			$CI = get_instance();
 		
-		$user_id = (int)$this->session->userdata['logged_in']['id'];
+			$CI->SOCOM_Git_Data_model->git_track_data(GitDataType::CREATE_METADATA, $usr_dt_uploads_id, $user_id);
+		
+			$this->DBs->SOCOM_UI->trans_complete();
 
-		$CI = get_instance();
+			$result = $this->DBs->SOCOM_UI->trans_status();
+		} else {
+			$this->DBs->SOCOM_UI->trans_rollback();
+			$log = sprintf('Upload Table Metadata could not be saved');
+			throw new ErrorException($log);
+		}
+		
 
-		$CI->SOCOM_Git_Data_model->git_track_data(GitDataType::CREATE_METADATA, $usr_dt_uploads_id, $user_id);
-
-		$this->DBs->SOCOM_UI->trans_complete();
-		return $this->DBs->SOCOM_UI->trans_status();
+		return $result;
 	}
 
 	public function set_table_meta(string $final_table_name, string $dirty_table_name, int $user_id) {
@@ -104,14 +110,13 @@ class SOCOM_Database_Upload_Metadata_model extends SOCOM_Database_Upload_model
             ->select('s.CRON_PROCESSED')
 			->select('s.ERRORS')
 			->select('c.CYCLE_NAME')
-			->select('tm.IS_DIRTY_TABLE_ACTIVE')
 			->select('tm.IS_ACTIVE')
 			->select('s.WARNINGS')
 			->from('USR_DT_UPLOADS u')
             ->join('USR_DT_SCHEDULER_MAP m', 'ON m.MAP_ID = u.ID')
             ->join('USR_DT_SCHEDULER s', 'ON s.ID = m.DT_SCHEDULER_ID')
 			->join('USR_LOOKUP_CYCLES c', 'ON c.ID = s.CYCLE_ID')
-			->join('USR_DT_LOOKUP_METADATA tm', 'ON tm.USR_DT_UPLOAD_ID = u.ID')
+			->join('USR_DT_UPLOADS_METADATA tm', 'ON tm.USR_DT_UPLOADS_ID = u.ID')
 			->where('c.ID', $cycle_id)
 			->where('c.IS_ACTIVE', 1)
 			->where('u.TYPE', $uploadType->name)
@@ -151,19 +156,18 @@ class SOCOM_Database_Upload_Metadata_model extends SOCOM_Database_Upload_model
 				->select('s.CRON_PROCESSED')
 				->select('s.ERRORS')
 				->select('c.CYCLE_NAME')
-				->select('tm.IS_DIRTY_TABLE_ACTIVE')
 				->select('tm.CAP_SPONSOR')
 				->select('s.WARNINGS')
 				->select('tm.TABLE_NAME')
-				->select('tm.DIRTY_TABLE_NAME')
+				->select('dtm.DIRTY_TABLE_NAME')
 				->select('tm.USR_DT_TABLE_METADATA_ID')
 				->select('dtm.REVISION')
 				->from('USR_DT_UPLOADS u')
 				->join('USR_DT_SCHEDULER_MAP m', 'ON m.MAP_ID = u.ID')
 				->join('USR_DT_SCHEDULER s', 'ON s.ID = m.DT_SCHEDULER_ID')
 				->join('USR_LOOKUP_CYCLES c', 'ON c.ID = s.CYCLE_ID')
-				->join('USR_DT_LOOKUP_METADATA tm', 'ON tm.USR_DT_UPLOAD_ID = u.ID')
-				->join('USR_DT_LOOKUP_TABLE_METADATA dtm', 'ON dtm.DIRTY_TABLE_NAME = tm.DIRTY_TABLE_NAME', 'left')
+				->join('USR_DT_UPLOADS_METADATA tm', 'ON tm.USR_DT_UPLOADS_ID = u.ID')
+				->join('USR_DT_LOOKUP_TABLE_METADATA dtm', 'ON dtm.ID = tm.USR_DT_TABLE_METADATA_ID', 'left')
 				->where('u.ID', $file_id)
 				->where('c.ID', $cycle_id)
 				->where('c.IS_ACTIVE', 1)
@@ -192,8 +196,8 @@ class SOCOM_Database_Upload_Metadata_model extends SOCOM_Database_Upload_model
 			->select('dtm.CREATED_TIMESTAMP')
 			->select('dtm.UPDATED_TIMESTAMP')
 			->from('USR_DT_LOOKUP_TABLE_METADATA dtm')
-			->join('USR_DT_LOOKUP_METADATA m', 'm.USR_DT_TABLE_METADATA_ID = dtm.ID')
-			->join('USR_DT_UPLOADS u', 'u.ID = m.USR_DT_UPLOAD_ID')
+			->join('USR_DT_UPLOADS_METADATA m', 'm.USR_DT_TABLE_METADATA_ID = dtm.ID')
+			->join('USR_DT_UPLOADS u', 'u.ID = m.USR_DT_UPLOADS_ID')
 			->join('USR_LOOKUP_CYCLES c', 'c.ID = dtm.CYCLE_ID')
 			->where('c.ID', $cycle_id)
 			->where('c.IS_ACTIVE', 1)
@@ -218,7 +222,7 @@ class SOCOM_Database_Upload_Metadata_model extends SOCOM_Database_Upload_model
 			->select('FINAL_TABLE_NAME')
 			->select('IS_FINAL_TABLE_ACTIVE')
 			->select('dtm.USER_ID')
-			->select('REVISION')
+			->select('dtm.REVISION')
 			->select('CREATED_TIMESTAMP')
 			->select('UPDATED_TIMESTAMP')
 			->from('USR_DT_LOOKUP_TABLE_METADATA dtm')
@@ -232,5 +236,84 @@ class SOCOM_Database_Upload_Metadata_model extends SOCOM_Database_Upload_model
 		$results['ID'] = encrypted_string($results['ID'], 'encode');
 
 		return $results;
+	}
+
+	public function get_metadata_aggregate_admin_id(int $id) {
+		$cycle_id = get_cycle_id();
+		$user_id = (int)$this->session->userdata['logged_in']['id'];
+
+		$this->DBs->SOCOM_UI
+			->select('dtm.ID')
+			->select('DIRTY_TABLE_NAME')
+			->select('FINAL_TABLE_NAME')
+			->select('IS_FINAL_TABLE_ACTIVE')
+			->select('dtm.USER_ID')
+			->select('dtm.REVISION')
+			->select('dtm.CREATED_TIMESTAMP')
+			->select('dtm.UPDATED_TIMESTAMP')
+			->select('GROUP_CONCAT(DISTINCT u.S3_PATH SEPARATOR ", ") as S3_PATH')
+			->select('GROUP_CONCAT(DISTINCT u.FILE_NAME SEPARATOR ", ") as FILE_NAME')
+			->select('GROUP_CONCAT(DISTINCT u.USER_ID SEPARATOR ", ") as USER_ID')
+			->select('GROUP_CONCAT(DISTINCT m.CAP_SPONSOR SEPARATOR ", ") as CAP_SPONSOR')
+			->from('USR_DT_LOOKUP_TABLE_METADATA dtm')
+			->join('USR_DT_UPLOADS_METADATA m', 'm.USR_DT_TABLE_METADATA_ID = dtm.ID')
+			->join('USR_DT_UPLOADS u', 'u.ID = m.USR_DT_UPLOADS_ID')
+			->join('USR_LOOKUP_CYCLES c', 'c.ID = dtm.CYCLE_ID')
+			->where('c.ID', $cycle_id)
+			->where('c.IS_ACTIVE', 1)
+			->where('dtm.ID', $id);
+
+		$results = $this->DBs->SOCOM_UI->get()->row_array();
+		
+		$results['ID'] = encrypted_string($results['ID'], 'encode');
+
+		return $results;
+	}
+
+	public function has_submitted_status_by_metadata_id(int $id): bool
+	{
+		$result = $this->DBs->SOCOM_UI
+			->select('DIRTY_TABLE_NAME')
+			->from('USR_DT_LOOKUP_TABLE_METADATA')
+			->where('ID', $id)
+			->get()
+			->row_array();
+
+		if (empty($result['DIRTY_TABLE_NAME'])) {
+			return false;
+		}
+
+		$table = $result['DIRTY_TABLE_NAME'];
+
+		$sql = "SELECT 1 FROM {$table} WHERE submission_status = 'SUBMITTED' LIMIT 1";
+		$q = $this->DBs->SOCOM_UI->query($sql);
+		return $q->num_rows() > 0;
+	}
+
+	public function get_metadata_view_status($id) {
+		$cycle_id = get_cycle_id();
+
+		return $this->DBs->SOCOM_UI
+			->distinct()
+			->select("
+				u.USER_ID,
+				m.CAP_SPONSOR,
+				Title,
+				sa.ACTION_STATUS AS SUBMISSION_STATUS
+			")
+			->from('USR_DT_LOOKUP_TABLE_METADATA dtm')
+			->join('USR_DT_UPLOADS_METADATA m', 'm.USR_DT_TABLE_METADATA_ID = dtm.ID')
+			->join('USR_DT_UPLOADS u', 'u.ID = m.USR_DT_UPLOADS_ID')
+			->join('USR_LOOKUP_CYCLES c', 'c.ID = dtm.CYCLE_ID')
+			->join(
+				'USR_DT_SUBMIT_APPROVE_ACTIONS sa',
+				"sa.USER_ID = u.USER_ID",
+				'left'
+			)
+			->where('c.ID', $cycle_id)
+			->where('c.IS_ACTIVE', 1)
+			->where('dtm.ID', $id)
+			->get()
+			->result_array();
 	}
 }

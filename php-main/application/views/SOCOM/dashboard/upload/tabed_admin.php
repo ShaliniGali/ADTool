@@ -61,7 +61,7 @@
             <a tabindex="2" id="tab-myuser-3" class="bx--tabs__nav-link" href="javascript:void(0)" role="tab" aria-controls="tab-panel-3" aria-selected="false">Out-of-POM Cycle Data Upload</a>
         </li>
         <?php endif; ?>
-        <?php if($is_pom_admin || $is_guest): ?>
+        <?php if($is_pom_admin || $is_guest || $is_restricted): ?>
         <li id="list-tab-myuser-4" class="bx--tabs__nav-item bx--tabs__nav-item" data-target=".tab-4" role="presentation">
             <a tabindex="3" id="tab-myuser-4" class="bx--tabs__nav-link" href="javascript:void(0)" role="tab" aria-controls="tab-panel-4" aria-selected="false">ZBT Events and Issue Events Data Upload</a>
         </li>

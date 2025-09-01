@@ -11,9 +11,6 @@
                     Version
                 </th>
                 <th scope="col">
-                    Table Type
-                </th>
-                <th scope="col">
                     File Status
                 </th>
                 <th scope="col">

@@ -116,7 +116,6 @@
 					title: 'Cron Processed',
 					data: 'CRON_PROCESSED_TXT'
 				},
-                
                 {
                     title: 'Warnings',
                     data: 'WARNINGS', 
@@ -135,23 +134,22 @@
                 }
 
                 },
-                 {
+                {
                     title: 'Errors',
                     data: 'ERRORS', 
                     orderable: false,
                     render: function(data, type, row, meta) {
-                    if (!data || data.trim() === '') 
-                            return '';
-                    let errorsEncoded = encodeURIComponent(data);
-                    return `
-                        <button class="bx--btn bx--btn--primary bx--btn--sm view-error-btn"
-                                data-errors="${errorsEncoded}"
-                                data-table-id="processed-list4">
-                            View Errors
-                        </button>
-                    `;
-                }
-
+                        if (!data || data.trim() === '') 
+                                return '';
+                        let errorsEncoded = encodeURIComponent(data);
+                        return `
+                            <button class="bx--btn bx--btn--primary bx--btn--sm view-error-btn"
+                                    data-errors="${errorsEncoded}"
+                                    data-table-id="processed-list4">
+                                View Errors
+                            </button>
+                        `;
+                    }
                 },
 				{
 					title: 'Updated',
@@ -174,7 +172,7 @@
                     data: '',
                     orderable: false,
                     render: function(data, type, row, meta) {
-                        if (row != null && row['CRON_PROCESSED_TXT'] === 'Completed' && row['IS_ACTIVE'] != 1) {
+                        if (row != null && row['CRON_PROCESSED'] === 1 && row['IS_ACTIVE'] != 1) {
                             return `
                             <button id="${row['ID']}" class="bx--btn bx--btn--primary bx--btn--sm activate-btn"
                             onclick="activate_upload('${row['ID']}')">
@@ -196,8 +194,6 @@
                         return data == 1 ? 'True' : 'False';
                     }
                 },
-               
-
             ];
         }
     }

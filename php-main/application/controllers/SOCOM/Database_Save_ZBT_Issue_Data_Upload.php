@@ -11,6 +11,7 @@ class Database_Save_ZBT_Issue_Data_Upload extends CI_Controller
         parent::__construct();
         $this->load->model('SOCOM_Database_Upload_Metadata_model');
         $this->load->model('SOCOM_Scheduler_model');
+        $this->load->model('SOCOM_DT_Editor_model');
         $this->load->model('SOCOM_Git_Data_model');
         $this->load->model('SOCOM_Cycle_Management_model');
 
@@ -30,8 +31,9 @@ class Database_Save_ZBT_Issue_Data_Upload extends CI_Controller
     {
         $is_pom_admin = $this->SOCOM_Site_User_model->is_user_by_group(2);
         $is_guest = $this->rbac_users->is_guest();
+        $is_restricted = $this->rbac_users->is_restricted();
 
-        if (!$is_pom_admin && !$is_guest) {
+        if (!$is_pom_admin && !$is_guest && !$is_restricted) {
             $http_status = 403;
             $output = json_encode([
                 'messages' => ['No Permissions'],
@@ -121,9 +123,11 @@ class Database_Save_ZBT_Issue_Data_Upload extends CI_Controller
     public function list_uploads() {
         $is_pom_admin = $this->SOCOM_Site_User_model->is_user_by_group(2);
         $is_guest = $this->rbac_users->is_guest();
+        $is_restricted = $this->rbac_users->is_restricted();
+
         $response = [];
 
-        if (!$is_pom_admin && !$is_guest) {
+        if (!$is_pom_admin && !$is_guest && !$is_restricted) {
             $http_status = 403;
             $response['status'] = 'No Permissions';
             $response['success'] = false;
@@ -153,9 +157,11 @@ class Database_Save_ZBT_Issue_Data_Upload extends CI_Controller
     public function get_processed() {
         $is_pom_admin = $this->SOCOM_Site_User_model->is_user_by_group(2);
         $is_guest = $this->rbac_users->is_guest();
+        $is_restricted = $this->rbac_users->is_restricted();
+
         $response = [];
 
-        if (!$is_pom_admin && !$is_guest) {
+        if (!$is_pom_admin && !$is_guest && !$is_restricted) {
             $http_status = 403;
             $response['status'] = 'No Permissions';
             $response['success'] = false;
@@ -178,7 +184,7 @@ class Database_Save_ZBT_Issue_Data_Upload extends CI_Controller
             ->set_output(json_encode($response));
     }
 
-     public function get_processed_admin() {
+    public function get_processed_admin() {
         $is_pom_admin = $this->SOCOM_Site_User_model->is_user_by_group(2);
         $response = [];
 
@@ -191,6 +197,15 @@ class Database_Save_ZBT_Issue_Data_Upload extends CI_Controller
             $this->user_can_access(false);
 
             $data = $this->SOCOM_Database_Upload_Metadata_model->get_metadata_admin(UploadType::DT_UPLOAD_EXTRACT_UPLOAD);
+                                                        
+            foreach ($data as &$row) {
+                $id = encrypted_string($row['ID'], 'decode');
+                $row['HAS_SUBMITTED_ROWS'] = $this->SOCOM_Database_Upload_Metadata_model
+                    ->has_submitted_status_by_metadata_id((int)$id);
+                $row['TOTAL_ROWS_EDIT'] = $this->SOCOM_DT_Editor_model->get_dt_table_total_count($id, false);
+                $row['TOTAL_ROWS_VIEW'] = $this->SOCOM_DT_Editor_model->get_dt_table_total_count($id, true);
+            }
+
             $response = ['data' => $data];
 
             $http_status = 200;
@@ -234,11 +249,11 @@ class Database_Save_ZBT_Issue_Data_Upload extends CI_Controller
         if ($data_check['result']) {
             $post_data = $data_check['post_data'];
 
-            $is_pom_admin = $this->SOCOM_Site_User_model->is_user_by_group(2);
             $is_guest = $this->rbac_users->is_guest();
+            $is_restricted = $this->rbac_users->is_restricted();
             $response = [];
 
-            if (!$is_pom_admin && !$is_guest) {
+            if (!$is_guest && !$is_restricted) {
                 $http_status = 403;
                 $response['status'] = 'No Permissions';
                 $response['success'] = false;
@@ -251,13 +266,12 @@ class Database_Save_ZBT_Issue_Data_Upload extends CI_Controller
                     'Content-Type: application/json'
                 ];
 
-                $api_params = '';
                 $api_endpoint = RHOMBUS_PYTHON_URL.'/socom/dirty-table/'.$row_id;
 
                 $res = php_api_call(
                     'POST',
                     $headers,
-                    json_encode($api_params),
+                    null,
                     $api_endpoint
                 );
                 $result = json_decode($res, true);
@@ -287,10 +301,9 @@ class Database_Save_ZBT_Issue_Data_Upload extends CI_Controller
             $post_data = $data_check['post_data'];
 
             $is_pom_admin = $this->SOCOM_Site_User_model->is_user_by_group(2);
-            $is_guest = $this->rbac_users->is_guest();
             $response = [];
-
-            if (!$is_pom_admin && !$is_guest) {
+ 
+            if (!$is_pom_admin) {
                 $http_status = 403;
                 $response['status'] = 'No Permissions';
                 $response['success'] = false;
@@ -333,8 +346,27 @@ class Database_Save_ZBT_Issue_Data_Upload extends CI_Controller
     }
 
     public function save_submit($html = false) {
+        $is_pom_admin = $this->SOCOM_Site_User_model->is_user_by_group(2);
+        $is_guest = $this->rbac_users->is_guest();
+        $is_restricted = $this->rbac_users->is_restricted();
+
         $http_status = 403;
         $response = ['status' => 'Unauthorized user, unable to use this feature of SOCOM'];
+
+        if (!$is_guest && !$is_restricted) {
+            $http_status = 403;
+            $response = ['status' => 'No Permissions'];
+            if ($html === false) {
+                $this->output
+                    ->set_status_header($http_status)
+                    ->set_content_type(self::CONTENT_TYPE_JSON)
+                    ->set_output(json_encode($response))
+                    ->_display();
+                exit();
+            } else {
+                show_error($response['status'], $http_status);
+            }
+        }
 
         $map_id = encrypted_string($this->input->post('map_id'), 'decode');
         $description = $this->input->post('description')  ?: '';
@@ -352,6 +384,11 @@ class Database_Save_ZBT_Issue_Data_Upload extends CI_Controller
                     show_error($response['status'], $http_status);
                 }
             }
+
+            $user_id = (int)$this->session->userdata['logged_in']['id'];
+
+            $this->SOCOM_Git_Data_model->git_track_data(GitDataType::USER_DATA_FINAL_SUBMISSION, $map_id, $user_id);
+
 
             $http_status = 200;
             $response['status'] = 'Submission saved successfully.';
@@ -375,8 +412,25 @@ class Database_Save_ZBT_Issue_Data_Upload extends CI_Controller
     }
 
     public function save_approve($html = false) {
+        $is_pom_admin = $this->SOCOM_Site_User_model->is_user_by_group(2);
+
         $http_status = 403;
         $response = ['status' => 'Unauthorized user, unable to use this feature of SOCOM'];
+        
+        if (!$is_pom_admin) {
+            $http_status = 403;
+            $response = ['status' => 'No Permissions'];
+            if ($html === false) {
+                $this->output
+                    ->set_status_header($http_status)
+                    ->set_content_type(self::CONTENT_TYPE_JSON)
+                    ->set_output(json_encode($response))
+                    ->_display();
+                exit();
+            } else {
+                show_error($response['status'], $http_status);
+            }
+        }
 
         $map_id = encrypted_string($this->input->post('map_id'), 'decode');
         $description = $this->input->post('description') ?: '';
@@ -394,6 +448,11 @@ class Database_Save_ZBT_Issue_Data_Upload extends CI_Controller
             }
         }
 
+        $user_id = (int)$this->session->userdata['logged_in']['id'];
+
+        $this->SOCOM_Git_Data_model->git_track_data(GitDataType::ADMIN_APPROVAL, $map_id, $user_id);
+
+
         $http_status = 200;
         $response['status'] = 'Submission saved successfully.';
 
@@ -407,6 +466,46 @@ class Database_Save_ZBT_Issue_Data_Upload extends CI_Controller
         } else {
             return [$http_status, $response['status']];
         }
+    } 
+    public function get_metadata_view_status_admin($encoded_id) {
+        $is_pom_admin = $this->SOCOM_Site_User_model->is_user_by_group(2);
+        $response = [];
+
+        if (!$is_pom_admin) {
+            $http_status = 403;
+            $response['status'] = 'No Permissions';
+            $response['success'] = false;
+        } else {
+            $this->user_can_access(false);
+            $id = encrypted_string($encoded_id, 'decode');
+            $data = $this->SOCOM_Database_Upload_Metadata_model->get_metadata_view_status((int)$id);
+
+            if ($data) {
+                foreach ($data as &$row) {
+                    if(!empty($row['USER_ID'])){
+                        $user = $this->SOCOM_Users_model->get_user($row['USER_ID']);
+                        $row['EMAIL'] = $user[$row['USER_ID']] ?? null;
+                    }
+                    if($row['SUBMISSION_STATUS']){
+                        $row['SUBMISSION_STATUS'] = "True";
+                    }
+                    else{
+                        $row['SUBMISSION_STATUS'] = "False";
+                    }
+                }
+                unset($row);
+                $response = $data;
+                $http_status = 200;
+            } else {
+                $http_status = 404;
+                $response['status'] = 'No data found';
+            }
+        }
+
+        $this->output
+            ->set_status_header($http_status)
+            ->set_content_type(self::CONTENT_TYPE_JSON)
+            ->set_output(json_encode($response));
     }
 
 }

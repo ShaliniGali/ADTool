@@ -215,7 +215,7 @@ class  Login_model extends CI_Model
 
     $user_id = $user['id'];
     $login_attempts = $user['login_attempts'];
-    $encrypted_password = $user['password_hash'];
+    $encrypted_password = $user['password'];
     $password_salt = $user['saltiness'];
     if (RHOMBUS_ENABLE_CAC === false) {
       $user['login_layers'][2] = 0;
@@ -251,24 +251,24 @@ class  Login_model extends CI_Model
       $this->dump_user('invalid_password_login_attempt', $dump_data, $user_id);
       $this->dump_user('reset_password', $username);
     }
-    // Verify the attempted login password against the stored hash
-    else if ($this->password_encrypt_decrypt->verify_password($password, $encrypted_password, $password_salt)) {
+    // Encrypt the attempted login password and match it against the password from the users tables
+    else if ($encrypted_password == $this->password_encrypt_decrypt->decrypt($password, $password_salt)) {
 
       $this->encrypted_password_in_user_check($result,$user,$user_id,$username,$password,$login_attempts,$encrypted_password,$password_salt,$login_layers,$account_status,$timestamp,$dump_data);
     } 
     else {
-        // Increment the login attempts by one.
-        $this->update_login_attempts_by_id($user_id);
+      // Increment the login attempts by one.
+      $this->update_login_attempts_by_id($user_id);
 
-        if ($login_attempts >= $this->reset_password_prompt_attempts) {
-            $result['message'] = 'reset_password';
-            $this->dump_user('invalid_password_login_attempt', $dump_data, $user_id);
-            $this->session->set_userdata('reset_password', $username);
-        } else {
-            // Dump failed login attempt
-            $result['message'] = 'failed';
-            $this->dump_user('invalid_password_login_attempt', $dump_data, $user_id);
-        }
+      if ($login_attempts >= $this->reset_password_prompt_attempts) {
+          $result['message'] = 'reset_password';
+          $this->dump_user('invalid_password_login_attempt', $dump_data, $user_id);
+          $this->session->set_userdata('reset_password', $username);
+      } else {
+          // Dump failed login attempt
+          $result['message'] = 'failed';
+          $this->dump_user('invalid_password_login_attempt', $dump_data, $user_id);
+      }
     }
   }
 

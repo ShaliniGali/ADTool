@@ -99,7 +99,7 @@
                 type="button">
                 EOC Summary
             </button>
-            <button id="eoc-historical-pom-tag" onclick="view_onchange(1, 'eoc_historical_pom', '<?= $program; ?>')" hidden
+            <button id="eoc-historical-pom-tag" onclick="view_onchange(1, 'eoc_historical_pom', '<?= (is_array($program) || empty($program)) ? '' : htmlspecialchars($program); ?>')" hidden
                 class="bx--btn bx--btn--primary header-button bx--btn--field"
                 type="button" disabled>
                 EOC Historical POM Data
@@ -125,7 +125,7 @@
     </div>
 <?php endif; ?>
 <script>
-    var currentProgram = '<?= $program; ?>';
+    var currentProgram = '<?= (is_array($program) || empty($program)) ? '' : htmlspecialchars($program); ?>';
 
     //  Wire up both event summary header buttons by reading their data-url + current search
     $('#btn-event-summary').on('click', function(e){

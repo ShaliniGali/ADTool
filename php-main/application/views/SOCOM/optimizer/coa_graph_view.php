@@ -91,11 +91,15 @@
                     let allCoaSeriesDataCopy = JSON.parse(JSON.stringify(allCoaSeriesData[unitIndex])); 
                     tempCoaSeriesData.series = allCoaSeriesDataCopy.series.filter(obj => validGroups.has(obj.name));
                     tempCoaSeriesData.categories = allCoaSeriesDataCopy.categories.filter(cat => validGroups.has(cat));
-                    tempCoaSeriesData.drilldownSeries = allCoaSeriesDataCopy.drilldownSeries.filter(obj => validProgramIds.has(obj.name));
+                    tempCoaSeriesData.drilldownSeries = allCoaSeriesDataCopy.drilldownSeries.filter(obj => validProgramIds.has(
+                        CryptoJS.SHA512(obj.name).toString(CryptoJS.enc.Hex)
+                    ));
                     
                     //only update the drilldown series for the first coa because we are not adding drilldown series of first coa after the chart is created  
                     if (parseInt(unitIndex) === 0 || unitIndex === 0) {
-                        allCoaSeriesChartData.drilldownSeries = allCoaSeriesDataCopy.drilldownSeries.filter(obj => validProgramIds.has(obj.name));
+                        allCoaSeriesChartData.drilldownSeries = allCoaSeriesDataCopy.drilldownSeries.filter(obj => validProgramIds.has(
+                            CryptoJS.SHA512(obj.name).toString(CryptoJS.enc.Hex)
+                        ));
                     }
 
                     // getting the program group => score map
@@ -141,7 +145,9 @@
                 let allCoaSeriesDataCopy = JSON.parse(JSON.stringify(allCoaSeriesData));
                 allCoaSeriesDataCopy.series = allCoaSeriesDataCopy.series.filter(obj => validGroups.has(obj.name));
                 allCoaSeriesDataCopy.categories = allCoaSeriesDataCopy.categories.filter(cat => validGroups.has(cat));
-                allCoaSeriesDataCopy.drilldownSeries = allCoaSeriesDataCopy.drilldownSeries.filter(obj => validProgramIds.has(obj.name));
+                allCoaSeriesDataCopy.drilldownSeries = allCoaSeriesDataCopy.drilldownSeries.filter(obj => validProgramIds.has(
+                    CryptoJS.SHA512(obj.name).toString(CryptoJS.enc.Hex)
+                ));
 
                 let programGroupScores = updateNewScorebyDrilldownSeries(allCoaSeriesDataCopy.drilldownSeries);
                 allCoaSeriesDataCopy.series.forEach((mainSeries) => {
@@ -152,7 +158,7 @@
 
                 createCOAGraph(JSON.parse(JSON.stringify(allCoaSeriesDataCopy)), 1, tranchMax);
             }
-        } else { // wiuth All selection
+        } else { // with All selection
 
             if (tranche_assignment[0]['tranche_assignment']) { // multiple coas
                 

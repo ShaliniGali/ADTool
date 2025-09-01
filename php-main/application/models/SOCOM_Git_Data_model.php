@@ -6,7 +6,16 @@ class SOCOM_Git_Data_model extends CI_Model {
         if ($transaction === true) {
             $this->DBs->SOCOM_UI->trans_start();
         }
-        
+
+        $pom_admin = $this->rbac_users->is_admin();
+        if ($pom_admin === true) {
+            $is_admin = 1;
+        } else {
+            $is_admin = 0;
+        }
+        $this->DBs->SOCOM_UI
+                ->set('IS_ADMIN', $is_admin);
+
         if(isset($user_id)){
             $this->DBs->SOCOM_UI
                 ->set('USER_ID', $user_id);
@@ -49,6 +58,7 @@ enum GitDataType: string {
     case CREATE_DATABASE = 'CREATE_DATABASE';
     case USER_DATA_OPEN = 'USER_DATA_OPEN';
     case USER_DATA_CLOSE = 'USER_DATA_CLOSE';
+    case USER_DATA_SEARCH = 'USER_DATA_SEARCH';
     case USER_DATA_EDIT = 'USER_DATA_EDIT';
     case USER_DATA_HISTORY = 'USER_DATA_HISTORY';
     case USER_DATA_SAVE_START = 'USER_DATA_SAVE_START';

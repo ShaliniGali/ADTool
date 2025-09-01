@@ -6,7 +6,7 @@
 	.overflow-btn-primary {
 		color: #fff !important;
 		background-color: #0f62fe !important;
-		border-color: rgba(0,0,0,0) !important;
+		border-color: rgba(0, 0, 0, 0) !important;
 		border-style: solid !important;
 		border-width: 1px !important;
 	}
@@ -17,11 +17,11 @@
 		line-height: 1.29 !important;
 		letter-spacing: .16px !important;
 		position: relative !important;
-		display: flex !!important;
+		display: flex !important;
 		flex-shrink: 0 !important;
 		align-items: center !important;
 		justify-content: space-between !important;
-		width:unset !important;
+		width: unset !important;
 		height: unset !important;
 		max-width: 20rem !important;
 		min-height: 3rem !important;
@@ -33,10 +33,10 @@
 		border-radius: 0 !important;
 		outline: none !important;
 		cursor: pointer !important;
-		-webkit-transition: background 70ms cubic-bezier(0, 0, 0.38, 0.9),border-color 70ms cubic-bezier(0, 0, 0.38, 0.9),outline 70ms cubic-bezier(0, 0, 0.38, 0.9),-webkit-box-shadow 70ms cubic-bezier(0, 0, 0.38, 0.9) !important;
-		transition: background 70ms cubic-bezier(0, 0, 0.38, 0.9),border-color 70ms cubic-bezier(0, 0, 0.38, 0.9),outline 70ms cubic-bezier(0, 0, 0.38, 0.9),-webkit-box-shadow 70ms cubic-bezier(0, 0, 0.38, 0.9) !important;
-		transition: background 70ms cubic-bezier(0, 0, 0.38, 0.9),box-shadow 70ms cubic-bezier(0, 0, 0.38, 0.9),border-color 70ms cubic-bezier(0, 0, 0.38, 0.9),outline 70ms cubic-bezier(0, 0, 0.38, 0.9) !important;
-		transition: background 70ms cubic-bezier(0, 0, 0.38, 0.9),box-shadow 70ms cubic-bezier(0, 0, 0.38, 0.9),border-color 70ms cubic-bezier(0, 0, 0.38, 0.9),outline 70ms cubic-bezier(0, 0, 0.38, 0.9),-webkit-box-shadow 70ms cubic-bezier(0,0,0.38,0.9) !important;
+		-webkit-transition: background 70ms cubic-bezier(0, 0, 0.38, 0.9), border-color 70ms cubic-bezier(0, 0, 0.38, 0.9), outline 70ms cubic-bezier(0, 0, 0.38, 0.9), -webkit-box-shadow 70ms cubic-bezier(0, 0, 0.38, 0.9) !important;
+		transition: background 70ms cubic-bezier(0, 0, 0.38, 0.9), border-color 70ms cubic-bezier(0, 0, 0.38, 0.9), outline 70ms cubic-bezier(0, 0, 0.38, 0.9), -webkit-box-shadow 70ms cubic-bezier(0, 0, 0.38, 0.9) !important;
+		transition: background 70ms cubic-bezier(0, 0, 0.38, 0.9), box-shadow 70ms cubic-bezier(0, 0, 0.38, 0.9), border-color 70ms cubic-bezier(0, 0, 0.38, 0.9), outline 70ms cubic-bezier(0, 0, 0.38, 0.9) !important;
+		transition: background 70ms cubic-bezier(0, 0, 0.38, 0.9), box-shadow 70ms cubic-bezier(0, 0, 0.38, 0.9), border-color 70ms cubic-bezier(0, 0, 0.38, 0.9), outline 70ms cubic-bezier(0, 0, 0.38, 0.9), -webkit-box-shadow 70ms cubic-bezier(0, 0, 0.38, 0.9) !important;
 	}
 
 	.bx--overflow-menu:hover,
@@ -46,10 +46,10 @@
 </style>
 
 <div data-overflow-menu class="bx--overflow-menu">
-	<button class="bx--overflow-menu__trigger overflow-btn overflow-btn-primary" aria-haspopup="true" aria-expanded="false" id="<?=$id ? $id.'-trigger' : ''?>" aria-controls="list-menu">
-		Set Action 
+	<button class="bx--overflow-menu__trigger overflow-btn overflow-btn-primary" aria-haspopup="true" aria-expanded="false" id="<?= $id ? $id . '-trigger' : '' ?>" aria-controls="list-menu">
+		Set Action
 	</button>
-	<div class="bx--overflow-menu-options" tabindex="-1" role="menu" aria-labelledby="list-menu-trigger" data-floating-menu-direction="bottom" id="<?=$id ?? ''?>">
+	<div class="bx--overflow-menu-options" tabindex="-1" role="menu" aria-labelledby="list-menu-trigger" data-floating-menu-direction="bottom" id="<?= $id ?? '' ?>">
 		<ul class="bx--overflow-menu-options__content">
 			<li class="bx--overflow-menu-options__option">
 				<button class="bx--overflow-menu-options__btn" role="edit" title="An example option that is really long to show what should be done to handle long text" data-floating-menu-primary-focus>

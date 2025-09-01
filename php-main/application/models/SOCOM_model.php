@@ -3043,6 +3043,19 @@ EOT;
         $criteria_name_id = get_criteria_name_id();
         $user_id = (int)$this->session->userdata['logged_in']['id'];
 
+        // Development fallback for missing variables
+        if (ENVIRONMENT === 'development') {
+            if (!isset($this->page_variables['issue']['subapp'])) {
+                $this->page_variables['issue']['subapp'] = 'ISS_SUMMARY';
+            }
+            if (!isset($this->page_variables['issue']['type']['EXTRACT'])) {
+                $this->page_variables['issue']['type']['EXTRACT'] = 'EXTRACT';
+            }
+            if (!isset($this->ISS_YEAR_LIST)) {
+                $this->ISS_YEAR_LIST = ['2024', '2025', '2026', '2027', '2028'];
+            }
+        }
+
         $lookup_program = 'LOOKUP_PROGRAM';
         $even_name = 'EVENT_NAME IS NOT NULL';
         $table = $this->dynamic_year->getTable(

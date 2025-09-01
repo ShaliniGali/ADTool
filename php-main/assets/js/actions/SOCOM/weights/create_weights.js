@@ -179,8 +179,22 @@ function sendWeight() {
         }
 
         data['title'] = $('#text-input-title').val();
-        data['guidance'] = saveForm('guidance');
-        data['pom'] = saveForm('pom');
+        
+        // Get guidance and POM data
+        let guidanceData = saveForm('guidance');
+        let pomData = saveForm('pom');
+        
+        // Add guidance data
+        Object.keys(guidanceData.SESSION).forEach(function(key) {
+            data['guidance[SESSION][' + key + ']'] = guidanceData.SESSION[key];
+        });
+        data['guidance[DESCRIPTION]'] = guidanceData.DESCRIPTION;
+        
+        // Add POM data
+        Object.keys(pomData.SESSION).forEach(function(key) {
+            data['pom[SESSION][' + key + ']'] = pomData.SESSION[key];
+        });
+        data['pom[DESCRIPTION]'] = pomData.DESCRIPTION;
         
         return $.post('/socom/resource_constrained_coa/weights/save', 
             data, 

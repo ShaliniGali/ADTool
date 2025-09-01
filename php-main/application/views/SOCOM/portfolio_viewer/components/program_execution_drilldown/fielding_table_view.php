@@ -138,7 +138,7 @@
             </div>
 
             <div class="fielding-dropdown-container w-100 d-flex justify-content-start">
-                <?php $this->load->view('SOCOM/portfolio_viewer/dropdown_filter_view', [
+                <?php $this->load->view('SOCOM/portfolio_viewer/components/common/dropdown_filter_view', [
                     'options' => $components,
                     'title' => 'Component',
                     'view_type' => 'fielding-component',

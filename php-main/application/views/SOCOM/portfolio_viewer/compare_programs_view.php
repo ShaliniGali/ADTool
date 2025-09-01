@@ -121,7 +121,7 @@
         <div class="mb-3 d-flex flex-rows align-items-center flex-wrap gap-3">
             <?php
             $this->load->view(
-                'SOCOM/portfolio_viewer/dropdown_filter_view',
+                'SOCOM/portfolio_viewer/components/common/dropdown_filter_view',
                 array(
                     'options' => $program_groups,
                     'title' => 'Program Group',

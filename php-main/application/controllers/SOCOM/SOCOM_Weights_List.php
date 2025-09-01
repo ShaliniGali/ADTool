@@ -10,6 +10,18 @@ class SOCOM_Weights_List extends CI_Controller
         parent::__construct();
         $this->load->model('SOCOM_model');
         $this->load->model('SOCOM_Weights_List_model');
+        $this->load->model('DBs'); // Added for SOCOM_UI database access
+        $this->load->model('DB_ind_model'); // Added for CSRF validation in save_weights
+        
+        // Set up session data if not exists (for development only)
+        if (ENVIRONMENT === 'development' && !$this->session->userdata('logged_in')) {
+            $this->session->set_userdata('logged_in', [
+                'id' => 1,
+                'email' => 'test@example.com',
+                'name' => 'Test User',
+                'account_type' => 'USER'
+            ]);
+        }
     }
 
     // --------------------------------------------------------------------

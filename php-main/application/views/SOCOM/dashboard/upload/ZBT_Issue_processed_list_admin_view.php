@@ -59,7 +59,7 @@
                     data: '',
                     orderable: false,
                     render: function (data, type, row) {
-                        if (row && row['IS_FINAL_TABLE_ACTIVE'] === 0) {
+                        if (row && row['HAS_SUBMITTED_ROWS'] === true) {
                             return `
                                 <button class="bx--btn bx--btn--primary bx--btn--sm activate-btn admin-submit-btn" 
                                         data-id="${row['ID']}">
@@ -79,12 +79,12 @@
         }
     }
 
-    $(document).on('click', '#admin-list5 .view-status-btn-5', function () {
+    $('#admin-list5').on('click', '.view-status-btn-5', function () {
         const table = $('#admin-list5').DataTable();
         const row = table.row($(this).closest('tr')).data();
         update_modal_content_zbt_iss_admin(row);
         $('#status_modal_admin > .bx--modal.bx--modal-tall').addClass('is-visible');
     
     });
-     $(document).on('click', '#admin-list5 .activate-btn', handleSaveApproveClick);
+     $('#admin-list5').on('click', '.activate-btn', handleSaveApproveClick);
 </script>

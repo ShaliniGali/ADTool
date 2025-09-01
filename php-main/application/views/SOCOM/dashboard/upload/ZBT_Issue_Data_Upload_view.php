@@ -1,5 +1,7 @@
 <?php 
 $is_pom_admin = $this->SOCOM_Site_User_model->is_user_by_group(2);
+$is_guest = $this->rbac_users->is_guest();
+$is_restricted = $this->rbac_users->is_restricted();
 ?>
 <style>
 .bx--file__selected-file {
@@ -11,16 +13,18 @@ $is_pom_admin = $this->SOCOM_Site_User_model->is_user_by_group(2);
     display: block;
 }
 </style>
-<div data-content-switcher class="bx--content-switcher w-50 mb-5">
-    <button id="upload-tab4" class="bx--content-switcher-btn bx--content-switcher--selected" data-target=".admin--panel--opt-1">Upload</button>
-    <button id="file-list-tab4" class="bx--content-switcher-btn" data-target=".admin--panel--opt-2">File List</button>
-    <button class="bx--content-switcher-btn" data-target=".admin--panel--opt-3">Processed File List</button>
+<div data-content-switcher class="bx--content-switcher <?= $is_pom_admin === true ? 'w-25' :'w-50'?> mb-5">
+    <?php if($is_guest || $is_restricted): ?>
+        <button id="upload-tab4" class="bx--content-switcher-btn bx--content-switcher--selected" data-target=".upload-panel-1">Upload</button>
+        <button id="file-list-tab4" class="bx--content-switcher-btn" data-target=".upload-panel-2">File List</button>
+        <button class="bx--content-switcher-btn" data-target=".upload-panel-3">Processed File List</button>
+    <?php endif; ?>
     <?php if($is_pom_admin): ?>
-    <button class="bx--content-switcher-btn" data-target=".admin--panel--opt-4">Admin Processed File List</button>
+        <button id="admin-list-tab4" class="bx--content-switcher-btn" data-target=".upload-panel-4">Admin Processed File List</button>
     <?php endif; ?>
 </div>
 
-<div class="admin--panel--opt-1">
+<div class="upload-panel-1" hidden>
 
     <form id="upload-form">
 
@@ -123,7 +127,7 @@ $is_pom_admin = $this->SOCOM_Site_User_model->is_user_by_group(2);
     
 </div>
 
-<div class="admin--panel--opt-2" hidden>
+<div class="upload-panel-2" hidden>
     <div class="d-flex">
         <?php
             $this->load->view('templates/carbon/inline_notification_low_contrast_view', [
@@ -152,7 +156,7 @@ $is_pom_admin = $this->SOCOM_Site_User_model->is_user_by_group(2);
     </div>
 </div>
 
-<div class="admin--panel--opt-3" hidden>
+<div class="upload-panel-3" hidden>
     <div class="d-flex">
     <?php
 		$this->load->view('templates/carbon/inline_notification_low_contrast_view', [
@@ -180,7 +184,7 @@ $is_pom_admin = $this->SOCOM_Site_User_model->is_user_by_group(2);
     ?>
 </div>
 
-<div class="admin--panel--opt-4" hidden>
+<div class="upload-panel-4" hidden>
     <div class="d-flex">
     <?php
 		$this->load->view('templates/carbon/inline_notification_low_contrast_view', [

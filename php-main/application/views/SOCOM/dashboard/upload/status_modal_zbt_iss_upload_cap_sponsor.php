@@ -79,6 +79,9 @@
 
 <div id="status-cap-sponsor-action-buttons" class="mt-3 d-flex justify-content-end gap-3 px-4">
 
+        <button class="bx--btn bx--btn--primary ml-3" id="view-guest-table-btn">
+                    View
+        </button>
         <button class="bx--btn bx--btn--primary ml-3" id="edit-guest-table-btn">
                     Edit
         </button>

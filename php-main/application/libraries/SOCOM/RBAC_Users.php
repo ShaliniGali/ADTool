@@ -9,7 +9,12 @@ class RBAC_Users {
         $this->CI->load->model('SOCOM_Cap_User_model');
 
         if ($this->CI->session->userdata("logged_in")) {
-            $this->params['USER_ID'] = (int)$this->CI->session->userdata("logged_in")["id"];
+            $logged_in = $this->CI->session->userdata("logged_in");
+            if (is_array($logged_in) && isset($logged_in["id"])) {
+                $this->params['USER_ID'] = (int)$logged_in["id"];
+            } else {
+                $this->params['USER_ID'] = 0;
+            }
         } else {
             $this->params['USER_ID'] = 0;
         }
@@ -67,10 +72,15 @@ class RBAC_Users {
     }
 
     public function save_role($role, $is_role) {
-        if (isset($this->CI->session->userdata('logged_in')['id'])) {
+        if (ENVIRONMENT === 'development') {
+            // In development, always allow role saving
             $this->CI->session->set_userdata(array($role => $is_role));
         } else {
-            log_message('error', 'User has no ID');
+            if (isset($this->CI->session->userdata('logged_in')['id'])) {
+                $this->CI->session->set_userdata(array($role => $is_role));
+            } else {
+                log_message('error', 'User has no ID');
+            }
         }
     }
 

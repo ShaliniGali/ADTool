@@ -53,7 +53,7 @@
     <div class="card__body">
       <div id="program-execution-drilldown-funding-chart">
         <?php $this->load->view(
-          'SOCOM/portfolio_viewer/line_plot_view.php',
+          'SOCOM/portfolio_viewer/components/common/line_plot_view.php',
           ['type' => 'program-execution-drilldown']
         ); ?>
       </div>
@@ -62,7 +62,7 @@
 
   <div class="dropdown-card">
     <?php $this->load->view(
-      'SOCOM/portfolio_viewer/dropdown_filter_view',
+      'SOCOM/portfolio_viewer/components/common/dropdown_filter_view',
       [
         'options'            => $resource_categories,
         'title'              => 'Resource Category',
