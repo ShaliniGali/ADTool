@@ -288,8 +288,15 @@
 
     const test= 'test';
 
+  $(document).ready(function(){
+    // Check if required libraries are loaded
+    if (typeof $ === 'undefined') {
+        console.error('jQuery is not loaded - breadcrumb functionality may not work');
+        return;
+    }
+    
+    // Show breadcrumb
     $(`#${page}-summary-breadcrumb`).attr("hidden",false);
-
 
     $(".selection-dropdown").select2({
         placeholder: "Select an option",
@@ -309,10 +316,6 @@
     if (selectedReviewStatus.length) $('#review-status').val(selectedReviewStatus).trigger('change');
 
     if (selectedAAC.length)          $('#aac').val(selectedAAC).trigger('change');
-
-
-
-  $(document).ready(function(){
 
 
     //  On load: if there are ?…[] params, restore them into the selects

@@ -125,28 +125,41 @@
     </div>
 <?php endif; ?>
 <script>
-    var currentProgram = '<?= (is_array($program) || empty($program)) ? '' : htmlspecialchars($program); ?>';
+    // Wait for jQuery and Carbon to be loaded
+    $(document).ready(function() {
+        // Check if required libraries are loaded
+        if (typeof $ === 'undefined') {
+            console.error('jQuery is not loaded - breadcrumb functionality may not work');
+            return;
+        }
+        
+        // Check if Carbon Design System is loaded (check for common Carbon objects)
+        if (typeof window.Carbon === 'undefined' && typeof window.carbon === 'undefined' && typeof window.bx === 'undefined') {
+            console.warn('Carbon Design System may not be fully loaded - some styling may not work');
+        }
+        
+        var currentProgram = '<?= (is_array($program) || empty($program)) ? '' : htmlspecialchars($program); ?>';
 
-    //  Wire up both event summary header buttons by reading their data-url + current search
-    $('#btn-event-summary').on('click', function(e){
-        e.preventDefault();
-        const base = $(this).data('url');
-        // window.location.search already has filters
-        window.location.href = base + window.location.search;
+        //  Wire up both event summary header buttons by reading their data-url + current search
+        $('#btn-event-summary').on('click', function(e){
+            e.preventDefault();
+            const base = $(this).data('url');
+            // window.location.search already has filters
+            window.location.href = base + window.location.search;
         });
 
         $('#breadcrumb-event-summary').on('click', function(e){
-        e.preventDefault();
-        const base = $(this).data('base-url');
-        const qs = sessionStorage.getItem('oesFilters') || '';
-        window.location.href = base + qs;
-    
-    });
+            e.preventDefault();
+            const base = $(this).data('base-url');
+            const qs = sessionStorage.getItem('oesFilters') || '';
+            window.location.href = base + qs;
+        });
 
-    if($('html').hasClass('dark')) {
-        $('.theme-button').addClass('bx--btn--primary').removeClass('bx--btn--tertiary');
-    } else {
-        $('.theme-button').addClass('bx--btn--tertiary').removeClass('bx--btn--primary');
-    }       
+        if($('html').hasClass('dark')) {
+            $('.theme-button').addClass('bx--btn--primary').removeClass('bx--btn--tertiary');
+        } else {
+            $('.theme-button').addClass('bx--btn--tertiary').removeClass('bx--btn--primary');
+        }
+    });
 </script>
 

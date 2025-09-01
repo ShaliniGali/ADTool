@@ -12,7 +12,7 @@ require_once(realpath(__DIR__ . '/../helpers/Rhombus_url_helper.php'));
 require_once(realpath(__DIR__ . '/../libraries/AccountStatus.php'));
 
 
-defined('P1_FLAG') || define('P1_FLAG', TRUE);
+defined('P1_FLAG') || define('P1_FLAG', (getenv('SOCOM_P1') == 'TRUE') ? TRUE : FALSE);
 defined('DEPLOYMENT_ENVIRONMENT') || define('DEPLOYMENT_ENVIRONMENT', getenv(GLOBAL_APP_STRUCTURE.'_deployment_environment'));
 defined('RHOMBUS_ENVIRONMENT') || define('RHOMBUS_ENVIRONMENT', getenv('SOCOM_ENVIRONMENT'));
 

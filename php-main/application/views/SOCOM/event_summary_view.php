@@ -474,19 +474,26 @@ $modal_id = null;
     const isAoUser = <?= json_encode($is_ao_user); ?>;
     const isAdUser = <?= json_encode($is_ad_user); ?>;
 
+    $(document).ready(function() {
+        // Check if required libraries are loaded
+        if (typeof $ === 'undefined') {
+            console.error('jQuery is not loaded - breadcrumb functionality may not work');
+            return;
+        }
+        
+        // Show breadcrumb
+        $(`#${page}-summary-breadcrumb`).attr("hidden",false);
 
-    $(`#${page}-summary-breadcrumb`).attr("hidden",false);
-
-
-    $(".selection-dropdown").select2({
-        placeholder: "Select an option",
-        width: '16vw'
-    })
-    .on('change.select2', function() {
-            var dropdown = $(this).siblings('span.select2-container');
-            if (dropdown.height() > 100) {
-                dropdown.css('max-height', '100px');
-                dropdown.css('overflow-y', 'auto');
-            }
-    })
+        $(".selection-dropdown").select2({
+            placeholder: "Select an option",
+            width: '16vw'
+        })
+        .on('change.select2', function() {
+                var dropdown = $(this).siblings('span.select2-container');
+                if (dropdown.height() > 100) {
+                    dropdown.css('max-height', '100px');
+                    dropdown.css('overflow-y', 'auto');
+                }
+        })
+    });
 </script>
