@@ -284,5 +284,60 @@
       <rect id="_Transparent_Rectangle_" data-name="&lt;Transparent Rectangle&gt;" class="cls-1" width="32" height="32"/></svg>'));
       ?>
     </div>
+    
+    <!-- NEW ROW: Advanced Analysis Tools -->
+    <div class="d-flex flex-row">
+      <?php $this->load->view('home_block_view',array('label'=>'COA Optimizer','description'=>'Advanced COA optimization and analysis',
+      'class' => '',
+      'state' => '',
+      'link'=>'/optimizer/view','icon'=> '<svg id="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+      <defs><style>.cls-1{fill:none;}</style></defs><title>settings</title>
+      <path d="M30,8a6.0066,6.0066,0,0,0-6-6H8A6.0066,6.0066,0,0,0,2,8V24a6.0066,6.0066,0,0,0,6,6H24a6.0066,6.0066,0,0,0,6-6ZM8,4H24a4.0045,4.0045,0,0,1,4,4V24a4.0045,4.0045,0,0,1-4,4H8a4.0045,4.0045,0,0,1-4-4V8A4.0045,4.0045,0,0,1,8,4Z"/>
+      <path d="M16,10a6,6,0,1,0,6,6A6.0066,6.0066,0,0,0,16,10Zm0,10a4,4,0,1,1,4-4A4.0045,4.0045,0,0,1,16,20Z"/>
+      <rect id="_Transparent_Rectangle" style="fill:none;" width="32" height="32"/>
+      </svg>'));
+      ?>
+      <?php $this->load->view('home_block_view',array('label'=>'Program Breakdown','description'=>'Detailed program analysis and historical data',
+      'class' => '',
+      'state' => '',
+      'link'=>'/socom/zbt_summary/program_breakdown','icon'=> '<svg id="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+      <defs><style>.cls-1{fill:none;}</style></defs><title>chart--bar</title>
+      <path d="M25,30H7a2.0023,2.0023,0,0,1-2-2V4A2.0023,2.0023,0,0,1,7,2H25a2.0023,2.0023,0,0,1,2,2V28A2.0023,2.0023,0,0,1,25,30ZM7,4V28H25V4Z"/>
+      <path d="M10,26V16H8V26a2.0023,2.0023,0,0,0,2,2V26Z"/>
+      <path d="M16,26V12H14V26a2.0023,2.0023,0,0,0,2,2V26Z"/>
+      <path d="M22,26V8H20V26a2.0023,2.0023,0,0,0,2,2V26Z"/>
+      <rect id="_Transparent_Rectangle" style="fill:none;" width="32" height="32"/>
+      </svg>'));
+      ?>
+    </div>
+    
+    <div class="d-flex flex-row">
+      <?php $this->load->view('home_block_view',array('label'=>'Event Summary','description'=>'Event tracking and funding analysis',
+      'class' => '',
+      'state' => '',
+      'link'=>'/socom/zbt_summary/event_summary','icon'=> '<svg id="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+      <defs><style>.cls-1{fill:none;}</style></defs><title>calendar</title>
+      <path d="M10,12H12V14H10Z"/><path d="M16,12H18V14H16Z"/><path d="M22,12H24V14H22Z"/>
+      <path d="M4,6H6V8H4Z"/><path d="M10,6H12V8H10Z"/><path d="M16,6H18V8H16Z"/><path d="M22,6H24V8H22Z"/>
+      <path d="M28,6H30V8H28Z"/><path d="M4,18H6V20H4Z"/><path d="M10,18H12V20H10Z"/>
+      <path d="M16,18H18V20H16Z"/><path d="M22,18H24V20H22Z"/><path d="M28,18H30V20H28Z"/>
+      <path d="M4,24H6V26H4Z"/><path d="M10,24H12V26H10Z"/><path d="M16,24H18V26H16Z"/>
+      <path d="M22,24H24V26H22Z"/><path d="M28,24H30V26H28Z"/>
+      <path d="M26,2H24V4h2V8H4V4H6V2H4A2.0023,2.0023,0,0,0,2,4V28a2.0023,2.0023,0,0,0,2,2H26a2.0023,2.0023,0,0,0,2-2V4A2.0023,2.0023,0,0,0,26,2ZM26,28H4V10H26Z"/>
+      <rect id="_Transparent_Rectangle" style="fill:none;" width="32" height="32"/>
+      </svg>'));
+      ?>
+      <?php $this->load->view('home_block_view',array('label'=>'Document Upload','description'=>'Upload and manage documents',
+      'class' => '',
+      'state' => '',
+      'link'=>'/dashboard/import_upload','icon'=> '<svg id="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+      <defs><style>.cls-1{fill:none;}</style></defs><title>document--upload</title>
+      <path d="M24,14V10a1,1,0,0,0-.29-.71l-7-7A1,1,0,0,0,16,2H6A2,2,0,0,0,4,4V28a2,2,0,0,0,2,2H22a2,2,0,0,0,2-2V26H22v2H6V4h8v6a2,2,0,0,0,2,2h6v2Z"/>
+      <path d="M24,14H20a2,2,0,0,1-2-2V8.41L21.59,10Z"/>
+      <path d="M16,20l-4-4,1.41-1.41L15,16.17V12h2v4.17l1.59-1.58L20,16Z"/>
+      <rect id="_Transparent_Rectangle" style="fill:none;" width="32" height="32"/>
+      </svg>'));
+      ?>
+    </div>
   </div>
 </div>
