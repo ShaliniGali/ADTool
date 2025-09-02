@@ -23,12 +23,45 @@ curl -s -X POST "http://localhost/login/user_check" -H "Content-Type: applicatio
 # Test pages:
 curl -s "http://localhost/socom/zbt_summary/" | grep -o '<title>[^<]*</title>'
 
+QUICK PASSWORD RESET:
+--------------------
+# If login fails, reset all passwords to "password":
+docker exec rhombus-php php -r "
+\$_SERVER['SERVER_NAME'] = 'localhost';
+\$_SERVER['REQUEST_URI'] = '/';
+\$_SERVER['REQUEST_METHOD'] = 'GET';
+putenv('GLOBAL_APP_STRUCTURE=SOCOM');
+putenv('SOCOM_ENVIRONMENT=siprdevelopment');
+putenv('SOCOM_guardian_users=SOCOM_UI');
+putenv('SOCOM_P1=FALSE');
+putenv('SOCOM_DEV_BYPASS_AUTH=FALSE');
+putenv('SOCOM_DEV_MODE=TRUE');
+putenv('SOCOM_DISABLE_STRICT_SQL=TRUE');
+putenv('UI_USERNAME_PASS_AUTH=TRUE');
+putenv('SOCOM_emails_qa=admin@rhombus.local::::test@rhombus.local');
+putenv('ENCRYPT_DECRYPT_PASSWORD_ITERATIONS=1000');
+putenv('ENCRYPTION_SIZE=64');
+require_once '/var/www/html/index.php';
+\$CI =& get_instance();
+\$CI->load->library('password_encrypt_decrypt');
+\$encrypted_data = \$CI->password_encrypt_decrypt->encrypt('password');
+echo 'HASH=' . \$encrypted_data['password'] . PHP_EOL;
+echo 'SALT=' . \$encrypted_data['salt'] . PHP_EOL;
+"
+
+# Then update passwords (replace HASH and SALT with output above):
+docker exec rhombus-mysql mysql -u root -prhombus_root_password -e "
+USE SOCOM_UI;
+UPDATE users SET password = 'HASH_VALUE_HERE', saltiness = 'SALT_VALUE_HERE' WHERE password IS NULL OR password = '';
+"
+
 COMMON ISSUES & FIXES:
 ---------------------
 ❌ "Unknown database" → CREATE DATABASE SOCOM_UI;
 ❌ "Table doesn't exist" → Run add_missing_dt_tables.sql first
 ❌ "Foreign key constraint fails" → Run scripts in correct order
 ❌ "Login failed" → Check SOCOM_DEV_BYPASS_AUTH=TRUE in docker-compose.yml
+❌ "Invalid credentials" → Reset passwords using QUICK PASSWORD RESET above
 ❌ "No data in tables" → Run seed data scripts
 
 ENVIRONMENT CHECK:

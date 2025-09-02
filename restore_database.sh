@@ -85,6 +85,53 @@ if [[ $LOGIN_RESULT == "success" ]]; then
     echo "✓ Admin login successful"
 else
     echo "⚠ Admin login failed (result: $LOGIN_RESULT)"
+    echo "Step 6.1: Resetting user passwords..."
+    
+    # Generate password hash and salt
+    PASSWORD_DATA=$(docker exec rhombus-php php -r "
+    \$_SERVER['SERVER_NAME'] = 'localhost';
+    \$_SERVER['REQUEST_URI'] = '/';
+    \$_SERVER['REQUEST_METHOD'] = 'GET';
+    putenv('GLOBAL_APP_STRUCTURE=SOCOM');
+    putenv('SOCOM_ENVIRONMENT=siprdevelopment');
+    putenv('SOCOM_guardian_users=SOCOM_UI');
+    putenv('SOCOM_P1=FALSE');
+    putenv('SOCOM_DEV_BYPASS_AUTH=FALSE');
+    putenv('SOCOM_DEV_MODE=TRUE');
+    putenv('SOCOM_DISABLE_STRICT_SQL=TRUE');
+    putenv('UI_USERNAME_PASS_AUTH=TRUE');
+    putenv('SOCOM_emails_qa=admin@rhombus.local::::test@rhombus.local');
+    putenv('ENCRYPT_DECRYPT_PASSWORD_ITERATIONS=1000');
+    putenv('ENCRYPTION_SIZE=64');
+    require_once '/var/www/html/index.php';
+    \$CI =& get_instance();
+    \$CI->load->library('password_encrypt_decrypt');
+    \$encrypted_data = \$CI->password_encrypt_decrypt->encrypt('password');
+    echo \$encrypted_data['password'] . '|' . \$encrypted_data['salt'];
+    ")
+    
+    HASH=$(echo $PASSWORD_DATA | cut -d'|' -f1)
+    SALT=$(echo $PASSWORD_DATA | cut -d'|' -f2)
+    
+    # Update passwords
+    UPDATED_COUNT=$(docker exec rhombus-mysql mysql -u root -prhombus_root_password -e "
+    USE SOCOM_UI;
+    UPDATE users SET password = '$HASH', saltiness = '$SALT' WHERE password IS NULL OR password = '';
+    SELECT ROW_COUNT();
+    " -s -N)
+    
+    echo "✓ Updated passwords for $UPDATED_COUNT users"
+    
+    # Test login again
+    LOGIN_RESULT=$(curl -s -X POST "http://localhost/login/user_check" \
+      -H "Content-Type: application/x-www-form-urlencoded" \
+      -d "username=admin@rhombus.local&password=password&tos_agreement_check=true" | jq -r '.result // "failed"')
+    
+    if [[ $LOGIN_RESULT == "success" ]]; then
+        echo "✓ Admin login successful after password reset"
+    else
+        echo "⚠ Admin login still failed after password reset (result: $LOGIN_RESULT)"
+    fi
 fi
 
 echo "=========================================="

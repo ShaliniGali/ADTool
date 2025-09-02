@@ -72,12 +72,62 @@ curl -s "http://localhost/socom/zbt_summary/" | grep -o '<title>[^<]*</title>'
 curl -s "http://localhost/dashboard/coa_management" | grep -o '<title>[^<]*</title>'
 # Should return: <title>COA Management</title>
 
-STEP 7: TEST USER LOGIN
+STEP 7: RESET USER PASSWORDS (IF NEEDED)
+========================================
+# If users can't login, reset all passwords to "password":
+
+# 7.1: Generate correct password hash and salt
+docker exec rhombus-php php -r "
+\$_SERVER['SERVER_NAME'] = 'localhost';
+\$_SERVER['REQUEST_URI'] = '/';
+\$_SERVER['REQUEST_METHOD'] = 'GET';
+putenv('GLOBAL_APP_STRUCTURE=SOCOM');
+putenv('SOCOM_ENVIRONMENT=siprdevelopment');
+putenv('SOCOM_guardian_users=SOCOM_UI');
+putenv('SOCOM_P1=FALSE');
+putenv('SOCOM_DEV_BYPASS_AUTH=FALSE');
+putenv('SOCOM_DEV_MODE=TRUE');
+putenv('SOCOM_DISABLE_STRICT_SQL=TRUE');
+putenv('UI_USERNAME_PASS_AUTH=TRUE');
+putenv('SOCOM_emails_qa=admin@rhombus.local::::test@rhombus.local');
+putenv('ENCRYPT_DECRYPT_PASSWORD_ITERATIONS=1000');
+putenv('ENCRYPTION_SIZE=64');
+require_once '/var/www/html/index.php';
+\$CI =& get_instance();
+\$CI->load->library('password_encrypt_decrypt');
+\$encrypted_data = \$CI->password_encrypt_decrypt->encrypt('password');
+echo 'HASH=' . \$encrypted_data['password'] . PHP_EOL;
+echo 'SALT=' . \$encrypted_data['salt'] . PHP_EOL;
+"
+
+# 7.2: Update all user passwords (replace HASH and SALT with output from step 7.1)
+docker exec rhombus-mysql mysql -u root -prhombus_root_password -e "
+USE SOCOM_UI;
+UPDATE users SET password = 'HASH_VALUE_HERE', saltiness = 'SALT_VALUE_HERE' WHERE password IS NULL OR password = '';
+SELECT COUNT(*) as updated_users FROM users WHERE password IS NOT NULL AND password != '';
+"
+
+# 7.3: Verify password reset
+docker exec rhombus-mysql mysql -u root -prhombus_root_password -e "
+USE SOCOM_UI;
+SELECT id, username, email, 
+       CASE WHEN password IS NOT NULL AND password != '' THEN 'HAS_PASSWORD' ELSE 'NO_PASSWORD' END as password_status 
+FROM users ORDER BY id;
+"
+
+STEP 8: TEST USER LOGIN
 =======================
 # Test admin login:
 curl -s -X POST "http://localhost/login/user_check" \
   -H "Content-Type: application/x-www-form-urlencoded" \
   -d "username=admin@rhombus.local&password=password&tos_agreement_check=true"
+
+# Should return: {"message":"success","result":"success"}
+
+# Test other users:
+curl -s -X POST "http://localhost/login/user_check" \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -d "username=test@rhombus.local&password=password&tos_agreement_check=true"
 
 # Should return: {"message":"success","result":"success"}
 
@@ -95,6 +145,8 @@ If login fails:
 - Check that users table has password and saltiness columns
 - Verify SOCOM_DEV_BYPASS_AUTH=TRUE in docker-compose.yml
 - Restart PHP container: docker compose up -d --force-recreate rhombus-php
+- Reset all passwords using Step 7 above
+- Check that password hash format is correct (PBKDF2, not bcrypt)
 
 If DataTables show "No data":
 - Check that sample data was inserted correctly
