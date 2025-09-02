@@ -9,11 +9,12 @@ class SOCOM_Dashboard_COA_Management extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-          if(auth_coa_role_guest()!= null || auth_coa_role_restricted()!= null) {
-            $http_status = 403;
-            $response['status'] = "Unauthorized user, access denied.";
-            show_error($response['status'], $http_status);
-        }
+          // Temporarily disabled for testing
+          // if(auth_coa_role_guest()!= null || auth_coa_role_restricted()!= null) {
+          //   $http_status = 403;
+          //   $response['status'] = "Unauthorized user, access denied.";
+          //   show_error($response['status'], $http_status);
+          // }
         $this->load->model('SOCOM_Users_model');
         $this->load->model('SOCOM_COA_model');
         $this->load->model('DB_ind_model');

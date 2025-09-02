@@ -1,0 +1,182 @@
+-- SOCOM Application Seed Data (Using INSERT IGNORE to avoid duplicates)
+-- This file populates tables with sample data for development
+
+USE SOCOM_UI;
+
+-- Populate USR_SITE_USERS table (using INSERT IGNORE)
+INSERT IGNORE INTO USR_SITE_USERS (USER_ID, USER_NAME, USER_EMAIL, USER_ROLE, IS_ACTIVE, CREATED_DATETIME) VALUES
+(1, 'admin', 'admin@rhombus.local', 'ADMIN', 1, NOW()),
+(2, 'testuser', 'test@rhombus.local', 'USER', 1, NOW()),
+(3, 'pom_admin', 'pom@rhombus.local', 'POM_ADMIN', 1, NOW()),
+(4, 'ao_user', 'ao@rhombus.local', 'AO_USER', 1, NOW()),
+(5, 'ad_user', 'ad@rhombus.local', 'AD_USER', 1, NOW());
+
+-- Populate USR_ADMIN_USERS table (using INSERT IGNORE)
+INSERT IGNORE INTO USR_ADMIN_USERS (USER_ID, ADMIN_TYPE, IS_ACTIVE, CREATED_DATETIME) VALUES
+(1, 'SYSTEM_ADMIN', 1, NOW()),
+(3, 'POM_ADMIN', 1, NOW());
+
+-- Populate USR_CAP_USERS table (using INSERT IGNORE)
+INSERT IGNORE INTO USR_CAP_USERS (USER_ID, CAPABILITY_SPONSOR_CODE, IS_ACTIVE, CREATED_DATETIME) VALUES
+(2, 'SORDAC', 1, NOW()),
+(4, 'USSOCOM', 1, NOW()),
+(5, 'NSWC', 1, NOW());
+
+-- Populate USR_AO_AD_USERS table (using INSERT IGNORE)
+INSERT IGNORE INTO USR_AO_AD_USERS (USER_ID, AO_AD_TYPE, IS_ACTIVE, CREATED_DATETIME) VALUES
+(4, 'AO', 1, NOW()),
+(5, 'AD', 1, NOW());
+
+-- Populate USR_LOOKUP_USER_CRITERIA_NAME table (using INSERT IGNORE)
+INSERT IGNORE INTO USR_LOOKUP_USER_CRITERIA_NAME (USER_ID, CRITERIA_NAME, CRITERIA_DESCRIPTION, IS_ACTIVE, CREATED_DATETIME) VALUES
+(1, 'FY2024_Criteria', 'Fiscal Year 2024 Criteria', 1, NOW()),
+(1, 'FY2025_Criteria', 'Fiscal Year 2025 Criteria', 1, NOW()),
+(2, 'Test_Criteria', 'Test Criteria Set', 1, NOW());
+
+-- Populate USR_LOOKUP_USER_CRITERIA_TERMS table (using INSERT IGNORE)
+INSERT IGNORE INTO USR_LOOKUP_USER_CRITERIA_TERMS (CRITERIA_NAME_ID, TERM_NAME, TERM_VALUE, IS_ACTIVE, CREATED_DATETIME) VALUES
+(1, 'FISCAL_YEAR', '2024', 1, NOW()),
+(1, 'CYCLE_TYPE', 'POM', 1, NOW()),
+(2, 'FISCAL_YEAR', '2025', 1, NOW()),
+(2, 'CYCLE_TYPE', 'POM', 1, NOW()),
+(3, 'FISCAL_YEAR', '2024', 1, NOW()),
+(3, 'CYCLE_TYPE', 'TEST', 1, NOW());
+
+-- Populate USR_OPTION_SCORES table (using INSERT IGNORE)
+INSERT IGNORE INTO USR_OPTION_SCORES (USER_ID, OPTION_NAME, SCORE_VALUE, SCORE_TYPE, IS_ACTIVE, CREATED_DATETIME) VALUES
+(1, 'Option_A', 85.5, 'PERCENTAGE', 1, NOW()),
+(1, 'Option_B', 92.3, 'PERCENTAGE', 1, NOW()),
+(2, 'Option_C', 78.9, 'PERCENTAGE', 1, NOW()),
+(3, 'Option_D', 88.2, 'PERCENTAGE', 1, NOW());
+
+-- Populate USR_ZBT_AD_SAVES table (using INSERT IGNORE)
+INSERT IGNORE INTO USR_ZBT_AD_SAVES (USER_ID, ZBT_DATA, SAVE_NAME, IS_ACTIVE, CREATED_DATETIME) VALUES
+(5, '{"fiscal_year": "2024", "data": "sample_zbt_data"}', 'FY2024_ZBT_Save', 1, NOW()),
+(5, '{"fiscal_year": "2025", "data": "sample_zbt_data_2"}', 'FY2025_ZBT_Save', 1, NOW());
+
+-- Populate USR_ZBT_AO_SAVES table (using INSERT IGNORE)
+INSERT IGNORE INTO USR_ZBT_AO_SAVES (USER_ID, ZBT_DATA, SAVE_NAME, IS_ACTIVE, CREATED_DATETIME) VALUES
+(4, '{"fiscal_year": "2024", "data": "sample_ao_data"}', 'FY2024_AO_Save', 1, NOW()),
+(4, '{"fiscal_year": "2025", "data": "sample_ao_data_2"}', 'FY2025_AO_Save', 1, NOW());
+
+-- Populate USR_ISSUE_AD_SAVES table (using INSERT IGNORE)
+INSERT IGNORE INTO USR_ISSUE_AD_SAVES (USER_ID, ISSUE_DATA, SAVE_NAME, IS_ACTIVE, CREATED_DATETIME) VALUES
+(5, '{"fiscal_year": "2024", "data": "sample_issue_data"}', 'FY2024_Issue_Save', 1, NOW()),
+(5, '{"fiscal_year": "2025", "data": "sample_issue_data_2"}', 'FY2025_Issue_Save', 1, NOW());
+
+-- Populate USR_ISSUE_AO_SAVES table (using INSERT IGNORE)
+INSERT IGNORE INTO USR_ISSUE_AO_SAVES (USER_ID, ISSUE_DATA, SAVE_NAME, IS_ACTIVE, CREATED_DATETIME) VALUES
+(4, '{"fiscal_year": "2024", "data": "sample_ao_issue_data"}', 'FY2024_AO_Issue_Save', 1, NOW()),
+(4, '{"fiscal_year": "2025", "data": "sample_ao_issue_data_2"}', 'FY2025_AO_Issue_Save', 1, NOW());
+
+-- Populate USR_ISSUE_AD_FINAL_SAVES table (using INSERT IGNORE)
+INSERT IGNORE INTO USR_ISSUE_AD_FINAL_SAVES (USER_ID, ISSUE_DATA, SAVE_NAME, IS_ACTIVE, CREATED_DATETIME) VALUES
+(5, '{"fiscal_year": "2024", "data": "final_issue_data"}', 'FY2024_Final_Issue_Save', 1, NOW()),
+(5, '{"fiscal_year": "2025", "data": "final_issue_data_2"}', 'FY2025_Final_Issue_Save', 1, NOW());
+
+-- Populate USR_LOOKUP_CYCLES_HISTORY table (using INSERT IGNORE)
+INSERT IGNORE INTO USR_LOOKUP_CYCLES_HISTORY (CYCLE_ID, CYCLE_NAME, CYCLE_YEAR, ACTION_TYPE, USER_ID, CREATED_DATETIME) VALUES
+(1, 'FY2024 SOCOM Cycle', 2024, 'CREATED', 1, NOW()),
+(2, 'FY2025 SOCOM Cycle', 2025, 'CREATED', 1, NOW()),
+(1, 'FY2024 SOCOM Cycle', 2024, 'ACTIVATED', 1, NOW());
+
+-- Populate USR_LOOKUP_POM_POSITION_HISTORY table (using INSERT IGNORE)
+INSERT IGNORE INTO USR_LOOKUP_POM_POSITION_HISTORY (POM_POSITION_ID, POSITION_NAME, ACTION_TYPE, USER_ID, CREATED_DATETIME) VALUES
+(1, 'POM_Position_1', 'CREATED', 1, NOW()),
+(2, 'POM_Position_1', 'CREATED', 1, NOW()),
+(1, 'POM_Position_1', 'UPDATED', 3, NOW());
+
+-- Populate USR_DT_LOOKUP_TABLE_METADATA table (using INSERT IGNORE)
+INSERT IGNORE INTO USR_DT_LOOKUP_TABLE_METADATA (TABLE_NAME, COLUMN_NAME, DATA_TYPE, IS_REQUIRED, DEFAULT_VALUE, CREATED_DATETIME) VALUES
+('LOOKUP_SPONSOR', 'SPONSOR_CODE', 'VARCHAR(10)', 1, NULL, NOW()),
+('LOOKUP_SPONSOR', 'SPONSOR_NAME', 'VARCHAR(100)', 1, NULL, NOW()),
+('LOOKUP_ASSESSMENT_AREA', 'AREA_CODE', 'VARCHAR(10)', 1, NULL, NOW()),
+('LOOKUP_ASSESSMENT_AREA', 'AREA_NAME', 'VARCHAR(100)', 1, NULL, NOW()),
+('LOOKUP_PROGRAM', 'PROGRAM_CODE', 'VARCHAR(10)', 1, NULL, NOW()),
+('LOOKUP_PROGRAM', 'PROGRAM_NAME', 'VARCHAR(100)', 1, NULL, NOW());
+
+-- Populate USR_DT_DIRTY_TABLE_EDIT_JOBS table (using INSERT IGNORE)
+INSERT IGNORE INTO USR_DT_DIRTY_TABLE_EDIT_JOBS (TABLE_NAME, JOB_TYPE, STATUS, USER_ID, CREATED_DATETIME) VALUES
+('LOOKUP_SPONSOR', 'UPDATE', 'PENDING', 1, NOW()),
+('LOOKUP_ASSESSMENT_AREA', 'INSERT', 'COMPLETED', 1, NOW()),
+('LOOKUP_PROGRAM', 'DELETE', 'FAILED', 1, NOW());
+
+-- Populate POM table (using INSERT IGNORE)
+INSERT IGNORE INTO POM (POM_ID, POM_YEAR, POM_NAME, IS_ACTIVE, CREATED_DATETIME) VALUES
+(1, 2024, 'FY2024 POM', 1, NOW()),
+(2, 2025, 'FY2025 POM', 1, NOW()),
+(3, 2026, 'FY2026 POM', 0, NOW());
+
+-- Populate POM_SUMMARY_2025 table (using the actual structure)
+INSERT IGNORE INTO POM_SUMMARY_2025 (CAPABILITY_SPONSOR_CODE, EVENT_NAME, DELTA_AMT, FISCAL_YEAR, PROGRAM_NAME, RESOURCE_CATEGORY_CODE, EXECUTION_MANAGER_CODE, PROGRAM_CODE, EOC_CODE, OSD_PE_CODE, APPROVAL_STATUS) VALUES
+('SORDAC', 'POM Summary Event 1', 5000000.00, 2025, 'POM Summary Program 1', 'RESEARCH_DEV', 'EM001', 'PROG001', 'EOC001', 'OSD001', 'PENDING'),
+('USSOCOM', 'POM Summary Event 2', 7500000.00, 2025, 'POM Summary Program 2', 'ACQUISITION', 'EM002', 'PROG002', 'EOC002', 'OSD002', 'PENDING');
+
+-- Populate RESOURCE_CONSTRAINED_COA_2025 table (using the actual structure)
+INSERT IGNORE INTO RESOURCE_CONSTRAINED_COA_2025 (CAPABILITY_SPONSOR_CODE, EVENT_NAME, DELTA_AMT, FISCAL_YEAR, PROGRAM_NAME, RESOURCE_CATEGORY_CODE, EXECUTION_MANAGER_CODE, PROGRAM_CODE, EOC_CODE, OSD_PE_CODE, APPROVAL_STATUS) VALUES
+('SORDAC', 'RC COA Event 1', 3000000.00, 2025, 'RC COA Program 1', 'RESEARCH_DEV', 'EM001', 'PROG001', 'EOC001', 'OSD001', 'PENDING'),
+('USSOCOM', 'RC COA Event 2', 4500000.00, 2025, 'RC COA Program 2', 'ACQUISITION', 'EM002', 'PROG002', 'EOC002', 'OSD002', 'PENDING');
+
+-- Populate ZBT table (using INSERT IGNORE)
+INSERT IGNORE INTO ZBT (ZBT_ID, ZBT_NAME, FISCAL_YEAR, ZBT_DATA, CREATED_DATETIME) VALUES
+(1, 'ZBT_2024_001', 2024, '{"zbt_type": "ACQUISITION", "amount": 25000000}', NOW()),
+(2, 'ZBT_2024_002', 2024, '{"zbt_type": "MAINTENANCE", "amount": 35000000}', NOW()),
+(3, 'ZBT_2025_001', 2025, '{"zbt_type": "ACQUISITION", "amount": 30000000}', NOW());
+
+-- Populate ISS table (using INSERT IGNORE)
+INSERT IGNORE INTO ISS (ISS_ID, ISS_NAME, FISCAL_YEAR, ISS_DATA, CREATED_DATETIME) VALUES
+(1, 'ISS_2024_001', 2024, '{"iss_type": "CAPABILITY", "amount": 40000000}', NOW()),
+(2, 'ISS_2024_002', 2024, '{"iss_type": "TECHNOLOGY", "amount": 60000000}', NOW()),
+(3, 'ISS_2025_001', 2025, '{"iss_type": "CAPABILITY", "amount": 45000000}', NOW());
+
+-- Populate DT_AMS_FEM table (using INSERT IGNORE)
+INSERT IGNORE INTO DT_AMS_FEM (AMS_ID, AMS_NAME, FISCAL_YEAR, AMS_DATA, CREATED_DATETIME) VALUES
+(1, 'AMS_2024_001', 2024, '{"ams_type": "FEM", "amount": 15000000}', NOW()),
+(2, 'AMS_2024_002', 2024, '{"ams_type": "FEM", "amount": 20000000}', NOW()),
+(3, 'AMS_2025_001', 2025, '{"ams_type": "FEM", "amount": 18000000}', NOW());
+
+-- Populate LOOKUP_JCA table (using INSERT IGNORE)
+INSERT IGNORE INTO LOOKUP_JCA (JCA_ID, JCA_CODE, JCA_NAME, IS_ACTIVE, CREATED_DATETIME) VALUES
+(1, 'JCA001', 'Joint Capability Area 1', 1, NOW()),
+(2, 'JCA002', 'Joint Capability Area 2', 1, NOW()),
+(3, 'JCA003', 'Joint Capability Area 3', 1, NOW()),
+(4, 'JCA004', 'Joint Capability Area 4', 1, NOW());
+
+-- Populate LOOKUP_PROGRAM_DETAIL table (using INSERT IGNORE)
+INSERT IGNORE INTO LOOKUP_PROGRAM_DETAIL (PROGRAM_ID, PROGRAM_CODE, PROGRAM_NAME, DETAIL_DESCRIPTION, IS_ACTIVE, CREATED_DATETIME) VALUES
+(1, 'PROG001', 'Program Alpha', 'Detailed description for Program Alpha', 1, NOW()),
+(2, 'PROG002', 'Program Beta', 'Detailed description for Program Beta', 1, NOW()),
+(3, 'PROG003', 'Program Gamma', 'Detailed description for Program Gamma', 1, NOW()),
+(4, 'PROG004', 'Program Delta', 'Detailed description for Program Delta', 1, NOW());
+
+-- Populate USR_LOOKUP_USER_SHARED_COA table (using INSERT IGNORE)
+INSERT IGNORE INTO USR_LOOKUP_USER_SHARED_COA (ORIGINAL_USER_ID, NEW_USER_ID, ORIGINAL_COA_ID, NEW_COA_ID, IS_REVOKED, CREATED_DATETIME) VALUES
+(1, 2, 1, 2, 0, NOW()),
+(1, 3, 1, 3, 0, NOW()),
+(2, 4, 2, 4, 0, NOW());
+
+-- Populate processing_logs table (using INSERT IGNORE)
+INSERT IGNORE INTO processing_logs (upload_id, log_level, message, created_at) VALUES
+(1, 'INFO', 'File upload started', NOW()),
+(1, 'INFO', 'File processing completed successfully', NOW()),
+(2, 'WARNING', 'File validation warning', NOW()),
+(3, 'ERROR', 'File processing failed', NOW());
+
+-- Show record counts for verification
+SELECT 'USR_SITE_USERS' as table_name, COUNT(*) as record_count FROM USR_SITE_USERS
+UNION ALL
+SELECT 'USR_ADMIN_USERS' as table_name, COUNT(*) as record_count FROM USR_ADMIN_USERS
+UNION ALL
+SELECT 'USR_CAP_USERS' as table_name, COUNT(*) as record_count FROM USR_CAP_USERS
+UNION ALL
+SELECT 'USR_AO_AD_USERS' as table_name, COUNT(*) as record_count FROM USR_AO_AD_USERS
+UNION ALL
+SELECT 'LOOKUP_PROGRAM' as table_name, COUNT(*) as record_count FROM LOOKUP_PROGRAM
+UNION ALL
+SELECT 'RESOURCE_CONSTRAINED_COA_2024' as table_name, COUNT(*) as record_count FROM RESOURCE_CONSTRAINED_COA_2024
+UNION ALL
+SELECT 'RESOURCE_CONSTRAINED_COA_2025' as table_name, COUNT(*) as record_count FROM RESOURCE_CONSTRAINED_COA_2025
+UNION ALL
+SELECT 'USR_DT_UPLOADS' as table_name, COUNT(*) as record_count FROM USR_DT_UPLOADS;
+
+

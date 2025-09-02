@@ -24,8 +24,10 @@ function isStrongPwd(password) {
 window._rb.disable_paste = disable_paste;
 function disable_paste(id) {
     let myInput = document.getElementById(id);
-    myInput.onpaste = function (e) {
-        e.preventDefault();
+    if (myInput) {
+        myInput.onpaste = function (e) {
+            e.preventDefault();
+        }
     }
 }
 

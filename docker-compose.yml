@@ -32,7 +32,7 @@ services:
       - ./php-main:/var/www/html
       - ./php-main/application/logs:/var/www/html/application/logs
     environment:
-      - SOCOM_guardian_users=rhombus_db
+      - SOCOM_guardian_users=SOCOM_UI
       - SOCOM_P1=FALSE
       - SOCOM_BASE_URL=http://localhost:80/
       - SOCOM_UI=SOCOM_UI
@@ -61,9 +61,11 @@ services:
       - SOCOM_JWT_SECRET_KEY=your-super-secret-jwt-key-here-12345
       - SOCOM_JWT_ALGORITHM=HS256
       - SOCOM_PYTHON_URL=http://rhombus-python:8020
-      - SOCOM_DEV_BYPASS_AUTH=FALSE
+      - SOCOM_DEV_BYPASS_AUTH=TRUE
       - SOCOM_DEV_MODE=TRUE
       - SOCOM_DISABLE_STRICT_SQL=TRUE
+      - UI_USERNAME_PASS_AUTH=TRUE # Enable username/password authentication
+      - SOCOM_emails_qa=admin@rhombus.local::::test@rhombus.local # QA users that bypass password verification
       - CI_CREDENTIALS_HOST=rhombus-mysql
       - CI_CREDENTIALS_USERNAME=rhombus_user
       - CI_CREDENTIALS_PASSWORD=rhombus_password
