@@ -1,0 +1,51 @@
+QUICK DATABASE RESTORE REFERENCE
+================================
+
+EMERGENCY RESTORE (Database completely lost):
+---------------------------------------------
+1. ./restore_database.sh
+   (Automated script - run this first!)
+
+MANUAL RESTORE (Step by step):
+------------------------------
+1. docker exec rhombus-mysql mysql -u root -prhombus_root_password < add_missing_dt_tables.sql
+2. docker exec rhombus-mysql mysql -u root -prhombus_root_password < complete_database_backup_corrected.sql
+3. docker exec rhombus-mysql mysql -u root -prhombus_root_password < final_seed_data_from_sql_folder.sql
+
+QUICK VERIFICATION:
+------------------
+# Check users exist:
+docker exec rhombus-mysql mysql -u root -prhombus_root_password -e "USE SOCOM_UI; SELECT COUNT(*) FROM users;"
+
+# Test login:
+curl -s -X POST "http://localhost/login/user_check" -H "Content-Type: application/x-www-form-urlencoded" -d "username=admin@rhombus.local&password=password&tos_agreement_check=true"
+
+# Test pages:
+curl -s "http://localhost/socom/zbt_summary/" | grep -o '<title>[^<]*</title>'
+
+COMMON ISSUES & FIXES:
+---------------------
+❌ "Unknown database" → CREATE DATABASE SOCOM_UI;
+❌ "Table doesn't exist" → Run add_missing_dt_tables.sql first
+❌ "Foreign key constraint fails" → Run scripts in correct order
+❌ "Login failed" → Check SOCOM_DEV_BYPASS_AUTH=TRUE in docker-compose.yml
+❌ "No data in tables" → Run seed data scripts
+
+ENVIRONMENT CHECK:
+-----------------
+docker-compose.yml should have:
+- SOCOM_DEV_BYPASS_AUTH=TRUE
+- SOCOM_guardian_users=SOCOM_UI
+- UI_USERNAME_PASS_AUTH=TRUE
+
+RESTART CONTAINERS IF NEEDED:
+----------------------------
+docker compose up -d --force-recreate rhombus-php
+
+BACKUP FILES:
+-------------
+- complete_database_backup_corrected.sql (MAIN BACKUP)
+- add_missing_dt_tables.sql (Schema fixes)
+- final_seed_data_from_sql_folder.sql (Sample data)
+
+For detailed instructions, see: DATABASE_RESTORATION_GUIDE.txt

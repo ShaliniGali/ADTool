@@ -1,0 +1,130 @@
+SOCOM DATABASE RESTORATION GUIDE
+=====================================
+
+This guide provides step-by-step instructions to restore the SOCOM database
+if it gets lost or corrupted. Follow these steps in order.
+
+PREREQUISITES
+=============
+- Docker containers running (rhombus-mysql, rhombus-php, rhombus-nginx)
+- Access to the project directory
+- MySQL root password: rhombus_root_password
+
+STEP 1: VERIFY DOCKER CONTAINERS ARE RUNNING
+============================================
+docker ps
+# Should show: rhombus-mysql, rhombus-php, rhombus-nginx containers running
+
+STEP 2: ACCESS MYSQL CONTAINER
+==============================
+docker exec -it rhombus-mysql mysql -u root -prhombus_root_password
+
+STEP 3: CREATE DATABASES
+========================
+# Run these commands in MySQL:
+CREATE DATABASE IF NOT EXISTS SOCOM_UI;
+CREATE DATABASE IF NOT EXISTS rhombus_db;
+SHOW DATABASES;
+# Should see: SOCOM_UI, rhombus_db, information_schema, mysql, performance_schema, sys
+
+STEP 4: EXIT MYSQL AND RUN RESTORATION SCRIPTS
+==============================================
+# Exit MySQL (type: exit)
+# Then run these scripts in order:
+
+# 4.1: Create missing database tables and columns
+docker exec rhombus-mysql mysql -u root -prhombus_root_password < add_missing_dt_tables.sql
+
+# 4.2: Add missing lookup tables
+docker exec rhombus-mysql mysql -u root -prhombus_root_password < add_missing_lookup_pom_position_decrement.sql
+docker exec rhombus-mysql mysql -u root -prhombus_root_password < add_missing_pom_position_table.sql
+
+# 4.3: Restore complete database backup
+docker exec rhombus-mysql mysql -u root -prhombus_root_password < complete_database_backup_corrected.sql
+
+# 4.4: Add seed data
+docker exec rhombus-mysql mysql -u root -prhombus_root_password < final_seed_data_from_sql_folder.sql
+docker exec rhombus-mysql mysql -u root -prhombus_root_password < seed_data_insert_ignore.sql
+
+# 4.5: Rename ID columns (if needed)
+docker exec rhombus-mysql mysql -u root -prhombus_root_password < rename_all_id_columns.sql
+
+STEP 5: VERIFY DATABASE RESTORATION
+===================================
+docker exec rhombus-mysql mysql -u root -prhombus_root_password -e "
+USE SOCOM_UI;
+SHOW TABLES;
+SELECT COUNT(*) as user_count FROM users;
+SELECT email FROM users LIMIT 5;
+"
+
+# Should show:
+# - Multiple tables including: users, users_keys, users_dump
+# - 12 users in the users table
+# - Sample emails: admin@rhombus.local, test@rhombus.local, etc.
+
+STEP 6: VERIFY APPLICATION ACCESS
+=================================
+# Test that the application is accessible:
+curl -s "http://localhost/socom/zbt_summary/" | grep -o '<title>[^<]*</title>'
+# Should return: <title>ZBT Summary</title>
+
+curl -s "http://localhost/dashboard/coa_management" | grep -o '<title>[^<]*</title>'
+# Should return: <title>COA Management</title>
+
+STEP 7: TEST USER LOGIN
+=======================
+# Test admin login:
+curl -s -X POST "http://localhost/login/user_check" \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -d "username=admin@rhombus.local&password=password&tos_agreement_check=true"
+
+# Should return: {"message":"success","result":"success"}
+
+TROUBLESHOOTING
+===============
+
+If Step 4.1 fails with "Unknown database":
+- Make sure SOCOM_UI database exists: CREATE DATABASE SOCOM_UI;
+
+If Step 4.3 fails with foreign key errors:
+- Run the scripts in this exact order
+- Some scripts depend on previous ones
+
+If login fails:
+- Check that users table has password and saltiness columns
+- Verify SOCOM_DEV_BYPASS_AUTH=TRUE in docker-compose.yml
+- Restart PHP container: docker compose up -d --force-recreate rhombus-php
+
+If DataTables show "No data":
+- Check that sample data was inserted correctly
+- Verify foreign key relationships are intact
+
+ENVIRONMENT VARIABLES TO VERIFY
+===============================
+Check docker-compose.yml has these settings:
+- SOCOM_DEV_BYPASS_AUTH=TRUE
+- SOCOM_guardian_users=SOCOM_UI
+- UI_USERNAME_PASS_AUTH=TRUE
+- SOCOM_emails_qa=admin@rhombus.local::::test@rhombus.local
+
+FINAL VERIFICATION CHECKLIST
+============================
+□ All Docker containers running
+□ SOCOM_UI database exists with 12 users
+□ All main sections accessible (ZBT, Issues, COA Management, Import)
+□ Admin login works (admin@rhombus.local / password)
+□ DataTables load data without errors
+□ No JavaScript console errors
+
+If all items are checked, the database restoration is complete!
+
+BACKUP FILES AVAILABLE
+======================
+- complete_database_backup_corrected.sql (Main backup)
+- socom_database_backup_*.sql (Individual backups)
+- rhombus_db_backup_*.sql (Rhombus database backup)
+- socom_ui_backup_*.sql (SOCOM_UI specific backup)
+
+For questions or issues, refer to the git commit: 956b1df
+"Fix SOCOM application authentication, authorization, and database issues"
