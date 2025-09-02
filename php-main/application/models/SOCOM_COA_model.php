@@ -987,7 +987,7 @@ class  SOCOM_COA_model extends CI_Model {
             ->select('user_saved.ID')
             ->select('user_saved.SAVED_COA_ID')
             ->select('user_saved.CRITERIA_NAME_ID')
-            ->select('CASE WHEN `STATE` IS NOT NULL THEN CONCAT(user_saved.COA_TITLE, "*") ELSE COA_TITLE END AS COA_TITLE')
+            ->select('CASE WHEN `STATE` IS NOT NULL THEN CONCAT(user_saved.COA_TITLE, "*") ELSE user_saved.COA_TITLE END AS COA_TITLE')
             ->select('user_saved.COA_DESCRIPTION')
             ->select('user_saved.SAVED_COA_ID')
             ->select('user_saved.CREATED_DATETIME')

@@ -4,15 +4,15 @@ let load_program_table = function() {
         stateSave: true,
         columnDefs: [{
                 targets: 0,
-                data: 'col_0',
-                name: "Event Name",
+                data: 'PROGRAM_CODE',
+                name: "Program",
                 defaultContent: '',
                 searchable: true
             },
             {
                 targets: 1,
-                data: 'col_1',
-                name: "Program",
+                data: 'CAPABILITY_SPONSOR_CODE',
+                name: "Capability Sponsor",
                 defaultContent: '',
                 searchable: true
             },
@@ -26,73 +26,120 @@ let load_program_table = function() {
             },
             {
                 targets: 3,
-                data: 'col_2',
+                data: 'FY',
                 name: "2026",
                 defaultContent: '',
-                searchable: true
+                searchable: true,
+                render: function(data) {
+                    if (data && typeof data === 'string') {
+                        try {
+                            const fyData = JSON.parse(data);
+                            return fyData['2026'] || '';
+                        } catch (e) {
+                            return '';
+                        }
+                    }
+                    return '';
+                }
             },
             {
                 targets: 4,
-                data: 'col_3',
+                data: 'FY',
                 name: "2027",
                 defaultContent: '',
-                searchable: true
+                searchable: true,
+                render: function(data) {
+                    if (data && typeof data === 'string') {
+                        try {
+                            const fyData = JSON.parse(data);
+                            return fyData['2027'] || '';
+                        } catch (e) {
+                            return '';
+                        }
+                    }
+                    return '';
+                }
             },
             {
                 targets: 5,
-                data: 'col_4',
+                data: 'FY',
                 name: "2028",
                 defaultContent: '',
-                searchable: true
+                searchable: true,
+                render: function(data) {
+                    if (data && typeof data === 'string') {
+                        try {
+                            const fyData = JSON.parse(data);
+                            return fyData['2028'] || '';
+                        } catch (e) {
+                            return '';
+                        }
+                    }
+                    return '';
+                }
             },
             {
                 targets: 6,
-                data: 'col_5',
+                data: 'FY',
                 name: "2029",
                 defaultContent: '',
-                searchable: true
+                searchable: true,
+                render: function(data) {
+                    if (data && typeof data === 'string') {
+                        try {
+                            const fyData = JSON.parse(data);
+                            return fyData['2029'] || '';
+                        } catch (e) {
+                            return '';
+                        }
+                    }
+                    return '';
+                }
             },
             {
                 targets: 7,
-                data: 'col_6',
+                data: 'FY',
                 name: "2030",
                 defaultContent: '',
-                searchable: true
+                searchable: true,
+                render: function(data) {
+                    if (data && typeof data === 'string') {
+                        try {
+                            const fyData = JSON.parse(data);
+                            return fyData['2030'] || '';
+                        } catch (e) {
+                            return '';
+                        }
+                    }
+                    return '';
+                }
             },
             {
                 targets: 8,
-                data: 'col_7',
-                name: "",
+                data: 'PROGRAM_GROUP',
+                name: "Program Group",
                 defaultContent: '',
                 visible: true,
                 searchable: true
             },
             {
                 targets: 9,
-                data: 'col_8',
-                name: "GUIDANCE",
-                defaultContent: '0',
-                visible: true,
-                searchable: false
-            },
-            {
-                targets: 10,
-                data: 'col_9',
+                data: 'POM_SPONSOR_CODE',
                 name: "POM",
                 defaultContent: '0',
                 visible: true,
                 searchable: false
             },
             {
-                targets: 11,
-                data: 'col_10',
-                name: "",
+                targets: 10,
+                data: 'ASSESSMENT_AREA_CODE',
+                name: "Assessment Area",
                 defaultContent: '',
                 visible: true,
                 searchable: false
             },
             {
-                targets: 12,
+                targets: 11,
                 data: 'storm_id',
                 name: "StoRM ID",
                 defaultContent: '0',
@@ -100,12 +147,21 @@ let load_program_table = function() {
                 searchable: false
             },
             {
-                targets: 13,
+                targets: 12,
                 data: 'storm',
                 name: "StoRM Score",
                 defaultContent: '0',
                 visible: true,
                 searchable: false
+            },
+            {
+                targets: 13,
+                data: null,
+                name: "Weights: POM",
+                defaultContent: '',
+                visible: true,
+                searchable: false,
+                orderable: false
             },
         ],
         ajax: {
@@ -145,21 +201,12 @@ let load_program_table = function() {
                         c++;
                     }
 
-                    let programCol = "col_8";
-                    if ($('input[name="storm_weighted_based"]:checked').val() === '1') {
-                        programCol = "col_7";
-                    }
+                    // Store PROGRAM_ID for use in rowCallback
+                    json.data[i]['PROGRAM_ID_FOR_DISPLAY'] = String(json.data[i]['PROGRAM_ID']);
 
-                    json.data[i][programCol] = String(json.data[i]['PROGRAM_ID']);
-
-                    if ($('input[name="use_iss_extract"]:checked').val() === 'true') {
-                        json.data[i]['col_0'] = json.data[i]['EVENT_NAME'];
-                        json.data[i]['col_1'] = json.data[i]['PROGRAM_CODE'];
-                    } else {
-                        json.data[i]['col_0'] = json.data[i]['PROGRAM_CODE'];
-                        json.data[i]['col_1'] = json.data[i]['CAPABILITY_SPONSOR_CODE'];
-                    }
-
+                    // Keep the original field names for the new column structure
+                    // The DataTable column definitions now use EVENT_NAME, PROGRAM_CODE, etc. directly
+                    
                     json.data[i]['SCORE_ID'] = scores?.[json.data[i]['PROGRAM_ID']]?.['SCORE_ID'] ?? JSON.stringify('');
                     json.data[i]['SCORE_SESSION'] = scores?.[json.data[i]['PROGRAM_ID']]?.['SCORE_SESSION'] ?? JSON.stringify('');
                 }
@@ -247,13 +294,13 @@ let load_program_table = function() {
                 $(`td:eq(${scoreCol})`, row).html(`<button class="bx--btn bx--btn--primary" type="button">${btnScoreTxt}</button>`);
                 $(`td:eq(${scoreCol}) button`, row).on('click', showScore);
                 
-                $(`td:eq(${scoreCol})`, row).data("PROGRAM_ID", data[`col_7`]);
+                $(`td:eq(${scoreCol})`, row).data("PROGRAM_ID", data['PROGRAM_ID']);
                 if ($('input[name="use_iss_extract"]:checked').val() === 'true') {
-                    $(`td:eq(${scoreCol})`, row).data("EVENT_NAME", data['col_0']);
-                    $(`td:eq(${scoreCol})`, row).data("PROGRAM_CODE", data['col_1']);
+                    $(`td:eq(${scoreCol})`, row).data("EVENT_NAME", data['EVENT_NAME']);
+                    $(`td:eq(${scoreCol})`, row).data("PROGRAM_CODE", data['PROGRAM_CODE']);
                 } else {
-                    $(`td:eq(${scoreCol})`, row).data("CAPABILITY_SPONSOR_CODE", data['col_1']);
-                    $(`td:eq(${scoreCol})`, row).data("PROGRAM_CODE", data['col_0']);
+                    $(`td:eq(${scoreCol})`, row).data("CAPABILITY_SPONSOR_CODE", data['CAPABILITY_SPONSOR_CODE']);
+                    $(`td:eq(${scoreCol})`, row).data("PROGRAM_CODE", data['PROGRAM_CODE']);
                 }
 
                 $(`td:eq(${scoreCol})`, row).data("PROGRAM_NAME_TXT", program_id);
@@ -262,13 +309,8 @@ let load_program_table = function() {
                 });
             }
 
-            if ($('input[name="use_iss_extract"]:checked').val() === 'true') {
-                $('td:eq(0)', row).html(data['EVENT_NAME'])
-                $('td:eq(1)', row).html(data['PROGRAM_CODE'])
-            } else {
-                $('td:eq(0)', row).html(data['PROGRAM_CODE'])
-                $('td:eq(1)', row).html(data['CAPABILITY_SPONSOR_CODE'])
-            }
+            // The DataTable column definitions now handle the display automatically
+            // No need to manually set HTML content as the columns are configured with the correct data fields
             
             if (visible[pomCol] && visible[gCol]) {
                 if (SESSION !== null) {
@@ -491,7 +533,14 @@ function update_program_filter(id) {
     }
 }
 
-function onReady() { attach_change_handler()
+function onReady() { 
+    attach_change_handler();
+    
+    // Initialize the DataTable with a small delay to ensure DOM is ready
+    setTimeout(function() {
+        load_program_table();
+    }, 100);
+    
     $('#option_filter').on('click', function() {
         
         $('#filter_modal > div.bx--modal.bx--modal-tall').addClass('is-visible');

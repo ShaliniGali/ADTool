@@ -134,6 +134,9 @@ class SOCOM_Dashboard_COA_Management extends CI_Controller
         $active_cycle = $this->SOCOM_Cycle_Management_model->get_active_cycle_id();
         log_message('debug', 'Active cycle data: ' . json_encode($active_cycle));
         $data['fy_years'] = $this->fy_years;
+        
+        // Set default radio button to Resource Constraining (false) since data exists for this option
+        $data['selected_value'] = false;
 
         $this->load->view('templates/header_view', $page_data);
         $this->load->view('SOCOM/dashboard/coa_management/coa_management_view', $data);

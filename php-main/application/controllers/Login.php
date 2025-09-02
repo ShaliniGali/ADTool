@@ -8,22 +8,22 @@ class Login extends CI_Controller
 
 	public function index()
 	{
-		// DEVELOPMENT MODE: Auto-login bypass
-		if (defined('SOCOM_ENVIRONMENT') && SOCOM_ENVIRONMENT === 'siprdevelopment') {
-			// Auto-login with hardcoded credentials for development
-			$user_data = array(
-				'email' => 'admin@dev.local',
-				'name' => 'Development Admin',
-				'account_type' => 'ADMIN',
-				'timestamp' => time(),
-				'profile_image' => '', // Optional field, can be empty
-				'id' => 1
-			);
-			
-			$this->session->set_userdata('logged_in', $user_data);
-			redirect('Home');
-			return;
-		}
+		// DEVELOPMENT MODE: Auto-login bypass - TEMPORARILY DISABLED FOR LOGIN TESTING
+		// if (defined('SOCOM_ENVIRONMENT') && SOCOM_ENVIRONMENT === 'siprdevelopment') {
+		// 	// Auto-login with hardcoded credentials for development
+		// 	$user_data = array(
+		// 		'email' => 'admin@dev.local',
+		// 		'name' => 'Development Admin',
+		// 		'account_type' => 'ADMIN',
+		// 		'timestamp' => time(),
+		// 		'profile_image' => '', // Optional field, can be empty
+		// 		'id' => 1
+		// 	);
+		// 	
+		// 	$this->session->set_userdata('logged_in', $user_data);
+		// 	redirect('Home');
+		// 	return;
+		// }
 
 		$private_subnet_access_required = $this->Login_private_subnet_model->enforcePrivateSubnetLogin();
 

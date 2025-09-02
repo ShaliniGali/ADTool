@@ -49,7 +49,13 @@ const sharedCoaToMeColDef = [
 ];
     
 function onReady() {
-    
+    // Add a small delay to ensure DOM is ready
+    setTimeout(function() {
+        initializeDataTables();
+    }, 100);
+}
+
+function initializeDataTables() {
     const $radioButtons = $('input[name="use_iss_extract_share_coa"]');
 
     // Initialize My COA Table (inside modal)
@@ -98,6 +104,10 @@ function onReady() {
                 is_revoked: 0,
                 use_iss_extract: function() { return $radioButtons.filter(':checked').val() === "true"; }
             },
+            error: function(xhr, error, thrown) {
+                console.error('DataTable Ajax error:', error, thrown);
+                console.error('Response:', xhr.responseText);
+            }
         },
         rowCallback: function (row, data) {},
         createdRow: function (row, data, index) {
@@ -127,6 +137,10 @@ function onReady() {
                 is_revoked: 0,
                 use_iss_extract: function() { return $radioButtons.filter(':checked').val() === "true"; }
             },
+            error: function(xhr, error, thrown) {
+                console.error('DataTable Ajax error:', error, thrown);
+                console.error('Response:', xhr.responseText);
+            }
         },
         rowCallback: function (row, data) {},
         createdRow: function (row, data, index) {
@@ -175,7 +189,7 @@ function onReady() {
     });
 
     handleCloseMenuOnClickOutside();
-};
+}
 
 function fetchMyCoa() {
     let url = '/dashboard/coa_management/get_my_coa';

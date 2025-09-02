@@ -61,7 +61,7 @@ services:
       - SOCOM_JWT_SECRET_KEY=your-super-secret-jwt-key-here-12345
       - SOCOM_JWT_ALGORITHM=HS256
       - SOCOM_PYTHON_URL=http://rhombus-python:8020
-      - SOCOM_DEV_BYPASS_AUTH=TRUE
+      - SOCOM_DEV_BYPASS_AUTH=FALSE
       - SOCOM_DEV_MODE=TRUE
       - SOCOM_DISABLE_STRICT_SQL=TRUE
       - CI_CREDENTIALS_HOST=rhombus-mysql
