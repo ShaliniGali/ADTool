@@ -147,3 +147,4 @@ UNION ALL
 SELECT 'DT_ZBT_EXTRACT_2025' as table_name, COUNT(*) as record_count FROM DT_ZBT_EXTRACT_2025;
 
 
+

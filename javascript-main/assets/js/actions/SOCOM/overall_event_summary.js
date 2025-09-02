@@ -343,7 +343,7 @@ function updateOverallEventSumTable(overall_sum, overall_sum_approve) {
         }
         
         columnDefs.push({
-            targets: 5,
+            targets: year_list.length,
             data: 'FYDP',
             title: 'FYDP',
         });

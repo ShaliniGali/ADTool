@@ -180,3 +180,4 @@ UNION ALL
 SELECT 'USR_DT_UPLOADS' as table_name, COUNT(*) as record_count FROM USR_DT_UPLOADS;
 
 
+

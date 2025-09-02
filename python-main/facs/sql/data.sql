@@ -1,0 +1,12 @@
+INSERT INTO {{schema}}.app (id) VALUE (UUID_TO_BIN('5bb1aec8-d97d-45dd-bd10-85495b2cdd46'));
+INSERT INTO {{schema}}.app_version (app_id, title) VALUE (UUID_TO_BIN('5bb1aec8-d97d-45dd-bd10-85495b2cdd46'), 'test_app_1');
+INSERT INTO {{schema}}.subapp (id, app_id) VALUE (UUID_TO_BIN('f470fd6d-ba51-4a7d-99d6-9773dc6ea78d'), UUID_TO_BIN('5bb1aec8-d97d-45dd-bd10-85495b2cdd46'));
+INSERT INTO {{schema}}.subapp_version (subapp_id, name) VALUE (UUID_TO_BIN('f470fd6d-ba51-4a7d-99d6-9773dc6ea78d'), 'test_subapp_1');
+INSERT INTO {{schema}}.feature (id, subapp_id) VALUE (UUID_TO_BIN('516675e8-4412-4175-960d-7cbc96d19a74'), UUID_TO_BIN('f470fd6d-ba51-4a7d-99d6-9773dc6ea78d'));
+INSERT INTO {{schema}}.feature_version (feature_id, name) VALUE (UUID_TO_BIN('516675e8-4412-4175-960d-7cbc96d19a74'), 'test_feature_1');
+INSERT INTO {{schema}}.upa_type (id, app_id) VALUE (UUID_TO_BIN('545f99f2-c6d3-4d6a-93f8-45887c730299'), UUID_TO_BIN('5bb1aec8-d97d-45dd-bd10-85495b2cdd46'));
+INSERT INTO {{schema}}.upa_type_version (upa_type_id, name) VALUE (UUID_TO_BIN('545f99f2-c6d3-4d6a-93f8-45887c730299'), 'test_upa_1');
+INSERT INTO {{schema}}.user_role (id, upa_type_id) VALUE (UUID_TO_BIN('ce02f727-0968-4a4f-9662-531ec4550eec'), UUID_TO_BIN('545f99f2-c6d3-4d6a-93f8-45887c730299'));
+INSERT INTO {{schema}}.user_role_version (user_role_id, name) VALUE (UUID_TO_BIN('ce02f727-0968-4a4f-9662-531ec4550eec'), 'test_user_role_1');
+INSERT INTO {{schema}}.role_feature_mapping (id, feature_id, user_role_id) VALUE (UUID_TO_BIN('79cd049d-8400-4e1d-96f2-dad5ab734f33'), UUID_TO_BIN('516675e8-4412-4175-960d-7cbc96d19a74'), UUID_TO_BIN('ce02f727-0968-4a4f-9662-531ec4550eec'));
+INSERT INTO {{schema}}.role_feature_mapping_version (mapping_id) VALUE (UUID_TO_BIN('79cd049d-8400-4e1d-96f2-dad5ab734f33'));

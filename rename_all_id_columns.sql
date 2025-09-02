@@ -42,3 +42,4 @@ UNION ALL
 SELECT 'document_metadata' as table_name, COLUMN_NAME as primary_key FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = 'SOCOM_UI' AND TABLE_NAME = 'document_metadata' AND COLUMN_KEY = 'PRI';
 
 
+

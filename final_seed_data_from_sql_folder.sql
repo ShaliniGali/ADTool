@@ -136,3 +136,4 @@ UNION ALL
 SELECT 'git_tracking' as table_name, COUNT(*) as record_count FROM git_tracking;
 
 
+

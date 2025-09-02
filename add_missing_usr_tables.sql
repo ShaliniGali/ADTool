@@ -96,3 +96,4 @@ UNION ALL
 SELECT 'USR_LOOKUP_CYCLES' as table_name, COUNT(*) as record_count FROM USR_LOOKUP_CYCLES;
 
 
+

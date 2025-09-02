@@ -240,3 +240,4 @@ INSERT INTO `USR_DT_SCHEDULER_MAP` (`TYPE`, `DT_SCHEDULER_ID`, `MAP_ID`) VALUES
 -- END OF TEST DATA
 -- =====================================================
 
+

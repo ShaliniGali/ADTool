@@ -42,18 +42,11 @@ echo "   Password: password\n\n";
 
 $users = [
     'admin' => 'admin@rhombus.local',
-    'testuser' => 'test@rhombus.local',
-    'socom_admin' => 'socom_admin@rhombus.local',
-    'socom_analyst' => 'socom_analyst@rhombus.local',
-    'socom_manager' => 'socom_manager@rhombus.local',
-    'socom_viewer' => 'socom_viewer@rhombus.local',
-    'zbt_manager' => 'zbt_manager@rhombus.local',
-    'iss_manager' => 'iss_manager@rhombus.local',
-    'coa_manager' => 'coa_manager@rhombus.local',
-    'pom_manager' => 'pom_manager@rhombus.local',
-    'document_manager' => 'document_manager@rhombus.local',
-    'pipeline_manager' => 'pipeline_manager@rhombus.local'
+    'testuser' => 'test@rhombus.local'
 ];
+
+echo "   NOTE: Only 2 users are available in the correct database (SOCOM_UI)\n";
+echo "   The Login_model is now pointing to SOCOM_UI database\n";
 
 foreach ($users as $username => $email) {
     echo "   - $username ($email)\n";
@@ -76,11 +69,16 @@ echo "   ✅ DataTables should load sample COA data\n";
 echo "   ✅ Radio buttons should switch between data sets\n";
 echo "   ✅ 'Open Share COA' button should work\n\n";
 
-echo "6. IMPORTANT FIX APPLIED:\n";
+echo "6. IMPORTANT FIXES APPLIED:\n";
 echo "   ✅ Development bypass has been DISABLED\n";
 echo "   ✅ Login page now shows properly (no auto-redirect)\n";
 echo "   ✅ You can now test the actual login form\n";
 echo "   ✅ Environment variable SOCOM_DEV_BYPASS_AUTH=FALSE\n";
+echo "   ✅ Database connection changed from rhombus_db to SOCOM_UI\n";
+echo "   ✅ Added missing database columns (password, saltiness, login_attempts, etc.)\n";
+echo "   ✅ Generated correct password format using system's encryption method\n";
+echo "   ✅ Updated user passwords with proper PBKDF2 hashes and salts\n";
+echo "   ✅ Added UI_USERNAME_PASS_AUTH=TRUE environment variable\n";
 echo "   ✅ PHP container restarted to apply changes\n\n";
 
 echo "=== TEST COMPLETE ===\n";
